@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bildirimler · Masaüstü · Lokale Sor</title>
+<link rel="stylesheet" href="../design/fonts.css">
+<style>
+body{margin:0}
+a{color:#15171C}a:hover{color:#D8344B}
+button{font-family:inherit}
+body{margin:0}
+</style>
+</head>
+<body>
+<div style="min-height: 820px; background: #FFFFFF; font-family: 'Schibsted Grotesk', system-ui, sans-serif; color: #15171C">
+
+  <header style="border-bottom: 1px solid #DDDFDA">
+    <div style="position: relative; max-width: 1200px; margin: 0 auto; padding: 12px 24px; min-height: 72px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+      <span style="display: inline-flex; align-items: baseline; gap: 2px; font-size: 24px; font-weight: 800; letter-spacing: -0.03em">Lokale Sor<span style="width: 7px; height: 7px; border-radius: 999px; background: #D8344B"></span></span>
+      <button type="button" style="height: 44px; padding: 0 12px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 15px; display: inline-flex; align-items: center; gap: 6px"><span style="color: #5F636B">Şu an:</span><span style="font-weight: 700">İstanbul</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+      <div style="display: flex; align-items: center; gap: 8px">
+        <div role="group" aria-label="Rol" style="display: inline-flex; padding: 3px; border-radius: 10px; background: #F0F1EE">
+          <button type="button" aria-pressed="true" style="height: 36px; padding: 0 16px; border: 0; border-radius: 7px; background: #FFFFFF; color: #15171C; font-size: 14px; font-weight: 700; box-shadow: 0 0 0 1px #C9CCC5">Turist</button>
+          <button type="button" aria-pressed="false" style="height: 36px; padding: 0 16px; border: 0; border-radius: 7px; background: transparent; color: #5F636B; font-size: 14px; font-weight: 600">Lokal</button>
+        </div>
+        <span style="position: relative; display: inline-flex"><button type="button" aria-label="Bildirimler, 2 okunmamış" aria-expanded="true" style="width: 44px; height: 44px; border: 0; border-radius: 10px; background: #F0F1EE; color: #15171C; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 8 2.5 8h-17S6 15 6 9Z"></path><path d="M10 20.5h4"></path></svg></button><span aria-hidden="true" style="position: absolute; top: 6px; right: 5px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 999px; background: #D8344B; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #F0F1EE">2</span></span>
+        <button type="button" aria-label="Profil: Elif" style="width: 40px; height: 40px; border: 0; padding: 0; border-radius: 999px; background: #7B4CE0; color: #FFFFFF; font-size: 15px; font-weight: 700">E</button>
+      </div>
+
+      <section role="dialog" aria-label="Bildirimler" style="position: absolute; top: 66px; right: 24px; z-index: 2; width: 400px; max-width: calc(100% - 48px); background: #FFFFFF; border: 1px solid #C9CCC5; border-radius: 14px; box-shadow: 0 12px 32px rgba(21,23,28,.14); overflow: hidden">
+        <div style="padding: 14px 16px; border-bottom: 1px solid #DDDFDA; display: flex; align-items: center; justify-content: space-between">
+          <span style="font-size: 16px; font-weight: 700">Bildirimler</span>
+          <button type="button" style="height: 36px; padding: 0 4px; border: 0; background: transparent; color: #15171C; font-size: 14px; font-weight: 700">Tümünü okundu yap</button>
+        </div>
+        <a href="#" style="text-decoration: none; color: #15171C; padding: 14px 16px; background: #F0F1EE; border-bottom: 1px solid #FFFFFF; display: flex; gap: 12px; align-items: flex-start">
+          <span aria-hidden="true" style="width: 34px; height: 34px; flex: none; border-radius: 999px; background: #E9A21B; color: #15171C; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center">Z</span>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 3px"><span style="font-size: 15px; line-height: 21px; font-weight: 700">Zeynep soruna cevap verdi.</span><span style="font-size: 13px; line-height: 18px; color: #3D4047">Kadıköy'de öğrenci bütçesine uygun…</span><span style="font-size: 12px; color: #5F636B">2 dk önce</span></div>
+          <span aria-label="Okunmadı" style="width: 9px; height: 9px; flex: none; margin-top: 6px; border-radius: 999px; background: #D8344B"></span>
+        </a>
+        <a href="#" style="text-decoration: none; color: #15171C; padding: 14px 16px; background: #F0F1EE; display: flex; gap: 12px; align-items: flex-start">
+          <span aria-hidden="true" style="width: 34px; height: 34px; flex: none; border-radius: 999px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #C9CCC5; display: flex; align-items: center; justify-content: center"><svg width="13" height="13" viewBox="0 0 14 14"><rect x="1.5" y="1.5" width="11" height="11" fill="none" stroke="#5F636B" stroke-width="1.5"></rect><rect x="5" y="5" width="4" height="4" fill="#5F636B"></rect></svg></span>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 3px"><span style="font-size: 15px; line-height: 21px; font-weight: 700">Sorun Zeynep'e yönlendirildi.</span><span style="font-size: 12px; color: #5F636B">20 dk önce · Otomatik</span></div>
+          <span aria-label="Okunmadı" style="width: 9px; height: 9px; flex: none; margin-top: 6px; border-radius: 999px; background: #D8344B"></span>
+        </a>
+        <a href="#" style="text-decoration: none; color: #15171C; padding: 14px 16px; border-top: 1px solid #DDDFDA; display: flex; gap: 12px; align-items: flex-start">
+          <span aria-hidden="true" style="width: 34px; height: 34px; flex: none; border-radius: 999px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #C9CCC5; display: flex; align-items: center; justify-content: center"><svg width="13" height="13" viewBox="0 0 14 14"><rect x="1.5" y="1.5" width="11" height="11" fill="none" stroke="#5F636B" stroke-width="1.5"></rect><rect x="5" y="5" width="4" height="4" fill="#5F636B"></rect></svg></span>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 3px"><span style="font-size: 15px; line-height: 21px; font-weight: 500">Sorun Mert'e iletildi.</span><span style="font-size: 12px; color: #5F636B">48 dk önce · Otomatik</span></div>
+        </a>
+        <a href="#" style="text-decoration: none; color: #15171C; padding: 14px 16px; border-top: 1px solid #DDDFDA; display: flex; gap: 12px; align-items: flex-start">
+          <span aria-hidden="true" style="width: 34px; height: 34px; flex: none; border-radius: 999px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #C9CCC5; display: flex; align-items: center; justify-content: center"><svg width="13" height="13" viewBox="0 0 14 14"><rect x="1.5" y="1.5" width="11" height="11" fill="none" stroke="#5F636B" stroke-width="1.5"></rect><rect x="5" y="5" width="4" height="4" fill="#5F636B"></rect></svg></span>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 3px"><span style="font-size: 15px; line-height: 21px; font-weight: 500">Beşiktaş'la ilgili sorun Deniz'e iletildi.</span><span style="font-size: 12px; color: #5F636B">Dün 23:10 · Otomatik</span></div>
+        </a>
+        <a href="#" style="display: flex; align-items: center; justify-content: center; min-height: 48px; border-top: 1px solid #DDDFDA; font-size: 14px; font-weight: 700">Tüm bildirimleri gör</a>
+      </section>
+    </div>
+    <nav aria-label="Ana menü" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; gap: 28px; overflow-x: auto">
+      <a href="#" aria-current="page" style="text-decoration: none; padding: 12px 0; font-size: 15px; font-weight: 700; color: #15171C; box-shadow: inset 0 -2px 0 #15171C; white-space: nowrap">Ana sayfa</a>
+      <a href="#" style="text-decoration: none; padding: 12px 0; font-size: 15px; font-weight: 500; color: #5F636B; white-space: nowrap">Soru sor</a>
+      <a href="#" style="text-decoration: none; padding: 12px 0; font-size: 15px; font-weight: 500; color: #5F636B; white-space: nowrap">Sorularım</a>
+      <a href="#" style="text-decoration: none; padding: 12px 0; font-size: 15px; font-weight: 500; color: #5F636B; white-space: nowrap">Gelen kutusu</a>
+    </nav>
+  </header>
+
+  <main aria-hidden="true" style="max-width: 1200px; margin: 0 auto; padding: 40px 24px; display: flex; flex-direction: column; gap: 28px; opacity: .35">
+    <span style="font-size: 44px; line-height: 48px; font-weight: 800; letter-spacing: -0.04em">Selam Elif, <span style="color: #5F636B">İstanbul'dasın.</span></span>
+    <div style="max-width: 680px; height: 160px; border: 1.5px solid #15171C; border-radius: 16px"></div>
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; max-width: 680px">
+      <div style="flex: 1 1 280px; height: 140px; border: 1px solid #DDDFDA; border-radius: 12px"></div>
+      <div style="flex: 1 1 280px; height: 140px; border: 1px solid #DDDFDA; border-radius: 12px"></div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

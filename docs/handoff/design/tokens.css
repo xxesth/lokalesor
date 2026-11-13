@@ -1,0 +1,74 @@
+/* Lokale Sor — tasarım değişkenleri
+   Kural: arayüz gri tonlu, renk yalnızca bir insanı temsil eder.
+   Nar kırmızısı yalnızca aciliyet, logo noktası ve bildirim sayısı içindir. */
+
+@import url('fonts.css');
+
+:root {
+  /* Sistem (nötr) */
+  --ink: #15171C;          /* metin, birincil buton, seçili çip, aktif sekme */
+  --ink-2: #3D4047;        /* gövde ikincil metin */
+  --gray: #5F636B;         /* yardımcı metin, otomatik mesaj etiketi */
+  --gray-soft: #8A8E96;    /* yalnızca büyük dekoratif rakamlar (≥36px) */
+  --line-strong: #C9CCC5;  /* çip/girdi kenarlığı */
+  --line: #DDDFDA;         /* ayraç, kart kenarlığı */
+  --mist: #F0F1EE;         /* turistin soru zemini, bilgi kutuları, seçili liste satırı */
+  --paper: #FFFFFF;
+
+  /* Marka / aciliyet */
+  --nar: #D8344B;          /* son dakika sayacı, "Yeniden atandı", okunmamış noktası, bildirim sayısı */
+
+  /* İnsan renkleri — her kullanıcıya bir tane atanır.
+     Avatar dolgusu, durum çubuğu segmenti, geri sayım çubuğu, profil bandı,
+     lokal modundaki kişisel vurgu. Mesaj zemininde KULLANILMAZ. */
+  --person-kobalt: #2C5BF0;  --person-kobalt-on: #FFFFFF;
+  --person-safran: #E9A21B;  --person-safran-on: #15171C;
+  --person-yosun:  #23774B;  --person-yosun-on:  #FFFFFF;
+  --person-erik:   #7B4CE0;  --person-erik-on:   #FFFFFF;
+  --person-deniz:  #0E8FA8;  --person-deniz-on:  #15171C;
+
+  /* Yazı */
+  --font: 'Schibsted Grotesk', system-ui, sans-serif;
+  --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700; --fw-black: 800;
+  --tracking-display: -0.04em;   /* ≥40px başlıklar */
+  --tracking-heading: -0.03em;   /* 22–36px */
+
+  --text-hero-d: 88px/84px;      /* tanıtım hero, masaüstü */
+  --text-hero-m: 46px/46px;      /* tanıtım hero, telefon */
+  --text-h1-d: 44px/48px;        /* sayfa başlığı, masaüstü */
+  --text-h1-m: 28px/32px;        /* sayfa başlığı, telefon */
+  --text-h2: 20px/26px;          /* bölüm başlığı (altında 1px ink çizgi) */
+  --text-body-l: 18px/26px;      /* soru metni, insan cevabı (masaüstü) */
+  --text-body: 16px/24px;        /* insan cevabı (telefon), girdiler — iOS zoom için ≥16 */
+  --text-small: 14px/20px;       /* otomatik mesaj metni, önizlemeler */
+  --text-meta: 13px/18px;        /* semt · saat, etiket */
+  --text-micro: 11px/14px;       /* sekme etiketi */
+  --num-countdown-l: 40px;       /* geri sayım, tabular-nums, 700 */
+  --num-countdown-m: 20px;
+
+  /* Boşluk (4 pt) */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px; --s-6: 24px; --s-8: 32px; --s-12: 48px; --s-16: 64px;
+  --gutter-m: 16px;   /* telefon kenar boşluğu */
+  --container: 1200px;
+  --gutter-d: 24px;
+
+  /* Köşe */
+  --r-chip: 6px;      /* salt okunur etiket */
+  --r-control: 8px;   /* buton, çip, girdi, segment */
+  --r-card: 12px;     /* liste kartı */
+  --r-panel: 14px;    /* soru kartı, değerlendirme kutusu */
+  --r-panel-l: 16px;  /* masaüstü panel */
+  --r-sheet: 22px;    /* alttan açılan panel üst köşeleri */
+  --r-full: 999px;    /* yalnızca avatar ve noktalar */
+
+  /* Mesaj balonu köşeleri: konuşanın tarafındaki köşe 4px */
+  --r-bubble-self: 14px 14px 4px 14px;   /* turistin sorusu (sağda) */
+  --r-bubble-other: 4px 14px 14px 14px;  /* insan cevabı (solda) */
+
+  /* Gölge — neredeyse yok. Yalnızca üstte açılan katmanlar. */
+  --shadow-pop: 0 12px 32px rgba(21, 23, 28, .14);
+  --scrim: rgba(21, 23, 28, .48);
+
+  /* Dokunma */
+  --hit: 44px;
+}

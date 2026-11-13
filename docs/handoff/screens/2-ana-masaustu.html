@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ana sayfa · Masaüstü · Lokale Sor</title>
+<link rel="stylesheet" href="../design/fonts.css">
+<style>
+body{margin:0}
+a{color:#15171C}a:hover{color:#D8344B}
+button,input{font-family:inherit}
+body{margin:0}
+</style>
+</head>
+<body>
+<div style="min-height: 1120px; background: #FFFFFF; font-family: 'Schibsted Grotesk', system-ui, sans-serif; color: #15171C">
+
+  <header style="border-bottom: 1px solid #DDDFDA">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 12px 24px; min-height: 72px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+      <span style="display: inline-flex; align-items: baseline; gap: 2px; font-size: 24px; font-weight: 800; letter-spacing: -0.03em">Lokale Sor<span style="width: 7px; height: 7px; border-radius: 999px; background: #D8344B"></span></span>
+      <button type="button" style="height: 44px; padding: 0 12px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 15px; display: inline-flex; align-items: center; gap: 6px"><span style="color: #5F636B">Şu an:</span><span style="font-weight: 700">İstanbul</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+      <div style="display: flex; align-items: center; gap: 8px">
+        <div role="group" aria-label="Rol" style="display: inline-flex; padding: 3px; border-radius: 10px; background: #F0F1EE">
+          <button type="button" aria-pressed="true" style="height: 36px; padding: 0 16px; border: 0; border-radius: 7px; background: #FFFFFF; color: #15171C; font-size: 14px; font-weight: 700; box-shadow: 0 0 0 1px #C9CCC5">Turist</button>
+          <button type="button" aria-pressed="false" style="height: 36px; padding: 0 16px; border: 0; border-radius: 7px; background: transparent; color: #5F636B; font-size: 14px; font-weight: 600">Lokal</button>
+        </div>
+        <span style="position: relative; display: inline-flex"><button type="button" aria-label="Bildirimler, 2 okunmamış" style="width: 44px; height: 44px; border: 0; background: transparent; color: #15171C; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 8 2.5 8h-17S6 15 6 9Z"></path><path d="M10 20.5h4"></path></svg></button><span aria-hidden="true" style="position: absolute; top: 6px; right: 5px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 999px; background: #D8344B; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #FFFFFF">2</span></span>
+        <button type="button" aria-label="Profil: Elif" style="width: 40px; height: 40px; border: 0; padding: 0; border-radius: 999px; background: #7B4CE0; color: #FFFFFF; font-size: 15px; font-weight: 700">E</button>
+      </div>
+    </div>
+    <nav aria-label="Ana menü" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; gap: 28px; overflow-x: auto">
+      <a href="#" aria-current="page" style="text-decoration: none; padding: 12px 0; font-size: 15px; font-weight: 700; color: #15171C; box-shadow: inset 0 -2px 0 #15171C; white-space: nowrap">Ana sayfa</a>
+      <a href="#" style="text-decoration: none; padding: 12px 0; font-size: 15px; font-weight: 500; color: #5F636B; white-space: nowrap">Soru sor</a>
+      <a href="#" style="text-decoration: none; padding: 12px 0; font-size: 15px; font-weight: 500; color: #5F636B; white-space: nowrap">Sorularım</a>
+      <a href="#" style="text-decoration: none; padding: 12px 0; font-size: 15px; font-weight: 500; color: #5F636B; white-space: nowrap">Gelen kutusu</a>
+    </nav>
+  </header>
+
+  <main style="max-width: 1200px; margin: 0 auto; padding: 40px 24px 64px; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start">
+
+    <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 36px">
+      <h1 style="margin: 0; font-size: 44px; line-height: 48px; font-weight: 800; letter-spacing: -0.04em">Selam Elif, <span style="color: #5F636B">İstanbul'dasın.</span></h1>
+
+      <section style="border: 1.5px solid #15171C; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+        <label for="ana-soru-d" style="font-size: 17px; font-weight: 700">Lokale sor</label>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px">
+          <input id="ana-soru-d" type="text" placeholder="Ne merak ediyorsun?" style="flex: 1 1 280px; min-width: 0; height: 52px; box-sizing: border-box; padding: 0 16px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 17px">
+          <button type="button" style="height: 52px; padding: 0 24px; border: 0; border-radius: 8px; background: #15171C; color: #FFFFFF; font-size: 16px; font-weight: 700">Lokale Sor</button>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px">
+          <span aria-hidden="true" style="display: inline-flex">
+            <span style="width: 28px; height: 28px; border-radius: 999px; background: #2C5BF0; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #FFFFFF">M</span>
+            <span style="width: 28px; height: 28px; margin-left: -6px; border-radius: 999px; background: #E9A21B; color: #15171C; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #FFFFFF">Z</span>
+            <span style="width: 28px; height: 28px; margin-left: -6px; border-radius: 999px; background: #0E8FA8; color: #15171C; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #FFFFFF">D</span>
+          </span>
+          <span style="font-size: 14px; color: #3D4047">Lokaller genelde ~25 dk içinde yanıt veriyor.</span>
+        </div>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 style="margin: 0; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 1px solid #15171C">Aktif sorularım</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px">
+          <a href="#" style="text-decoration: none; color: #15171C; border: 1px solid #DDDFDA; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+            <span style="font-size: 16px; line-height: 22px; font-weight: 600">Kadıköy'de öğrenci bütçesine uygun, turistik olmayan bir akşam yemeği yeri?</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+              <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.5" fill="none" stroke="#15171C" stroke-width="1.6"></circle><path d="M6 1.5a4.5 4.5 0 0 1 0 9z" fill="#15171C"></path></svg>Lokalde · <span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 999px; background: #E9A21B; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center">Z</span>Zeynep</span>
+              <span style="display: inline-flex; align-items: baseline; gap: 5px"><span style="width: 7px; height: 7px; border-radius: 999px; background: #D8344B; align-self: center"></span><span style="font-size: 22px; font-weight: 700; color: #D8344B; font-variant-numeric: tabular-nums">0:42</span><span style="font-size: 12px; color: #5F636B">kaldı</span></span>
+            </div>
+            <span style="height: 3px; border-radius: 2px; background: #F0F1EE"><span style="display: block; width: 6%; height: 3px; border-radius: 2px; background: #D8344B"></span></span>
+          </a>
+          <a href="#" style="text-decoration: none; color: #15171C; border: 1px solid #DDDFDA; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+            <span style="font-size: 16px; line-height: 22px; font-weight: 600">Beşiktaş'ta gece geç saatte güvenle oturulabilecek bir yer?</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+              <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.5" fill="none" stroke="#15171C" stroke-width="1.6"></circle><path d="M6 1.5a4.5 4.5 0 0 1 0 9z" fill="#15171C"></path></svg>Lokalde · <span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 999px; background: #0E8FA8; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center">D</span>Deniz</span>
+              <span style="display: inline-flex; align-items: baseline; gap: 5px"><span style="font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums">18:10</span><span style="font-size: 12px; color: #5F636B">kaldı</span></span>
+            </div>
+            <span style="height: 3px; border-radius: 2px; background: #F0F1EE"><span style="display: block; width: 62%; height: 3px; border-radius: 2px; background: #0E8FA8"></span></span>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <aside style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-size: 20px; font-weight: 700; padding-bottom: 8px; border-bottom: 1px solid #15171C">İstanbul'da popüler sorular</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px">
+        <button type="button" aria-pressed="true" style="height: 34px; padding: 0 12px; border: 1px solid #15171C; border-radius: 8px; background: #15171C; color: #FFFFFF; font-size: 13px; font-weight: 600">Tümü</button>
+        <button type="button" aria-pressed="false" style="height: 34px; padding: 0 12px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 13px; font-weight: 500">Gizli mekân</button>
+        <button type="button" aria-pressed="false" style="height: 34px; padding: 0 12px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 13px; font-weight: 500">Yerel yemek</button>
+        <button type="button" aria-pressed="false" style="height: 34px; padding: 0 12px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 13px; font-weight: 500">Uygun fiyat</button>
+        <button type="button" aria-pressed="false" style="height: 34px; padding: 0 12px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 13px; font-weight: 500">Rota</button>
+        <button type="button" aria-pressed="false" style="height: 34px; padding: 0 12px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 13px; font-weight: 500">Gece hayatı</button>
+        <button type="button" aria-pressed="false" style="height: 34px; padding: 0 12px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 13px; font-weight: 500">Güvenli yerler</button>
+      </div>
+      <div style="display: flex; flex-direction: column">
+        <article style="padding: 14px 0; border-bottom: 1px solid #DDDFDA; display: flex; flex-direction: column; gap: 6px">
+          <span style="font-size: 12px; font-weight: 600; color: #5F636B">Rota</span>
+          <h3 style="margin: 0; font-size: 16px; line-height: 22px; font-weight: 700">Moda'da sakin bir sahil yürüyüşü için en iyi saat?</h3>
+          <p style="margin: 0; font-size: 14px; line-height: 20px; color: #3D4047">"Hafta içi sabah 9'dan önce git. Akşamüstü sahil çok kalabalık oluyor."</p>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5F636B"><span aria-hidden="true" style="width: 22px; height: 22px; border-radius: 999px; background: #E9A21B; color: #15171C; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">Z</span><span style="color: #15171C; font-weight: 600">Zeynep</span><span>· 3 Kas</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M7 10v10H4V10Z"></path><path d="M7 10l4-7c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>24 faydalı</span></div>
+        </article>
+        <article style="padding: 14px 0; border-bottom: 1px solid #DDDFDA; display: flex; flex-direction: column; gap: 6px">
+          <span style="font-size: 12px; font-weight: 600; color: #5F636B">Yerel yemek</span>
+          <h3 style="margin: 0; font-size: 16px; line-height: 22px; font-weight: 700">Moda'da kahvaltı için turistik olmayan bir yer?</h3>
+          <p style="margin: 0; font-size: 14px; line-height: 20px; color: #3D4047">"Ana caddeden bir sokak içeri gir; küçük esnaf kahvaltıcıları hem ucuz hem sakin."</p>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5F636B"><span aria-hidden="true" style="width: 22px; height: 22px; border-radius: 999px; background: #E9A21B; color: #15171C; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">Z</span><span style="color: #15171C; font-weight: 600">Zeynep</span><span>· 9 Eki</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M7 10v10H4V10Z"></path><path d="M7 10l4-7c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>27 faydalı</span></div>
+        </article>
+        <article style="padding: 14px 0; border-bottom: 1px solid #DDDFDA; display: flex; flex-direction: column; gap: 6px">
+          <span style="font-size: 12px; font-weight: 600; color: #5F636B">Rota</span>
+          <h3 style="margin: 0; font-size: 16px; line-height: 22px; font-weight: 700">Kadıköy'den Adalar'a gitmenin en pratik yolu?</h3>
+          <p style="margin: 0; font-size: 14px; line-height: 20px; color: #3D4047">"İskeledeki vapur saatlerine bak, hafta sonu ilk seferlerden birine bin. Öğlene doğru çok doluyor."</p>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5F636B"><span aria-hidden="true" style="width: 22px; height: 22px; border-radius: 999px; background: #2C5BF0; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">M</span><span style="color: #15171C; font-weight: 600">Mert</span><span>· 28 Eki</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M7 10v10H4V10Z"></path><path d="M7 10l4-7c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>31 faydalı</span></div>
+        </article>
+        <article style="padding: 14px 0; border-bottom: 1px solid #DDDFDA; display: flex; flex-direction: column; gap: 6px">
+          <span style="font-size: 12px; font-weight: 600; color: #5F636B">Güvenli yerler</span>
+          <h3 style="margin: 0; font-size: 16px; line-height: 22px; font-weight: 700">Beşiktaş'ta maç günü nerelerden uzak durmalıyım?</h3>
+          <p style="margin: 0; font-size: 14px; line-height: 20px; color: #3D4047">"Stadyum çevresi ve çarşı maçtan iki saat önce dolar. O saatlerde sahil yolunu kullan."</p>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5F636B"><span aria-hidden="true" style="width: 22px; height: 22px; border-radius: 999px; background: #0E8FA8; color: #15171C; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">D</span><span style="color: #15171C; font-weight: 600">Deniz</span><span>· 21 Eki</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M7 10v10H4V10Z"></path><path d="M7 10l4-7c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>18 faydalı</span></div>
+        </article>
+        <article style="padding: 14px 0; display: flex; flex-direction: column; gap: 6px">
+          <span style="font-size: 12px; font-weight: 600; color: #5F636B">Gece hayatı</span>
+          <h3 style="margin: 0; font-size: 16px; line-height: 22px; font-weight: 700">Kadıköy'de gece 1'den sonra açık, sakin bir yer?</h3>
+          <p style="margin: 0; font-size: 14px; line-height: 20px; color: #3D4047">"Çarşı içindeki barlar geç saate kadar açık ama hafta sonu çok kalabalık. Hafta içi çok daha rahat."</p>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5F636B"><span aria-hidden="true" style="width: 22px; height: 22px; border-radius: 999px; background: #2C5BF0; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">M</span><span style="color: #15171C; font-weight: 600">Mert</span><span>· 15 Eki</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M7 10v10H4V10Z"></path><path d="M7 10l4-7c1.5 0 2.5 1 2.5 2.5V9h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.3 20H7"></path></svg>12 faydalı</span></div>
+        </article>
+      </div>
+    </aside>
+  </main>
+</div>
+</body>
+</html>

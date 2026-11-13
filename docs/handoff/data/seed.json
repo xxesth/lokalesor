@@ -1,0 +1,70 @@
+{
+  "_not": "Demo verisi. Tasarımlardaki tüm ekranlar bu veriyle çizildi. Faydalı sayıları ve arşiv soruları örnektir.",
+  "cities": ["İstanbul", "Ankara", "İzmir"],
+  "topics": ["Gizli mekân", "Yerel yemek", "Uygun fiyat", "Rota", "Gece hayatı", "Güvenli yerler"],
+  "budgets": ["₺", "₺₺", "₺₺₺"],
+  "personColors": {
+    "kobalt": { "fill": "#2C5BF0", "on": "#FFFFFF" },
+    "safran": { "fill": "#E9A21B", "on": "#15171C" },
+    "yosun":  { "fill": "#23774B", "on": "#FFFFFF" },
+    "erik":   { "fill": "#7B4CE0", "on": "#FFFFFF" },
+    "deniz":  { "fill": "#0E8FA8", "on": "#15171C" }
+  },
+  "users": [
+    { "id": "elif", "name": "Elif", "color": "erik", "homeCity": "Ankara", "currentCity": "İstanbul", "isLocal": false, "verified": false, "interests": ["Yerel yemek", "Uygun fiyat"] },
+    { "id": "can", "name": "Can", "color": "yosun", "homeCity": "İzmir", "currentCity": null, "isLocal": false, "verified": false, "interests": ["Rota", "Güvenli yerler"] },
+    { "id": "mert", "name": "Mert", "color": "kobalt", "homeCity": "İstanbul", "district": "Kadıköy", "isLocal": true, "verified": true, "interests": ["Yerel yemek", "Gece hayatı", "Rota"],
+      "stats": { "avgResponseMin": 20, "responseRate30d": 0.92, "localScore": 88 } },
+    { "id": "zeynep", "name": "Zeynep", "color": "safran", "homeCity": "İstanbul", "district": "Moda", "isLocal": true, "verified": true, "interests": ["Gizli mekân", "Yerel yemek"],
+      "answeredTopics": ["Gizli mekân", "Yerel yemek", "Rota"],
+      "stats": { "avgResponseMin": 25, "responseRate30d": 0.95, "localScore": 91 },
+      "capacity": { "dailyLimit": 2, "usedToday": 1 } },
+    { "id": "deniz", "name": "Deniz", "color": "deniz", "homeCity": "İstanbul", "district": "Beşiktaş", "isLocal": true, "verified": true, "interests": ["Gece hayatı", "Gizli mekân"], "stats": null }
+  ],
+  "questions": [
+    {
+      "id": "q1", "askerId": "elif", "city": "İstanbul", "district": "Kadıköy",
+      "text": "Kadıköy'de öğrenci bütçesine uygun, turistik olmayan bir akşam yemeği yeri?",
+      "topic": "Yerel yemek", "tags": ["Yerel yemek", "Uygun fiyat"], "budget": "₺",
+      "createdAt": "19:02",
+      "assignments": [
+        { "localId": "mert", "assignedAt": "19:02", "endedAt": "19:32", "outcome": "timeout" },
+        { "localId": "zeynep", "assignedAt": "19:32", "endedAt": "19:50", "outcome": "answered" }
+      ],
+      "systemMessages": [
+        { "at": "19:02", "kind": "delivered", "text": "Sorun Mert'e iletildi. Genelde ~20 dk içinde yanıt veriyor." },
+        { "at": "19:32", "kind": "reassigned", "text": "Mert şu an müsait değil. Sorunu Zeynep'e yönlendirdik, tahmini süre ~25 dk." },
+        { "at": "19:50", "kind": "answered", "text": "Zeynep soruna cevap verdi. Cevabı değerlendirmeyi unutma." }
+      ],
+      "answer": {
+        "localId": "zeynep", "at": "19:50", "addToArchive": true,
+        "text": "Moda'da Çiya'nın arka sokağındaki küçük esnaf lokantalarına bak. Kişi başı 150-200 ₺, akşam 9'a kadar açık, turist yok denecek kadar az."
+      },
+      "rating": { "useful": true, "current": null, "reliable": null }
+    },
+    {
+      "id": "q2", "askerId": "elif", "city": "İstanbul", "district": "Beşiktaş",
+      "text": "Beşiktaş'ta gece geç saatte güvenle oturulabilecek bir yer?",
+      "topic": "Güvenli yerler", "tags": ["Güvenli yerler", "Gece hayatı"], "budget": "₺₺",
+      "assignments": [ { "localId": "deniz", "assignedAt": "dün 23:10", "endedAt": null, "outcome": null } ],
+      "ui": { "remaining": "18:10", "progress": 0.62 }
+    }
+  ],
+  "archive": [
+    { "topic": "Rota", "q": "Moda'da sakin bir sahil yürüyüşü için en iyi saat?", "a": "Hafta içi sabah 9'dan önce git. Akşamüstü sahil çok kalabalık oluyor.", "localId": "zeynep", "date": "3 Kas", "useful": 24 },
+    { "topic": "Yerel yemek", "q": "Moda'da kahvaltı için turistik olmayan bir yer?", "a": "Ana caddeden bir sokak içeri gir; küçük esnaf kahvaltıcıları hem ucuz hem sakin.", "localId": "zeynep", "date": "9 Eki", "useful": 27 },
+    { "topic": "Rota", "q": "Kadıköy'den Adalar'a gitmenin en pratik yolu?", "a": "İskeledeki vapur saatlerine bak, hafta sonu ilk seferlerden birine bin. Öğlene doğru çok doluyor.", "localId": "mert", "date": "28 Eki", "useful": 31 },
+    { "topic": "Güvenli yerler", "q": "Beşiktaş'ta maç günü nerelerden uzak durmalıyım?", "a": "Stadyum çevresi ve çarşı maçtan iki saat önce dolar. O saatlerde sahil yolunu kullan.", "localId": "deniz", "date": "21 Eki", "useful": 18 },
+    { "topic": "Gece hayatı", "q": "Kadıköy'de gece 1'den sonra açık, sakin bir yer?", "a": "Çarşı içindeki barlar geç saate kadar açık ama hafta sonu çok kalabalık. Hafta içi çok daha rahat.", "localId": "mert", "date": "15 Eki", "useful": 12 },
+    { "topic": "Yerel yemek", "q": "Kadıköy'de ucuz ve yerel bir akşam yemeği önerisi?", "a": "Çarşı'daki esnaf lokantaları akşam 8'e kadar açık, kişi başı uygun. Hafta içi git, hafta sonu kuyruk oluyor.", "localId": "mert", "date": "2 Kas", "localApproved": true },
+    { "topic": "Yerel yemek", "q": "Moda'da öğrenci bütçesiyle nerede yenir?", "a": "Moda Caddesi pahalı. Bir sokak arkadaki ev yemekçilerine bak, çok daha uygun.", "localId": "zeynep", "date": "25 Eki", "useful": 15, "localApproved": true }
+  ],
+  "answerTemplates": [
+    "Bu saatte açık, şuraya git: …",
+    "Şu semte bak: … (neden: …)",
+    "Turistik ama değer: … / Turistik, gitme: …",
+    "Bütçe dostu alternatif: …",
+    "Tam emin değilim, ama şuna bak: …",
+    "Bu soruyu daha önce cevaplamıştım"
+  ]
+}

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soru sor · Telefon · Lokale Sor</title>
+<link rel="stylesheet" href="../design/fonts.css">
+<style>
+body{margin:0}
+a{color:#15171C}a:hover{color:#D8344B}
+button,input,textarea,select{font-family:inherit}
+html{background:#E4E5E1}body{margin:0;padding:32px 16px;display:flex;justify-content:center}body>div:first-child{box-shadow:0 0 0 1px #C9CCC5}
+</style>
+</head>
+<body>
+<div style="width: 390px; height: 1400px; box-sizing: border-box; background: #FFFFFF; font-family: 'Schibsted Grotesk', system-ui, sans-serif; color: #15171C; display: flex; flex-direction: column">
+
+  <header style="padding: 10px 16px; border-bottom: 1px solid #DDDFDA; display: flex; align-items: center; gap: 6px">
+    <a href="2-ana-telefon.html" aria-label="Geri" style="width: 44px; height: 44px; margin-left: -10px; color: #15171C; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg></a>
+    <span style="font-size: 18px; font-weight: 700">Lokale sor</span>
+  </header>
+
+  <form style="flex: 1; padding: 20px 16px 28px; display: flex; flex-direction: column; gap: 24px">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-radius: 10px; background: #F0F1EE">
+      <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; font-weight: 600; color: #5F636B">Şehir</span><span style="font-size: 16px; font-weight: 700">İstanbul</span></div>
+      <button type="button" style="height: 40px; padding: 0 12px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 14px; font-weight: 600">Değiştir</button>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <label for="soru-metin" style="font-size: 15px; font-weight: 700">Sorun</label>
+      <textarea id="soru-metin" rows="3" style="box-sizing: border-box; padding: 12px 14px; border: 1.5px solid #15171C; border-radius: 8px; color: #15171C; font-size: 16px; line-height: 23px; resize: none">Kadıköy'de öğrenci bütçesine uygun, turistik olmayan bir akşam yemeği yeri?</textarea>
+    </div>
+
+    <section aria-label="Benzer sorular" style="border-radius: 12px; background: #F0F1EE; padding: 14px; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 15px; font-weight: 700">Benzer sorular cevaplanmış</span>
+        <span style="font-size: 13px; color: #5F636B">Belki aradığın cevap zaten burada.</span>
+      </div>
+      <article style="background: #FFFFFF; border: 1px solid #DDDFDA; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px">
+        <h3 style="margin: 0; font-size: 14px; line-height: 20px; font-weight: 700">Kadıköy'de ucuz ve yerel bir akşam yemeği önerisi?</h3>
+        <p style="margin: 0; font-size: 14px; line-height: 20px; color: #3D4047">"Çarşı'daki esnaf lokantaları akşam 8'e kadar açık, kişi başı uygun. Hafta içi git, hafta sonu kuyruk oluyor."</p>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #5F636B"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 999px; background: #2C5BF0; color: #FFFFFF; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">M</span><span style="color: #15171C; font-weight: 600">Mert</span><span>· 2 Kas</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 4px; font-weight: 600; color: #15171C"><svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0.8 9.9 2.3 12.3 2.1 12.9 4.4 15 5.6 14.1 7.9 15 10.1 12.9 11.4 12.3 13.7 9.9 13.5 8 15 6.1 13.5 3.7 13.7 3.1 11.4 1 10.1 1.9 7.9 1 5.6 3.1 4.4 3.7 2.1 6.1 2.3Z" fill="#15171C"></path><path d="m5.2 8.1 1.9 1.9 3.8-3.8" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="square"></path></svg>Lokal onaylı</span></div>
+      </article>
+      <article style="background: #FFFFFF; border: 1px solid #DDDFDA; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px">
+        <h3 style="margin: 0; font-size: 14px; line-height: 20px; font-weight: 700">Moda'da öğrenci bütçesiyle nerede yenir?</h3>
+        <p style="margin: 0; font-size: 14px; line-height: 20px; color: #3D4047">"Moda Caddesi pahalı. Bir sokak arkadaki ev yemekçilerine bak, çok daha uygun."</p>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #5F636B"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 999px; background: #E9A21B; color: #15171C; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center">Z</span><span style="color: #15171C; font-weight: 600">Zeynep</span><span>· 25 Eki</span><span style="margin-left: auto; display: inline-flex; align-items: center; gap: 4px; font-weight: 600; color: #15171C"><svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0.8 9.9 2.3 12.3 2.1 12.9 4.4 15 5.6 14.1 7.9 15 10.1 12.9 11.4 12.3 13.7 9.9 13.5 8 15 6.1 13.5 3.7 13.7 3.1 11.4 1 10.1 1.9 7.9 1 5.6 3.1 4.4 3.7 2.1 6.1 2.3Z" fill="#15171C"></path><path d="m5.2 8.1 1.9 1.9 3.8-3.8" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="square"></path></svg>Lokal onaylı</span></div>
+      </article>
+      <div style="display: flex; gap: 8px">
+        <button type="button" style="flex: 1; height: 44px; border: 1px solid #15171C; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 15px; font-weight: 700">Bu yeterli</button>
+        <button type="button" style="flex: 1; height: 44px; border: 0; border-radius: 8px; background: #15171C; color: #FFFFFF; font-size: 15px; font-weight: 700">Yine de sor</button>
+      </div>
+    </section>
+
+    <fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 10px">
+      <legend style="padding: 0 0 10px; font-size: 15px; font-weight: 700">Konu</legend>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px">
+        <button type="button" aria-pressed="false" style="height: 40px; padding: 0 12px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 14px; font-weight: 500">Gizli mekân</button>
+        <button type="button" aria-pressed="true" style="height: 40px; padding: 0 12px; border: 1px solid #15171C; border-radius: 8px; background: #15171C; color: #FFFFFF; font-size: 14px; font-weight: 600">Yerel yemek</button>
+        <button type="button" aria-pressed="false" style="height: 40px; padding: 0 12px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 14px; font-weight: 500">Uygun fiyat</button>
+        <button type="button" aria-pressed="false" style="height: 40px; padding: 0 12px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 14px; font-weight: 500">Rota</button>
+        <button type="button" aria-pressed="false" style="height: 40px; padding: 0 12px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 14px; font-weight: 500">Gece hayatı</button>
+        <button type="button" aria-pressed="false" style="height: 40px; padding: 0 12px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 14px; font-weight: 500">Güvenli yerler</button>
+      </div>
+    </fieldset>
+
+    <div style="display: flex; gap: 16px">
+      <fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column">
+        <legend style="padding: 0 0 10px; font-size: 15px; font-weight: 700">Bütçe</legend>
+        <div style="display: inline-flex; border: 1px solid #15171C; border-radius: 8px; overflow: hidden">
+          <button type="button" aria-pressed="true" style="height: 44px; width: 48px; border: 0; background: #15171C; color: #FFFFFF; font-size: 15px; font-weight: 700">₺</button>
+          <button type="button" aria-pressed="false" style="height: 44px; width: 48px; border: 0; border-left: 1px solid #15171C; background: #FFFFFF; color: #15171C; font-size: 15px; font-weight: 700">₺₺</button>
+          <button type="button" aria-pressed="false" style="height: 44px; width: 48px; border: 0; border-left: 1px solid #15171C; background: #FFFFFF; color: #15171C; font-size: 15px; font-weight: 700">₺₺₺</button>
+        </div>
+      </fieldset>
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 10px">
+        <label for="semt" style="font-size: 15px; font-weight: 700">Semt <span style="font-weight: 400; color: #5F636B">(isteğe bağlı)</span></label>
+        <select id="semt" style="height: 44px; padding: 0 10px; border: 1px solid #C9CCC5; border-radius: 8px; background: #FFFFFF; color: #15171C; font-size: 15px">
+          <option>Kadıköy</option>
+          <option>Moda</option>
+          <option>Beşiktaş</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px">
+      <a href="3-sor-araniyor-telefon.html" style="height: 52px; border-radius: 8px; background: #15171C; color: #FFFFFF; text-decoration: none; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center">Lokale gönder</a>
+      <span style="font-size: 13px; line-height: 19px; color: #5F636B; text-align: center">Sorun Kadıköy'de yaşayan bir lokale gider. Cevap gelmezse otomatik olarak sıradakine geçer.</span>
+    </div>
+  </form>
+
+  <nav aria-label="Ana menü" style="border-top: 1px solid #DDDFDA; padding: 0 6px 20px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr))">
+    <a href="2-ana-telefon.html" style="text-decoration: none; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #5F636B; font-size: 11px; font-weight: 500"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M4 10 12 4l8 6v10H4Z"></path></svg>Ana sayfa</a>
+    <a href="#" aria-current="page" style="text-decoration: none; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #15171C; font-size: 11px; font-weight: 700; box-shadow: inset 0 3px 0 #15171C"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Soru sor</a>
+    <a href="#" style="text-decoration: none; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #5F636B; font-size: 11px; font-weight: 500"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h9"></path></svg>Sorularım</a>
+    <a href="#" style="text-decoration: none; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #5F636B; font-size: 11px; font-weight: 500"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M4 5h16v14H4Z"></path><path d="M4 13h5l1 2h4l1-2h5"></path></svg>Gelen kutusu</a>
+    <a href="#" style="text-decoration: none; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #5F636B; font-size: 11px; font-weight: 500"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"></path></svg>Profil</a>
+  </nav>
+</div>
+</body>
+</html>

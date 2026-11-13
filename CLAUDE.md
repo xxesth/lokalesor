@@ -2,7 +2,7 @@
 
 Bu dosyayı Claude Code her oturumda okur. Ekipteki herkes için geçerlidir.
 
-Turistin gittiği şehirde yaşayan lokale soru sorduğu, insan odaklı bir seyahat platformu. Ürünle ilgili her şey `Lokale Sor Demo Brief.md` dosyasında.
+Turistin gittiği şehirde yaşayan lokale soru sorduğu, insan odaklı bir seyahat platformu. Ürünle ilgili her şey `docs/brief.md` dosyasında. Görsel kimlik bölümü (3.2) geçersiz, onun yerine `docs/handoff/` kullanılır (bkz. ADR-013).
 Hocanın beklentisi: **ölçeklenebilir ve performans odaklı bir mimari.**
 
 ## Önce bunları oku

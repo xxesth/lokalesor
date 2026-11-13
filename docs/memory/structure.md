@@ -5,8 +5,8 @@ Yeni bir dosya açtığında bu dosyayı güncelle. Dosya isimleri kebab-case ol
 ```
 /
 ├─ CLAUDE.md
-├─ Lokale Sor Demo Brief.md
 ├─ claude-design-prompts.md
+├─ docs/brief.md                # ürün brief'i (EM). Görsel kimlik bölümü geçersiz → handoff
 ├─ docs/memory/                 # ekip hafızası
 ├─ docs/handoff/                # Claude Design teslimi (salt okunur referans)
 │  ├─ README.md                 #   tasarım ilkeleri, bileşen envanteri, davranışlar

@@ -51,11 +51,12 @@ export function LocalStatsRow({ p, size = "s" }: { p: LocalProfile; size?: "s" |
 export function LocalProfileCompact({ p }: { p: LocalProfile }) {
   return (
     <section className="overflow-hidden rounded-panel-l border border-line" style={personStyle(p.color)}>
-      <div className="h-14 bg-person" />
-      <div className="flex flex-col gap-4 px-5 pb-5">
-        <div className="-mt-8 flex items-end gap-3">
-          <Avatar name={p.name} color={p.color} size={64} ring />
-          <div className="flex flex-col pt-10">
+      {/* Kişi rengi şerit; avatar ve isim şeride binmez. */}
+      <div className="h-3 bg-person" />
+      <div className="flex flex-col gap-4 px-5 pb-5 pt-4">
+        <div className="flex items-center gap-3">
+          <Avatar name={p.name} color={p.color} size={56} />
+          <div className="flex flex-col">
             <span className="inline-flex items-center gap-1.5 text-lg font-bold">
               {p.name} {p.verified && <VerifiedSeal />}
             </span>

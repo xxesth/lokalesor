@@ -1,6 +1,9 @@
 # Sözleşmeler (taslak)
 
-Bu dosya `src/domain/types.ts` ve `src/data/repository.ts` için **taslaktır**. Kod yazılınca bu dosya değil, kodun kendisi tek doğru kaynak olur. Burada sadece özet ve kurallar kalır.
+Bu dosya `@lokale/contracts` paketi, web'deki Repository arayüzü ve REST uç noktaları için **taslaktır**. Kod yazılınca bu dosya değil, kodun kendisi tek doğru kaynak olur. Burada sadece özet ve kurallar kalır.
+Sözleşme dosyaları:
+- `packages/contracts/src/*`: web, api, realtime ve domain ortak kullanır.
+- `apps/web/src/data/repository.ts`: istemcinin portu.
 Değişiklik talepleri `progress.md` dosyasındaki "Sözleşme talepleri" bölümüne yazılır.
 
 ## Genel kurallar
@@ -9,8 +12,9 @@ Değişiklik talepleri `progress.md` dosyasındaki "Sözleşme talepleri" bölü
 - **Aktör parametre olarak gönderilmez.** "Ben kimim" bilgisi her zaman oturumdan alınır. `askQuestion(input)` çağrılır, `askQuestion(userId, input)` diye bir imza yoktur. Bu bir güvenlik kuralıdır.
 - Her Repository fonksiyonu `Promise` döndürür. Hata durumunda `RepoError` fırlatır.
 - Kişisel iletişim bilgisi hiçbir tipte yer almaz.
+- İstek girdileri **zod şeması** olarak yazılır. TS tipi `z.infer` ile şemadan türetilir, elle yazılmaz. api bu şemalarla doğrular, web aynı şemalarla tip alır.
 
-## `src/domain/types.ts`
+## `packages/contracts/src/entities.ts` + `enums.ts`
 ```ts
 export type Id = string;
 export type Timestamp = number; // epoch ms
@@ -214,11 +218,13 @@ export interface ArchivedAnswer {
 }
 ```
 
-## `src/data/repository.ts`
+## `packages/contracts/src/api.ts`: istek şemaları
+Aşağıdaki tipler zod şeması olarak yazılır (`AskQuestionInput = z.infer<typeof askQuestionInput>`).
 ```ts
 export interface AskQuestionInput {
   city: CityId; district: DistrictId | null;
-  text: string; topic: Topic; budget: Budget;
+  text: string;                   // 10-500 karakter
+  topic: Topic; budget: Budget;
 }
 export interface SubmitAnswerInput {
   assignmentId: Id; text: string; templateId: string | null; archive: boolean;
@@ -231,9 +237,13 @@ export interface ReportInput {
   reason: Report["reason"]; description: string;
 }
 export interface SettingsPatch {
-  dailyLimit?: number; homeDistrict?: DistrictId | null; interests?: Topic[];
+  dailyLimit?: number;            // 1-5
+  homeDistrict?: DistrictId | null; interests?: Topic[];
 }
+```
 
+## `packages/contracts/src/channels.ts`
+```ts
 export type Channel =
   | `question:${Id}`
   | `inbox:${Id}`
@@ -244,6 +254,39 @@ export interface ChannelEvent {
   type: "changed";                // sinyal; veri taşımaz
   at: Timestamp;
 }
+// Redis kanal adı: `evt:${Channel}`
+```
+
+## REST uç noktaları (`ROUTES`, `packages/contracts/src/api.ts`)
+Bütün uç noktalar `/api` altında. Aktör her zaman oturumdan alınır.
+
+| Repository fonksiyonu | Yöntem ve yol | Cevap |
+|---|---|---|
+| `findSimilarAnswers` | `GET /api/questions/similar?city&text&topic` | `ArchivedAnswer[]` |
+| `listPopular` | `GET /api/archive/popular?city&topic&budget&cursor` | `{ items, nextCursor }` |
+| `listAvailableLocals` | `GET /api/locals/available?city` | `LocalSummary[]` |
+| `askQuestion` | `POST /api/questions` | `QuestionSummary` (201) |
+| `listMyQuestions` | `GET /api/questions/mine` | `QuestionSummary[]` |
+| `getQuestionThread` | `GET /api/questions/:id` | `QuestionThread` |
+| `rateAnswer` | `POST /api/answers/:id/rating` | `{ rating, localScore }` |
+| `getInbox` | `GET /api/inbox` | `InboxView` |
+| `submitAnswer` | `POST /api/answers` | `Answer` (201) |
+| `declineAssignment` | `POST /api/assignments/:id/decline` | 204 |
+| `listMyArchive` | `GET /api/me/archive` | `ArchivedAnswer[]` |
+| `setArchived` | `PATCH /api/answers/:id` `{ archived }` | 204 |
+| `getLocalProfile` | `GET /api/locals/:id` | `LocalProfile` |
+| `listNotifications` | `GET /api/notifications` | `Notification[]` |
+| `markNotificationsRead` | `POST /api/notifications/read` `{ ids? }` | 204 |
+| `updateSettings` | `PATCH /api/me/settings` | `User` |
+| `report` | `POST /api/reports` | 204 |
+| (realtime) | `POST /api/realtime/token` | `{ token, expiresAt }` |
+| `AuthPort` | `/api/auth/*` (Better Auth) + `GET /api/me/session`, `PATCH /api/me/session` `{ currentCity?, roleOverride? }` | `Session` |
+| `DemoControls` | `POST /api/dev/reset`, `POST /api/dev/config` (sadece geliştirmede) | 204 |
+
+**Realtime:** `GET /events?token=…&channels=a,b` → `event: changed` + `data: ChannelEvent`. Ayrıntılar `architecture.md` → "Realtime protokolü" bölümünde.
+
+## `apps/web/src/data/repository.ts`: istemci portu
+```ts
 export type Unsubscribe = () => void;
 
 export interface Repository {
@@ -297,7 +340,7 @@ export interface DemoControls {     // sadece geliştirme ortamında / mock'ta
 }
 ```
 
-## `src/data/errors.ts`
+## `packages/contracts/src/errors.ts`
 ```ts
 export type RepoErrorCode =
   | "UNAUTHENTICATED" | "FORBIDDEN" | "NOT_FOUND"
@@ -306,9 +349,15 @@ export type RepoErrorCode =
 export class RepoError extends Error {
   constructor(public code: RepoErrorCode, message?: string) { super(message ?? code); }
 }
+export const HTTP_STATUS: Record<RepoErrorCode, number> = {
+  UNAUTHENTICATED: 401, FORBIDDEN: 403, NOT_FOUND: 404, VALIDATION: 400,
+  CAPACITY_FULL: 409, ASSIGNMENT_EXPIRED: 409, ASSIGNMENT_CLOSED: 409, ALREADY_RATED: 409,
+};
+// Hata cevabının gövdesi: { code: RepoErrorCode, message: string }
+// HttpAdapter bu gövdeyi tekrar RepoError'a çevirir. Mock ile http aynı hatayı fırlatır.
 ```
 
-## Domain fonksiyon imzaları (taslak)
+## Domain fonksiyon imzaları (`packages/domain/src/`, taslak)
 ```ts
 // role.ts
 resolveRole(user: User, currentCity: CityId, override: Role | null): Role

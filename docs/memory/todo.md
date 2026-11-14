@@ -7,23 +7,23 @@ Ekip: **Mali** (mimari ve çekirdek), **Fatih** (arka uç), **Ökkeş** (ön yü
 
 ## Faz 1 — Demo (1 gün · Mali)
 Hedef: brief'in 5. bölümündeki senaryo iki pencerede baştan sona çalışsın. Her şey MockAdapter üzerinde.
+Monorepo ilk günden kurulur, ama sadece `apps/web`, `packages/contracts`, `packages/domain` ve `packages/config` (ADR-023).
 Sıra kritik yola göre belirlendi: vakit yetmezse sondaki 🟡 maddeler atlanır.
 
 ### 1.1 Kurulum
-- [ ] Next.js (App Router) + TS strict + Tailwind v4 iskeleti, `@/` alias'ı
-- [ ] `src/styles/tokens.css` (handoff'tan) + `globals.css` içinde `@theme` eşlemesi
-- [ ] Schibsted Grotesk'i `next/font/local` ile yükle (`src/app/fonts/`, OFL.txt dahil)
-- [ ] Vitest, ESLint ve `typecheck` script'i
-- [ ] `.env.example` dosyasına `NEXT_PUBLIC_DATA_SOURCE=mock` ekle
+- [ ] pnpm workspace + Turborepo: `pnpm-workspace.yaml`, `turbo.json`, kök `package.json` script'leri
+- [ ] `packages/config`: `tsconfig.base.json` (strict), ESLint (bağımlılık kuralları dahil), Vitest ayarları
+- [ ] `apps/web`: Next.js (App Router) + Tailwind v4, `@/` alias'ı
+- [ ] `tokens.css` (handoff'tan) + `globals.css` içinde `@theme` eşlemesi
+- [ ] Schibsted Grotesk'i `next/font/local` ile yükle (OFL.txt dahil)
+- [ ] `.env.example`
 
 ### 1.2 Sözleşmeler
-- [ ] `src/domain/types.ts`
-- [ ] `src/data/repository.ts`: `Repository`, `AuthPort`, `DemoControls`
-- [ ] `src/data/errors.ts`
-- [ ] `src/domain/config.ts`, `src/domain/labels.ts`
+- [ ] `packages/contracts`: `entities.ts`, `enums.ts`, `api.ts` (zod şemaları + `ROUTES`), `channels.ts`, `errors.ts`
+- [ ] `apps/web/src/data/repository.ts`: `Repository`, `AuthPort`, `DemoControls`
 
-### 1.3 Domain (testleriyle)
-- [ ] `role.ts`, `countdown.ts`
+### 1.3 Domain (`packages/domain`, testleriyle)
+- [ ] `config.ts`, `labels.ts`, `role.ts`, `countdown.ts`
 - [ ] `messages.ts`: tüm otomatik mesaj ve bildirim metinleri
 - [ ] `matching.ts`: `filterEligible`, `rankCandidates`, `pickNextLocal`
 - [ ] `reassignment.ts`: süre dolması ve decline durumları, deneme sınırı → açık havuz
@@ -31,15 +31,14 @@ Sıra kritik yola göre belirlendi: vakit yetmezse sondaki 🟡 maddeler atlanı
 - [ ] `answer-templates.ts`
 - [ ] 🟡 `similarity.ts`
 
-### 1.4 MockAdapter
-- [ ] `mock/clock.ts`: ileri sarılabilen saat
-- [ ] `mock/store.ts`: bellek + localStorage
-- [ ] `mock/sync.ts`: BroadcastChannel
-- [ ] `mock/seed.ts`: `seed.json` sözleşme tiplerine çevrilecek. Senaryoda eşleştirme **Mert'i 1., Zeynep'i 2.** sıraya koymalı. Çiya metni düzeltilecek.
-- [ ] `mock/mock-auth.ts`: hazır kullanıcıyla giriş, oturum sessionStorage'da
-- [ ] `mock/mock-repository.ts`: tüm `Repository` fonksiyonları, aktör oturumdan alınır
-- [ ] `mock/scheduler.ts`: 5 sn'de bir süresi dolan atamaları işler
-- [ ] `data/index.ts` (`getRepository`), `query-keys.ts`, `use-channel.ts`, `useNow()`
+### 1.4 MockAdapter (`apps/web/src/data/mock`)
+- [ ] `clock.ts`, `store.ts` (bellek + localStorage), `sync.ts` (BroadcastChannel)
+- [ ] `seed.ts`: `seed.json` sözleşme tiplerine çevrilecek. Senaryoda eşleştirme **Mert'i 1., Zeynep'i 2.** sıraya koymalı. Çiya metni düzeltilecek.
+  - Ek demo kullanıcıları: **Çağlar Fidan, Efe Genç, Serkan Dağaşan, Yağmur Arpa, Melike Kaplan.** Çoğu İstanbul'da farklı semtlerde lokal olacak, bir kısmı başka şehirlerden gelen turistler. Arşiv cevaplarında ve popüler sorularda da kullanılacaklar. Bu kullanıcılar senaryoda Mert'in ve Zeynep'in önüne geçmemeli.
+- [ ] `mock-auth.ts`: hazır kullanıcıyla giriş, oturum sessionStorage'da
+- [ ] `mock-repository.ts`: tüm `Repository` fonksiyonları, aktör oturumdan alınır
+- [ ] `scheduler.ts`: 5 sn'de bir süresi dolan atamaları işler
+- [ ] `data/index.ts` (`getRepository`), `query-keys.ts`, `use-channel.ts`, `use-now.ts`
 - [ ] Providers: TanStack Query + Session
 
 ### 1.5 UI kit + layout
@@ -75,34 +74,39 @@ Sıra kritik yola göre belirlendi: vakit yetmezse sondaki 🟡 maddeler atlanı
 
 ---
 
-## Faz 2 — Gerçek arka uç ve tamamlama (üç kişi paralel)
-Bağımlılıklar: Fatih sözleşmenin sunucu tarafını yazar. Ökkeş mock üzerinde çalışır, arka ucu beklemez. Mali iki tarafı birleştirir.
+## Faz 2 — Ayrık arka uç ve tamamlama (üç kişi paralel)
+Bağımlılıklar:
+- Fatih `contracts`'taki şemalara göre api'yi yazar.
+- Ökkeş mock üzerinde çalışır, arka ucu beklemez.
+- Mali altyapıyı, realtime'ı, worker'ı ve `core/assignments.ts`'i yazar.
+- ⚠️ Fatih'in `askQuestion`'ı Mali'nin `assignNext`'ini çağırıyor. Bu yüzden Mali `assignNext`'i **Faz 2'nin ilk işi** olarak teslim eder. Hazır olana kadar Fatih geçici bir stub kullanır.
 
-### Mali — mimari ve çekirdek
-- [ ] Sözleşme sahipliği: `progress.md` dosyasındaki talepleri karara bağlamak
-- [ ] GitHub Actions: her PR'da lint, typecheck ve test çalışsın
-- [ ] `server/realtime/`: `LISTEN/NOTIFY` broker → SSE, `api/events/route.ts`
-- [ ] `server/jobs/reassign.ts` + `instrumentation.ts` (15 sn'de bir çalışan zamanlayıcı)
-- [ ] `similarity.ts` yerine Postgres full-text search (Fatih ile birlikte)
+### Mali — altyapı, realtime, worker
+- [ ] `docker-compose.yml` (Postgres + Redis), `.env.example` güncellemesi
+- [ ] `turbo dev` ile 4 servisi birlikte çalıştırma; `apps/web` içinde `/api` ve `/events` rewrite'ları
+- [ ] GitHub Actions: her PR'da lint, typecheck ve test
+- [ ] `packages/core`: `tx.ts` (`withTx`), `infra/redis.ts`, `infra/publish.ts`, `infra/queue.ts`
+- [ ] `packages/core/assignments.ts`: `assignNext` (`SKIP LOCKED`), `closeAndReassign`, `sweepExpired` + testleri
+- [ ] `apps/worker`: `assignment-deadline`, `sweep-expired`, `refresh-stats` job'ları, düzgün kapanış
+- [ ] `apps/realtime`: `GET /events`, JWT doğrulama (`jose`), kanal yetkisi, hub, Redis aboneliği, heartbeat
+- [ ] `apps/web/src/data/http/event-source.ts`: token al → bağlan → yeniden bağlan
 - [ ] Entegrasyon: `NEXT_PUBLIC_DATA_SOURCE=http` ile uçtan uca senaryo
-- [ ] Yük testi: k6 ya da autocannon ile eşzamanlı soru sorma ve kapasite yarışı (rapordaki ölçek iddiası için)
-- [ ] Code review
+- [ ] Yük testi (k6): eşzamanlı soru sorma, kapasite yarışı, 1000 SSE bağlantısı
+- [ ] `Caddyfile` (production)
+- [ ] Sözleşme taleplerini karara bağlamak, code review
 - [ ] Rapor: SDD mimari bölümü
 
-### Fatih — arka uç
-- [ ] `docker-compose.yml` (Postgres), `.env`, `drizzle.config.ts`
-- [ ] `server/db/schema.ts`: tablolar, kısmi index (`assignments(deadline) WHERE status='pending'`), `home_city` index'i, `interests` üzerinde GIN
-- [ ] Migration'lar + seed script'i (mock seed ile aynı veri)
-- [ ] Better Auth kurulumu + demo kullanıcıları, `server/session.ts` (`requireUser`)
-- [ ] `services/questions.ts`: `askQuestion` tek transaction'da, `SKIP LOCKED` ile
-- [ ] `services/answers.ts`: `submitAnswer`, `declineAssignment`, `rateAnswer`
-- [ ] `services/assignments.ts`: `expireAssignments`
-- [ ] `services/profiles.ts`: `local_stats` materialized view'ı ve yenilenmesi
-- [ ] `services/notifications.ts`
-- [ ] `app/api/**`: zod ile doğrulama, ince route handler'lar
-- [ ] `data/http/`: `HttpAdapter` + `http-auth` (fetch + EventSource)
-- [ ] Servis testleri: test veritabanı üzerinde transaction ve yarış durumu testleri
-- [ ] Rapor: SDD veri tasarımı bölümü (ER diyagramı, index'ler)
+### Fatih — veritabanı, api, auth
+- [ ] `packages/db`: `schema.ts` (tablolar, kısmi index, `home_city` index'i, `interests` üzerinde GIN, `local_stats` materialized view), `client.ts`, migration'lar, `seed.ts`
+- [ ] `apps/api`: Fastify kurulumu, pino, zod type provider, OpenAPI (`/api/docs`), hata plugin'i
+- [ ] Better Auth + demo kullanıcıları, `plugins/session.ts`, `GET/PATCH /api/me/session`
+- [ ] `packages/core`: `questions.ts`, `answers.ts`, `inbox.ts`, `profiles.ts`, `notifications.ts` (transaction'lar `withTx` ile)
+- [ ] `apps/api/routes/*`: `contracts.md`'deki tüm REST uç noktaları + `POST /api/realtime/token`
+- [ ] `apps/api/routes/dev.ts`: sıfırla, `T` ayarı
+- [ ] `apps/web/src/data/http/`: `http-repository.ts` (`ROUTES` + fetch + `RepoError` dönüşümü), `http-auth.ts`
+- [ ] `core` testleri: test veritabanı üzerinde transaction ve yarış durumları
+- [ ] Postgres full-text search ile `findSimilar` (Türkçe sözlük)
+- [ ] Rapor: SDD veri tasarımı bölümü (ER diyagramı, index'ler, OpenAPI)
 
 ### Ökkeş — ön yüzü tamamlama
 - [ ] Faz 1'de kalan 🟡 ekranlar: landing, benzer cevaplar
@@ -116,7 +120,7 @@ Bağımlılıklar: Fatih sözleşmenin sunucu tarafını yazar. Ökkeş mock üz
 - [ ] Rapor: SDD arayüz bölümü (ekran akışı, bileşen envanteri)
 
 ### Ortak
-- [ ] Ara rapor güncellemesi (brief 7. bölüm): araçlar tablosunda "React / responsive web" ifadesi ve kapsamda "ilk sürüm web" notu
+- [ ] Ara rapor güncellemesi (brief 7. bölüm): araçlar tablosu ve "ilk sürüm web" notu
 - [ ] EM'den `T`, deneme sınırı ve ağırlık değerlerini alıp `config.ts`'e işlemek
 
 ---
@@ -129,5 +133,5 @@ Bağımlılıklar: Fatih sözleşmenin sunucu tarafını yazar. Ökkeş mock üz
 - [ ] Seviye sistemi ve rozetler
 - [ ] Local Partner ve sponsorlu öneriler ("Sponsorlu" etiketiyle)
 - [ ] Kayıtta kişi rengi seçimi
-- [ ] Ölçek: Redis pub/sub (çok instance), okuma replikası, şehre göre sharding planı
-- [ ] Yayın: kendi sunucumuzda Docker ile (`next start` + Postgres)
+- [ ] Ölçek: okuma replikası, şehre göre sharding planı, gerekirse realtime servisinin Rust'a taşınması
+- [ ] Yayın: hedef seçimi (kendi sunucumuz ya da bulut), Docker imajları, Caddy

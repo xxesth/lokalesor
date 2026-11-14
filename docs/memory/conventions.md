@@ -2,9 +2,18 @@
 
 ## TypeScript
 - `strict: true`. `any` kullanılmaz; gerekiyorsa `unknown` + daraltma kullanılır.
-- Import'lar `@/` alias'ı ile yapılır (`@/domain/types`). `../../..` şeklinde göreli import kullanılmaz.
-- Domain tipleri `@/domain/types`'tan alınır, başka bir yerde yeniden tanımlanmaz.
-- Sunucuya gelen girdiler (2. faz) route handler'da **zod** ile doğrulanır.
+- Uygulama içi import'lar `@/` alias'ı ile yapılır (`@/features/inbox`). Paketler arası import'lar paket adıyla yapılır (`@lokale/contracts`). `../../..` şeklinde göreli import kullanılmaz.
+- Varlık tipleri sadece `@lokale/contracts`'tan alınır, başka bir yerde yeniden tanımlanmaz.
+- İstek girdileri zod şemasıyla tanımlanır (`@lokale/contracts/api`), tip `z.infer` ile türetilir.
+- Bağımlılık kuralları ESLint ile denetlenir: `web`, `db`/`core` paketlerini import edemez; paketler `apps/*`'tan import edemez.
+- Her paketin `package.json` dosyasında açık bir `exports` alanı bulunur. Paketin iç dosyalarına doğrudan import yapılmaz.
+
+## Sunucu (api, worker, core)
+- Route ve job handler'ları ince tutulur: doğrula → `core` → cevap dön.
+- Transaction'lar `withTx()` ile açılır. Redis yayını ve kuyruğa iş ekleme commit'ten sonra yapılır.
+- `RepoError` fırlatılır. api bu hatayı `HTTP_STATUS` tablosuna göre `{ code, message }` gövdesiyle döndürür.
+- Log için pino kullanılır, `console.log` yazılmaz. Her log satırında `requestId` ya da `jobId` bulunur.
+- Job'lar idempotent yazılır: aynı iş iki kez çalışsa da sonuç değişmez.
 
 ## İsimlendirme
 | Ne | Kural | Örnek |
@@ -41,11 +50,11 @@
 
 ## Metinler
 - Arayüz metinleri Türkçe ve "sen" diliyle yazılır. Kısa cümleler kullanılır.
-- Otomatik mesaj metinleri **sadece** `domain/messages.ts` içinde yazılır.
+- Otomatik mesaj metinleri **sadece** `@lokale/domain` içindeki `messages.ts` dosyasında yazılır.
 - Etiketlerin Türkçe karşılıkları `domain` içinde tek bir yerde tutulur (`TOPIC_LABELS`, `BUDGET_LABELS`).
 
 ## Test
-- `domain/` içindeki her fonksiyonun bir `*.test.ts` dosyası olur. Özellikle eşleştirme, yeniden atama ve istatistik fonksiyonlarının testi zorunludur.
+- `@lokale/domain` içindeki her fonksiyonun bir `*.test.ts` dosyası olur. `@lokale/core` testleri gerçek bir test veritabanında çalışır (Faz 2). Özellikle eşleştirme, yeniden atama ve istatistik fonksiyonlarının testi zorunludur.
 - Testlerde zaman sabit bir `now` ile verilir.
 
 ## Git

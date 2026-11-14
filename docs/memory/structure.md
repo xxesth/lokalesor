@@ -14,6 +14,8 @@ Yeni bir dosya ya da klasör açtığında bu dosyayı güncelle. Dosya isimleri
 ├─ docker-compose.yml           # (F2) Postgres + Redis
 ├─ Caddyfile                    # (F2) production proxy
 ├─ claude-design-prompts.md
+├─ docs/setup.md                # kurulum ve komutlar
+├─ docs/demo.md                 # sunumda demo adımları
 ├─ docs/
 │  ├─ brief.md                  # ürün brief'i (EM). Görsel kimlik bölümü geçersiz → handoff
 │  ├─ memory/                   # ekip hafızası
@@ -114,7 +116,7 @@ apps/web/
 | Dosya | İçerik |
 |---|---|
 | `repository.ts` | **Sözleşme.** `Repository`, `AuthPort`, `DemoControls` arayüzleri |
-| `index.ts` | `getRepository()`: `NEXT_PUBLIC_DATA_SOURCE=mock|http` değerine göre adapter seçer |
+| `index.ts` | `getRepository()`, `getAuth()`, `getDemoControls()`, `clock`, `onDataReset()`, `startBackgroundJobs()`: `NEXT_PUBLIC_DATA_SOURCE` değerine göre adapter seçer |
 | `query-keys.ts` | TanStack Query anahtarlarının hepsi |
 | `use-channel.ts` | `useChannel(channel, keysToInvalidate)` |
 | `use-now.ts` | Tek bir interval ile saniyelik saat |
@@ -124,7 +126,9 @@ apps/web/
 | `mock/seed.ts` | `docs/handoff/data/seed.json` sözleşme tiplerine çevrilmiş hali |
 | `mock/mock-auth.ts` | Hazır kullanıcıyla giriş, oturum sessionStorage'da |
 | `mock/mock-repository.ts` | `Repository` arayüzünün mock uygulaması (`@lokale/domain` fonksiyonlarını çağırır) |
-| `mock/scheduler.ts` | 5 sn'de bir süresi dolan atamaları işler |
+| `mock/scheduler.ts` | 2 sn'de bir süresi dolan atamaları işler; Web Locks ile sadece bir sekme (lider) çalıştırır |
+| `mock/sync.ts` | BroadcastChannel ile sekmeler arası sinyal |
+| `mock/scenario.test.ts` | Brief 5. bölüm senaryosu uçtan uca (vitest) |
 | `http/http-repository.ts` | (F2) `ROUTES` + fetch |
 | `http/http-auth.ts` | (F2) Better Auth istemcisi |
 | `http/event-source.ts` | (F2) token al → `EventSource` → yeniden bağlanma |
@@ -139,20 +143,21 @@ Her feature'ın içinde `components/`, `hooks/` ve `index.ts` bulunur. Bir featu
 | `home/` | `AskBox`, `ActiveQuestions`, `PopularQuestions` (2-ana) |
 | `ask/` | `AskForm`, `SimilarAnswersPanel`, `AskProgress` (3-sor-*) |
 | `question/` | `QuestionCard`, `ActiveQuestionCard`, `QuestionJourney`, `AutoMessage`, `HumanAnswerCard`, `ThreadView`, `MyQuestions` (4-detay-*) |
-| `rating/` | `RatingBox`, `RatingThanks` (4-detay-tesekkur) |
+| `rating/` | `RatingBox` (teşekkür durumu dahil), `ReportForm` (şikâyet) (4-detay-tesekkur) |
 | `inbox/` | `InboxList`, `InboxItem`, `CapacityMeter`, `AnsweredToday`, `InboxEmpty` (5-gelen-*) |
 | `answer/` | `AnswerForm`, `AnswerTemplates`, "Bilmiyorum, sıradakine geçsin" (5-cevapla) |
 | `profile/` | `LocalProfileCard` (`full | compact | sheet`), `LocalStatsRow` (6-profil-*) |
-| `archive/` | `ArchiveItem`, lokalin arşiv sayfası |
-| `notifications/` | `NotificationPanel`, `NotificationItem` (7-bildirim-*) |
-| `settings/` | Rol/şehir, günlük limit (tasarımı yok, stil rehberine göre) |
+| `archive/` | `ArchiveItem`, `MyArchivePage` (lokalin arşivi) |
+| `notifications/` | `NotificationBell` (masaüstünde açılır kutu, telefonda `/bildirimler`), `NotificationList`, `NotificationItem`, `useNotifications` (7-bildirim-*) |
+| `settings/` | `SettingsPage`: günlük limit, semt, ilgi alanları, çıkış (tasarımı yok, stil rehberine göre) |
+| `shell/` | `AppHeader`, `TabBar`, `Logo`, `nav.ts`: oturuma bağlı kabuk (bu yüzden `components/layout`'ta değil) |
 | `dev-panel/` | `T` ayarı, zamanı ileri sar, sıfırla, atama tablosu |
 
 ### `src/components/`: ortak, iş mantığından bağımsız
 | Klasör | Bileşenler |
 |---|---|
 | `ui/` | `Button`, `Chip`, `TopicChips`, `BudgetSegment`, `Avatar`, `VerifiedSeal`, `VerifiedBadge`, `StatusGlyph`, `StatusLabel`, `Countdown`, `ProgressLine`, `Sheet`, `EmptyState`, `Textarea`, `Select`, `icons.tsx` |
-| `layout/` | `AppHeader`, `TabBar`, `DesktopTabs`, `RoleToggle`, `CitySelector`, `NotificationBell`, `FlowHeader`, `TwoColumn` |
+| `layout/` | `RoleToggle`, `CitySelector`, `FlowHeader` + `BackLink`, `Page` + `TwoColumn` (oturumdan bağımsız görünüm bileşenleri) |
 
 Referans: `0-stil-rehberi`. SVG ikonları ekran HTML'lerinden alınıp `icons.tsx` dosyasında toplanır.
 

@@ -1,0 +1,65 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* Token → Tailwind eşlemesi. Bileşenlerde hex kod yazılmaz (CLAUDE.md #8). */
+@theme inline {
+  --font-sans: var(--font);
+
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-gray: var(--gray);
+  --color-gray-soft: var(--gray-soft);
+  --color-line-strong: var(--line-strong);
+  --color-line: var(--line);
+  --color-mist: var(--mist);
+  --color-paper: var(--paper);
+  --color-nar: var(--nar);
+  --color-scrim: var(--scrim);
+
+  /* Kişi rengi: bileşen kökünde personStyle(color) ile verilir. */
+  --color-person: var(--person, var(--ink));
+  --color-person-on: var(--person-on, var(--paper));
+
+  --radius-chip: var(--r-chip);
+  --radius-control: var(--r-control);
+  --radius-card: var(--r-card);
+  --radius-panel: var(--r-panel);
+  --radius-panel-l: var(--r-panel-l);
+  --radius-sheet: var(--r-sheet);
+
+  --shadow-pop: var(--shadow-pop);
+}
+
+/* Temel stiller. button/input'un font ve renk mirası Tailwind preflight'ta zaten var.
+   Katmansız kural yazma: Tailwind yardımcı sınıflarını ezer. */
+html {
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+button:not(:disabled),
+[role="button"]:not(:disabled) {
+  cursor: pointer;
+}

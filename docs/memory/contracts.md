@@ -6,6 +6,16 @@ Sözleşme dosyaları:
 - `apps/web/src/data/repository.ts`: istemcinin portu.
 Değişiklik talepleri `progress.md` dosyasındaki "Sözleşme talepleri" bölümüne yazılır.
 
+## Kodla senkron notları (2026-11-14, Faz 1)
+Kod yazılırken taslağa şu eklemeler yapıldı. Kod esas alınır:
+- `Session` artık `@lokale/contracts` içinde (`entities.ts`).
+- `InboxItem.touristColor: PersonColor` eklendi (avatar için; kişisel bilgi değil).
+- `ArchivedAnswer.district` eklendi.
+- `DemoControls.getDebugState()` ve `Clock` arayüzü eklendi (`/dev` paneli, ileri sarılabilir saat).
+- `SimilarQuery`, `PopularQuery`, `SessionPatch` zod şemaları eklendi.
+- `isUrgent(deadline, now, assignedAt?)`: eşik sürenin en fazla %25'i (T = 1 dk iken 15 sn).
+- `messages.assigned(name, eta | null)`: `formatEta()` `"~20 dk"` ya da `null` döner, `fallbackEtaText` kaldırıldı.
+
 ## Genel kurallar
 - **Zaman** epoch milisaniye olarak tutulur (`number`). JSON'a sorunsuz dönüşür ve süre hesabı kolaydır. Biçimlendirme sadece UI'da yapılır.
 - **ID'ler** string'dir ve her zaman adapter/sunucu tarafından üretilir.

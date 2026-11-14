@@ -1,0 +1,23 @@
+{
+  "name": "@lokale/domain",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@lokale/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "@lokale/config": "workspace:*",
+    "eslint": "9.39.5",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}

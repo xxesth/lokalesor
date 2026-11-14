@@ -9,6 +9,8 @@ Ekip: **Mali** (mimari ve çekirdek), **Fatih** (arka uç), **Ökkeş** (ön yü
 ## Önce bunları oku
 | Dosya | İçerik |
 |---|---|
+| `docs/setup.md` | Kurulum ve komutlar |
+| `docs/demo.md` | Sunumda demo adımları |
 | `docs/memory/architecture.md` | Servisler, paket bağımlılıkları, akışlar, realtime protokolü, ölçek planı |
 | `docs/memory/decisions.md` | Alınmış kararlar (ADR). Kapanmış bir kararı tekrar tartışmaya açma. |
 | `docs/memory/structure.md` | Monorepo yapısı, hangi kodun hangi dosyaya yazılacağı, ortam değişkenleri |

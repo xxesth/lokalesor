@@ -98,7 +98,7 @@ function rng(seed: number) {
   };
 }
 
-export function buildSeed(now: number): Omit<MockState, "offsetMs" | "reassignAfterMinutes" | "seq"> {
+export function buildSeed(now: number): Omit<MockState, "offsetMs" | "reassignAfterMinutes" | "seq" | "rev" | "lastChannels"> {
   const users: User[] = PEOPLE.map((p) => ({ ...p.user, avatarUrl: null, createdAt: now - 120 * DAY }));
   const questions: MockState["questions"] = [];
   const assignments: Assignment[] = [];

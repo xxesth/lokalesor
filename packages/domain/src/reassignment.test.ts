@@ -24,6 +24,6 @@ describe("reassignment", () => {
 
   it("deadline = atanma + T", () => {
     expect(deadlineFor(NOW, DEFAULT_CONFIG) - NOW).toBe(30 * 60_000);
-    expect(deadlineFor(NOW, DEMO_CONFIG) - NOW).toBe(60_000);
+    expect(deadlineFor(NOW, DEMO_CONFIG) - NOW).toBe(3 * 60_000);
   });
 });

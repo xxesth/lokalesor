@@ -4,7 +4,7 @@ import { CITIES, districtName, locativeSuffix, messages } from "@lokale/domain";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { BudgetSegment, TopicChips } from "@/components/ui/chip";
@@ -116,6 +116,9 @@ export function AskForm() {
   const [enough, setEnough] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
   const [result, setResult] = useState<QuestionSummary | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
+  const textRef = useRef<HTMLTextAreaElement>(null);
+  const topicRef = useRef<HTMLDivElement>(null);
   const districts = CITIES.find((c) => c.id === currentCity)?.districts ?? [];
 
   const ask = useMutation({
@@ -129,11 +132,26 @@ export function AskForm() {
     onError: () => setShowProgress(false),
   });
 
-  function submit(e: FormEvent) {
-    e.preventDefault();
-    if (!topic) return;
+  /** Eksik alan varsa butonu kilitlemek yerine ne eksik olduğunu söyle ve oraya götür. */
+  function trySubmit() {
+    if (text.trim().length < 10) {
+      setFormError("Sorunu biraz daha aç: en az 10 karakter yaz.");
+      textRef.current?.focus();
+      return;
+    }
+    if (!topic) {
+      setFormError("Bir konu seç, sorunu doğru lokale yönlendirelim.");
+      topicRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    setFormError(null);
     setShowProgress(true);
     ask.mutate();
+  }
+
+  function submit(e: FormEvent) {
+    e.preventDefault();
+    trySubmit();
   }
 
   if (showProgress) {
@@ -178,6 +196,7 @@ export function AskForm() {
           <div className="flex flex-col gap-2">
             <FieldLabel htmlFor="q-text">Sorun</FieldLabel>
             <Textarea
+              ref={textRef}
               id="q-text"
               rows={3}
               value={text}
@@ -190,11 +209,20 @@ export function AskForm() {
             />
           </div>
 
-          {!dismissed && <SimilarAnswersPanel text={text} onEnough={() => setEnough(true)} onDismiss={() => setDismissed(true)} />}
+          {!dismissed && <SimilarAnswersPanel text={text} onEnough={() => setEnough(true)} onDismiss={() => {
+                setDismissed(true);
+                trySubmit();
+              }} />}
 
-          <div className="flex flex-col gap-2">
+          <div ref={topicRef} className="flex scroll-mt-24 flex-col gap-2">
             <FieldLabel>Konu</FieldLabel>
-            <TopicChips value={topic} onChange={setTopic} />
+            <TopicChips
+              value={topic}
+              onChange={(t) => {
+                setTopic(t);
+                setFormError(null);
+              }}
+            />
           </div>
 
           <div className="grid grid-cols-[auto_1fr] items-end gap-4">
@@ -217,9 +245,9 @@ export function AskForm() {
             </div>
           </div>
 
-          <ErrorNote error={ask.error} />
+          <ErrorNote error={ask.error ?? (formError ? new Error(formError) : null)} />
           <div className="flex flex-col gap-2">
-            <Button type="submit" disabled={!topic || text.trim().length < 10 || ask.isPending} className="w-full">
+            <Button type="submit" disabled={ask.isPending} className="w-full">
               Lokale gönder
             </Button>
             <p className="text-center text-sm text-gray">

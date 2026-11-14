@@ -55,7 +55,7 @@ export function LocalProfileCompact({ p }: { p: LocalProfile }) {
       <div className="flex flex-col gap-4 px-5 pb-5">
         <div className="-mt-8 flex items-end gap-3">
           <Avatar name={p.name} color={p.color} size={64} ring />
-          <div className="flex flex-col pb-1">
+          <div className="flex flex-col pt-10">
             <span className="inline-flex items-center gap-1.5 text-lg font-bold">
               {p.name} {p.verified && <VerifiedSeal />}
             </span>

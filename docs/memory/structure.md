@@ -121,13 +121,11 @@ apps/web/
 | `use-channel.ts` | `useChannel(channel, keysToInvalidate)` |
 | `use-now.ts` | Tek bir interval ile saniyelik saat |
 | `mock/clock.ts` | İleri sarılabilen saat |
-| `mock/store.ts` | Bellek içi durum + localStorage |
-| `mock/sync.ts` | BroadcastChannel |
+| `mock/store.ts` | Bellek içi durum + localStorage; sekmeler `storage` olayıyla senkron, Web Locks + `rev` ile kayıp güncelleme yok |
 | `mock/seed.ts` | `docs/handoff/data/seed.json` sözleşme tiplerine çevrilmiş hali |
 | `mock/mock-auth.ts` | Hazır kullanıcıyla giriş, oturum sessionStorage'da |
 | `mock/mock-repository.ts` | `Repository` arayüzünün mock uygulaması (`@lokale/domain` fonksiyonlarını çağırır) |
 | `mock/scheduler.ts` | 2 sn'de bir süresi dolan atamaları işler; Web Locks ile sadece bir sekme (lider) çalıştırır |
-| `mock/sync.ts` | BroadcastChannel ile sekmeler arası sinyal |
 | `mock/scenario.test.ts` | Brief 5. bölüm senaryosu uçtan uca (vitest) |
 | `http/http-repository.ts` | (F2) `ROUTES` + fetch |
 | `http/http-auth.ts` | (F2) Better Auth istemcisi |

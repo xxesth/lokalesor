@@ -8,7 +8,7 @@ export function remaining(deadline: Timestamp, now: Timestamp): number {
 
 /**
  * Son dakika → nar (README ilke 3). Atama süresi biliniyorsa eşik sürenin en fazla %25'i olur;
- * böylece demoda T = 1 dk iken sayaç baştan kırmızı görünmez.
+ * böylece T kısa olduğunda (ör. 1 dk) sayaç baştan kırmızı görünmez.
  */
 export function isUrgent(
   deadline: Timestamp,

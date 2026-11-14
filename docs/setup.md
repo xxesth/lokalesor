@@ -32,4 +32,5 @@ Bir PR'ı birleştirmeden önce `pnpm lint && pnpm typecheck && pnpm test` geçm
 ## Sık karşılaşılan sorunlar
 | Sorun | Çözüm |
 |---|---|
+| Cloudflare tunnel'da sayfa yüklenmiyor | `next.config.ts` → `allowedDevOrigins` içinde `*.trycloudflare.com` olmalı; dev sunucusunu yeniden başlat. Paylaşım için `pnpm build && pnpm --filter @lokale/web start` daha sağlam. |
 | `PageProps` tip hatası | `pnpm typecheck` önce `next typegen` çalıştırır; tsc'yi doğrudan çalıştırma |

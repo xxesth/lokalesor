@@ -43,8 +43,8 @@ describe("demo senaryosu", () => {
     expect(thread.items[0]).toMatchObject({ type: "system", message: { kind: "assigned" } });
     expect(thread.items[0]?.type === "system" && thread.items[0].message.text).toMatch(/^Sorun Mert'e iletildi\. Genelde ~\d+ dk içinde yanıt veriyor\.$/);
 
-    // 4. Mert cevap vermez, T (1 dk) dolar → Zeynep'e yeniden atanır
-    await demo.advanceTime(61_000);
+    // 4. Mert cevap vermez, T (3 dk) dolar → Zeynep'e yeniden atanır
+    await demo.advanceTime(181_000);
     await runExpireDue();
     thread = await repo.getQuestionThread(asked.question.id);
     expect(thread.currentAssignment?.localId).toBe("zeynep");
@@ -99,8 +99,8 @@ describe("demo senaryosu", () => {
     let t = await repo.getQuestionThread(q.question.id);
     expect(t.assignments[0]?.status).toBe("declined");
     expect(t.currentAssignment?.attempt).toBe(2);
-    await demo.advanceTime(61_000);
-    await demo.advanceTime(61_000);
+    await demo.advanceTime(181_000);
+    await demo.advanceTime(181_000);
     t = await repo.getQuestionThread(q.question.id);
     expect(t.question.status).toBe("open_pool");
     expect(t.assignments).toHaveLength(3);
@@ -117,7 +117,7 @@ describe("demo senaryosu", () => {
     await demo.setReassignAfterMinutes(1);
     // zamanlayıcı çalışmadan önce süre dolmuşsa
     const { getStore } = await import("./store");
-    await getStore().transact((s) => { s.offsetMs += 61_000; });
+    await getStore().transact((s) => { s.offsetMs += 181_000; });
     await expect(repo.submitAnswer({ assignmentId: aid, text: "Geç kalan cevap", templateId: null, archive: false })).rejects.toMatchObject({ code: "ASSIGNMENT_EXPIRED" });
     await mockAuth.signOut();
     await expect(repo.getInbox()).rejects.toMatchObject({ code: "UNAUTHENTICATED" });

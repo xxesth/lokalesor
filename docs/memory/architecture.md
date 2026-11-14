@@ -12,7 +12,7 @@
 | Veritabanı | PostgreSQL + Drizzle |
 | Proxy | Production'da Caddy, geliştirmede Next.js rewrite'ları |
 | Log / test | pino / Vitest |
-| Demo (Faz 1) | MockAdapter: tarayıcı içinde çalışır, sekmeler `BroadcastChannel` ile senkron olur |
+| Demo (Faz 1) | MockAdapter: tarayıcı içinde çalışır, sekmeler localStorage `storage` olayıyla senkron olur |
 
 ## Servisler
 ```
@@ -98,7 +98,7 @@ Tetikleyiciler: BullMQ işinin zamanı gelir (`worker`), lokal "Bilmiyorum, sır
 ## Parametreler (`packages/domain/src/config.ts`)
 | Ad | Varsayılan | Demo | Not |
 |---|---|---|---|
-| `reassignAfterMinutes` (T) | 30 | 1 | EM simülasyonla güncelleyecek |
+| `reassignAfterMinutes` (T) | 30 | 3 | EM simülasyonla güncelleyecek |
 | `maxAttempts` | 3 | 3 | Aşılırsa soru açık havuza düşer |
 | `defaultDailyLimit` | 2 | 2 | Lokal 1-5 arası ayarlayabilir |
 | `statsWindowDays` | 30 | 30 | Medyan süre ve yanıt oranı penceresi |

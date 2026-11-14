@@ -32,7 +32,7 @@ Sıra kritik yola göre belirlendi: vakit yetmezse sondaki 🟡 maddeler atlanı
 - [x] 🟡 `similarity.ts`
 
 ### 1.4 MockAdapter (`apps/web/src/data/mock`)
-- [x] `clock.ts`, `store.ts` (bellek + localStorage), `sync.ts` (BroadcastChannel)
+- [x] `clock.ts`, `store.ts` (bellek + localStorage + `storage` olayıyla sekme senkronu)
 - [x] `seed.ts`: `seed.json` sözleşme tiplerine çevrilecek. Senaryoda eşleştirme **Mert'i 1., Zeynep'i 2.** sıraya koymalı. Çiya metni düzeltilecek.
   - Ek demo kullanıcıları: **Çağlar Fidan, Efe Genç, Serkan Dağaşan, Yağmur Arpa, Melike Kaplan.** Çoğu İstanbul'da farklı semtlerde lokal olacak, bir kısmı başka şehirlerden gelen turistler. Arşiv cevaplarında ve popüler sorularda da kullanılacaklar. Bu kullanıcılar senaryoda Mert'in ve Zeynep'in önüne geçmemeli.
 - [x] `mock-auth.ts`: hazır kullanıcıyla giriş, oturum sessionStorage'da
@@ -65,7 +65,7 @@ Sıra kritik yola göre belirlendi: vakit yetmezse sondaki 🟡 maddeler atlanı
 
 ### 1.8 Prova
 - Otomatik prova: `apps/web/src/data/mock/scenario.test.ts` (senaryo 1-8) + headless tarayıcıda iki sekmeyle uçtan uca çalıştırıldı.
-- [x] Senaryonun 1-7 adımları iki normal pencerede, `T` = 1 dk ile
+- [x] Senaryonun 1-7 adımları iki normal pencerede, `T` = 3 dk ile
 - [~] Her ekranı 390 px ve 1440 px'te handoff görüntüleriyle karşılaştır (ana ekranlar kontrol edildi; ince piksel ayarı Ökkeş'in Faz 2 işinde)
 - [~] Rapor ve sunum için ekran görüntüleri al (otomatik senaryo görüntüleri alındı; sunum için son hali alınacak)
 
@@ -83,6 +83,7 @@ Bağımlılıklar:
 - ⚠️ Fatih'in `askQuestion`'ı Mali'nin `assignNext`'ini çağırıyor. Bu yüzden Mali `assignNext`'i **Faz 2'nin ilk işi** olarak teslim eder. Hazır olana kadar Fatih geçici bir stub kullanır.
 
 ### Mali — altyapı, realtime, worker
+- [ ] ⚠️ `apps/web/next.config.ts` → `allowedDevOrigins: ["*.trycloudflare.com"]` satırını kaldır. Sadece demoyu tünelle paylaşmak için geçici olarak eklendi; herhangi bir trycloudflare adresinin dev sunucusuna erişmesine izin veriyor.
 - [ ] `docker-compose.yml` (Postgres + Redis), `.env.example` güncellemesi
 - [ ] `turbo dev` ile 4 servisi birlikte çalıştırma; `apps/web` içinde `/api` ve `/events` rewrite'ları
 - [ ] GitHub Actions: her PR'da lint, typecheck ve test

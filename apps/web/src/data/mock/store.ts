@@ -1,5 +1,8 @@
-// Mock "veritabanı": bellek + localStorage. Sekmeler arası yazma Web Locks ile sıraya konur,
-// değişiklikler BroadcastChannel ile diğer sekmelere duyurulur (ADR-003).
+// Mock "veritabanı": bellek + localStorage. Sekmeler arası yazma Web Locks ile sıraya konur.
+// Diğer sekmeler değişikliği localStorage'ın `storage` olayıyla öğrenir: olay yeni durumu
+// (newValue) içinde taşır, böylece "sinyal veriden önce geldi" yarışı olmaz (ADR-003).
+// Not: BroadcastChannel kullanılmıyor; ayrı pencerelerde localStorage gecikmeli senkronlandığı
+// için sinyal gelip eski veri okunabiliyordu.
 import type {
   Answer,
   Assignment,
@@ -14,7 +17,6 @@ import type {
 } from "@lokale/contracts";
 import { DEMO_CONFIG } from "@lokale/domain";
 import { buildSeed } from "./seed";
-import { createSync } from "./sync";
 
 export interface MockState {
   users: User[];
@@ -31,6 +33,10 @@ export interface MockState {
   offsetMs: number;
   reassignAfterMinutes: number;
   seq: number;
+  /** her yazmada +1: sekmeler en güncel durumu tanır */
+  rev: number;
+  /** son yazmanın etkilediği kanallar (storage olayıyla diğer sekmelere gider) */
+  lastChannels: Channel[];
 }
 
 const KEY = "lokale:mock:v1";
@@ -42,10 +48,25 @@ class MockStore {
   private state: MockState | null = null;
   private listeners = new Map<Channel, Set<Listener>>();
   private anyListeners = new Set<() => void>();
-  private sync = createSync((channels) => {
-    this.state = null; // başka sekme yazdı → tekrar oku
-    this.emit(channels);
-  });
+  /** bu sekmenin gördüğü en yeni sürüm (kendi yazması ya da storage olayı) */
+  private knownRev = 0;
+
+  constructor() {
+    if (typeof window !== "undefined") {
+      window.addEventListener("storage", (e) => {
+        if (e.key !== KEY || !e.newValue) return;
+        try {
+          const next = JSON.parse(e.newValue) as MockState;
+          if (next.rev < this.knownRev) return; // eski sürüm
+          this.knownRev = next.rev;
+          this.state = next;
+          this.emit(next.lastChannels ?? ["*" as Channel]);
+        } catch {
+          this.state = null;
+        }
+      });
+    }
+  }
 
   now(): number {
     return Date.now() + this.read().offsetMs;
@@ -56,8 +77,13 @@ class MockStore {
     const raw = safeGet(KEY);
     if (raw) {
       try {
-        this.state = JSON.parse(raw) as MockState;
-        return this.state;
+        const parsed = JSON.parse(raw) as MockState;
+        // Eski sürümden kalan veri (rev alanı yok) → yeni şemayla başla
+        if (typeof parsed.rev === "number") {
+          this.state = parsed;
+          this.knownRev = Math.max(this.knownRev, parsed.rev);
+          return this.state;
+        }
       } catch {
         // bozuk veri → sıfırla
       }
@@ -72,15 +98,23 @@ class MockStore {
    * etkilenen kanalları hem bu sekmede hem diğer sekmelerde yayınlar (commit sonrası yayın).
    */
   async transact<T>(fn: (s: MockState, now: number, touch: (c: Channel) => void) => T): Promise<T> {
-    const run = () => {
-      this.state = null;
-      const s = this.read();
+    const run = async () => {
+      // Kilit alındı; diğer sekmenin son yazması localStorage'a henüz yansımadıysa kısa bekle
+      // (kayıp güncellemeyi önler).
+      let s = this.reread();
+      for (let i = 0; i < 20 && s.rev < this.knownRev; i++) {
+        await new Promise((r) => setTimeout(r, 15));
+        s = this.reread();
+      }
       const touched = new Set<Channel>();
       const result = fn(s, Date.now() + s.offsetMs, (c) => touched.add(c));
-      safeSet(KEY, JSON.stringify(s));
       const channels = [...touched];
+      s.rev += 1;
+      s.lastChannels = channels;
+      this.knownRev = s.rev;
+      this.state = s;
+      safeSet(KEY, JSON.stringify(s));
       this.emit(channels);
-      this.sync.post(channels);
       return result;
     };
     if (typeof navigator !== "undefined" && navigator.locks) {
@@ -107,15 +141,19 @@ class MockStore {
     return () => this.anyListeners.delete(cb);
   }
 
+  /** Demo verisini başa al. "*" tüm ekranları ve diğer sekmeleri yeniler. */
   reset(): Promise<void> {
-    return this.transact((s) => {
-      const f = fresh();
-      Object.assign(s, f);
-    }).then(() => {
-      // reset tüm ekranları etkiler
-      this.sync.post(["*" as Channel]);
-      this.emit(["*" as Channel]);
+    return this.transact((s, _now, touch) => {
+      const rev = s.rev;
+      Object.assign(s, fresh());
+      s.rev = rev;
+      touch("*" as Channel);
     });
+  }
+
+  private reread(): MockState {
+    this.state = null;
+    return this.read();
   }
 
   private emit(channels: Channel[]) {
@@ -130,7 +168,14 @@ class MockStore {
 
 function fresh(): MockState {
   const now = Date.now();
-  return { ...buildSeed(now), offsetMs: 0, reassignAfterMinutes: DEMO_CONFIG.reassignAfterMinutes, seq: 0 };
+  return {
+    ...buildSeed(now),
+    offsetMs: 0,
+    reassignAfterMinutes: DEMO_CONFIG.reassignAfterMinutes,
+    seq: 0,
+    rev: 0,
+    lastChannels: [],
+  };
 }
 
 function safeGet(key: string): string | null {

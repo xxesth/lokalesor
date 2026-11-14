@@ -13,7 +13,7 @@ UI veri kaynağını tanımaz. Mock'tan gerçek arka uca geçerken UI değişmez
 
 ## ADR-003 — İlk faz MockAdapter ile
 Kabul · 2026-11-13
-1 günde arka uç kurmadan, yeniden atama dahil tüm akışı göstermek için. Mock tarayıcı içinde çalışır ve sekmeleri `BroadcastChannel` ile senkronlar. Mock hile yapmaz: her çağrı `async`'tir, ID ve zamanı mock üretir, hataları gerçek bir arka uçtaki gibi fırlatır.
+1 günde arka uç kurmadan, yeniden atama dahil tüm akışı göstermek için. Mock tarayıcı içinde çalışır ve sekmeleri localStorage `storage` olayıyla senkronlar (2026-11-14: BroadcastChannel'dan geçildi; ayrı pencerelerde sinyal veriden önce gelip eski veri okunuyordu). Mock hile yapmaz: her çağrı `async`'tir, ID ve zamanı mock üretir, hataları gerçek bir arka uçtaki gibi fırlatır.
 
 ## ADR-004 — Veritabanı: kendi Postgres'imiz
 Kabul · 2026-11-13 (API kısmı değişti → ADR-016)
@@ -67,7 +67,7 @@ Kabul · 2026-11-14
 
 ## ADR-015 — Tek süre modeli: `T`
 Kabul · 2026-11-14
-Ayrı bir "kabul süresi" ve "cevap süresi" yok, tek bir `T` (`reassignAfterMinutes`) var. Gerçek ortamda 30 dk, demoda 1 dk.
+Ayrı bir "kabul süresi" ve "cevap süresi" yok, tek bir `T` (`reassignAfterMinutes`) var. Gerçek ortamda 30 dk, demoda 3 dk (2026-11-14: 1 dk → 3 dk, sunumda konuşmaya zaman kalsın diye).
 Turiste gösterilen "~20 dk" değeri `T` değil, lokalin geçmişteki medyan yanıt süresi. Bu yüzden demoda ikisinin farklı görünmesi tutarlı.
 
 ## ADR-016 — Ayrık yapı: web + api + realtime + worker

@@ -8,3 +8,4 @@ export function personStyle(color: PersonColor): CSSProperties {
     ["--person-on" as string]: `var(--person-${color}-on)`,
   } as CSSProperties;
 }
+

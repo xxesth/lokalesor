@@ -27,8 +27,8 @@ export const DEFAULT_CONFIG: Config = {
   matchWeights: { topic: 3, district: 2, speed: 1 },
 };
 
-/** Demo: T = 1 dk (ADR-015). */
-export const DEMO_CONFIG: Config = { ...DEFAULT_CONFIG, reassignAfterMinutes: 1 };
+/** Demo: T = 3 dk (ADR-015). */
+export const DEMO_CONFIG: Config = { ...DEFAULT_CONFIG, reassignAfterMinutes: 3 };
 
 export const MINUTE = 60_000;
 export const HOUR = 60 * MINUTE;

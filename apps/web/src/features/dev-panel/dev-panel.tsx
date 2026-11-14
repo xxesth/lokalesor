@@ -46,13 +46,13 @@ export function DevPanel() {
         <h2 className="border-b border-ink pb-2 text-lg font-bold">Yeniden atama süresi (T)</h2>
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-[15px]">Şu an: <b>{d?.reassignAfterMinutes ?? "…"} dk</b></span>
-          {[1, 2, 5, 30].map((m) => (
+          {[1, 3, 5, 30].map((m) => (
             <Button key={m} variant="secondary" size="md" disabled={busy} onClick={() => run(`T = ${m} dk`, () => getDemoControls().setReassignAfterMinutes(m))}>
               {m} dk
             </Button>
           ))}
         </div>
-        <p className="text-[13px] text-gray">Yeni atamalara uygulanır. Demo için 1 dk (ADR-015).</p>
+        <p className="text-[13px] text-gray">Yeni atamalara uygulanır. Demo için 3 dk (ADR-015).</p>
       </section>
 
       <section className="flex flex-col gap-3">

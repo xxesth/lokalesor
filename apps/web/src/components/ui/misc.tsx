@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, type ReactNode, type TextareaHTMLAttributes, type SelectHTMLAttributes } from "react";
+import { useEffect, type ComponentProps, type ReactNode, type SelectHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 import { CloseIcon } from "./icons";
 
@@ -22,7 +22,7 @@ export function EmptyState({ icon, title, children }: { icon?: ReactNode; title:
   );
 }
 
-export function Textarea({ className, ...p }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+export function Textarea({ className, ...p }: ComponentProps<"textarea">) {
   return (
     <textarea
       className={cn(

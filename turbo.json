@@ -6,11 +6,21 @@
       "persistent": true
     },
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**"
+      ]
     },
     "test": {
-      "outputs": []
+      "outputs": [],
+      "passThroughEnv": [
+        "TEST_DATABASE_URL",
+        "CI"
+      ]
     },
     "lint": {
       "outputs": []

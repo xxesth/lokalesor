@@ -38,7 +38,7 @@ export function DevPanel() {
         </Link>
       </div>
       <p className="text-[15px] text-ink-2">
-        Mock veri tarayıcıda tutulur ve açık bütün pencerelerde ortaktır. Demo öncesi <b>Demoyu sıfırla</b>, sonra bir pencerede Elif, diğerinde Zeynep.
+        Mock veri tarayıcıda tutulur ve açık bütün pencerelerde ortaktır. Demo öncesi <b>Demoyu sıfırla</b>, sonra bir pencerede Efe Genç, diğerinde Nevin Arslan.
       </p>
       {msg && <p className="rounded-control bg-mist px-3 py-2 text-sm" role="status">✓ {msg}</p>}
 

@@ -52,7 +52,7 @@ contracts  ←  domain  ←  core  ←  api, worker
 ```
 - `contracts`: tipler, zod şemaları, kanal isimleri, hata kodları. Hiçbir pakete bağımlı değil.
 - `domain`: saf kurallar. Sadece `contracts`'a bağımlı.
-- `db`: Drizzle şeması ve client.
+- `db`: Drizzle şeması, client ve migration'lar. Sadece `contracts`'a bağımlı (enum değerleri).
 - `core`: transaction'lar, use-case'ler, Redis yayını ve iş kuyruğu (`domain` + `db` kullanır).
 
 ## Akış: soru sorma
@@ -64,6 +64,9 @@ contracts  ←  domain  ←  core  ←  api, worker
    - Redis'e `question:{id}`, `inbox:{localId}` ve `notifications:{localId}` sinyalleri yayınlanır.
 5. `realtime` sinyalleri ilgili SSE bağlantılarına iletir. İstemci ilgili query'yi geçersiz kılar ve `api`'den veriyi yeniden çeker.
 
+## Akış: açık havuz (ADR-027)
+Deneme sınırı aşılınca soru `open_pool` olur ve `pool:{city}` yayınlanır. Şehrin lokalleri `GET /api/pool` ile görür. Biri `POST /api/pool/:questionId/answer` ile cevaplar: ilk cevap kazanır (`answers.question_id` benzersiz), atama açılmaz.
+
 ## Akış: yeniden atama
 Tetikleyiciler: BullMQ işinin zamanı gelir (`worker`), lokal "Bilmiyorum, sıradakine geçsin" der (`api`) ya da yedek tarama gözden kaçan bir atama bulur (`worker`). Üçü de aynı fonksiyonu çağırır: `core.closeAndReassign(assignmentId, reason)`.
 1. Atama `FOR UPDATE SKIP LOCKED` ile kilitlenir. Hâlâ `pending` değilse fonksiyon hiçbir şey yapmadan çıkar (idempotent).
@@ -74,7 +77,7 @@ Tetikleyiciler: BullMQ işinin zamanı gelir (`worker`), lokal "Bilmiyorum, sır
 ## Realtime protokolü
 1. `web` → `POST /api/realtime/token` → `{ token, expiresAt }` (JWT, 5 dk, içinde `sub = userId`).
 2. `web` → `GET /events?token=…&channels=question:42,inbox:u1` (`EventSource` header gönderemediği için token query string'de).
-3. `realtime` token'ı imzasından doğrular, veritabanına gitmez. Kanal yetkisi: `inbox:{x}` ve `notifications:{x}` için `x = sub` olmalı. `question:*` kanalı giriş yapmış herkese açık, çünkü olay veri taşımıyor ve veri api'den yetki kontrolüyle okunuyor.
+3. `realtime` token'ı imzasından doğrular, veritabanına gitmez. Kanal yetkisi: `inbox:{x}` ve `notifications:{x}` için `x = sub` olmalı. `question:*` ve `pool:{city}` kanalları giriş yapmış herkese açık, çünkü olay veri taşımıyor ve veri api'den yetki kontrolüyle okunuyor.
 4. Olay formatı: `event: changed`, `data: {"channel":"question:42","at":1731600000000}`.
 5. Bağlantı koparsa istemci yeni bir token alıp yeniden bağlanır. 25 sn'de bir heartbeat gönderilir.
 

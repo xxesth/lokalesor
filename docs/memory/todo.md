@@ -33,8 +33,8 @@ Sıra kritik yola göre belirlendi: vakit yetmezse sondaki 🟡 maddeler atlanı
 
 ### 1.4 MockAdapter (`apps/web/src/data/mock`)
 - [x] `clock.ts`, `store.ts` (bellek + localStorage + `storage` olayıyla sekme senkronu)
-- [x] `seed.ts`: `seed.json` sözleşme tiplerine çevrilecek. Senaryoda eşleştirme **Mert'i 1., Zeynep'i 2.** sıraya koymalı. Çiya metni düzeltilecek.
-  - Ek demo kullanıcıları: **Çağlar Fidan, Efe Genç, Serkan Dağaşan, Yağmur Arpa, Melike Kaplan.** Çoğu İstanbul'da farklı semtlerde lokal olacak, bir kısmı başka şehirlerden gelen turistler. Arşiv cevaplarında ve popüler sorularda da kullanılacaklar. Bu kullanıcılar senaryoda Mert'in ve Zeynep'in önüne geçmemeli.
+- [x] `seed.ts`: `seed.json` sözleşme tiplerine çevrilecek. Senaryoda eşleştirme **Mert Özçelik'i 1., Nevin Arslan'ı 2.** sıraya koymalı. Çiya metni düzeltilecek.
+  - Demo kullanıcıları sadece ekibin verdiği isimler (2026-11-14): Efe Genç (senaryo turisti), Mert Özçelik, Nevin Arslan (senaryo lokalleri), Merve Güler, Çağlar Fidan, Gündüz Serkan Dağaşan, Yağmur Arpa, Melike Kaplan (İstanbul), Uzay Çetin (İzmir), Gülçin Büyüközkan Feyzioğlu (Paris), Fatih Furkan Altınkaya (Berlin), Ökkeş Donbaloğlu (Tokyo), Taylan Poyraz Kalfalar (New York), Muhammed Ali Karslı (Barselona). Eski not: Çoğu İstanbul'da farklı semtlerde lokal olacak, bir kısmı başka şehirlerden gelen turistler. Arşiv cevaplarında ve popüler sorularda da kullanılacaklar. Bu kullanıcılar senaryoda Mert'in ve Zeynep'in önüne geçmemeli.
 - [x] `mock-auth.ts`: hazır kullanıcıyla giriş, oturum sessionStorage'da
 - [x] `mock-repository.ts`: tüm `Repository` fonksiyonları, aktör oturumdan alınır
 - [x] `scheduler.ts`: 5 sn'de bir süresi dolan atamaları işler
@@ -67,7 +67,7 @@ Sıra kritik yola göre belirlendi: vakit yetmezse sondaki 🟡 maddeler atlanı
 - Otomatik prova: `apps/web/src/data/mock/scenario.test.ts` (senaryo 1-8) + headless tarayıcıda iki sekmeyle uçtan uca çalıştırıldı.
 - [x] Senaryonun 1-7 adımları iki normal pencerede, `T` = 3 dk ile
 - [~] Her ekranı 390 px ve 1440 px'te handoff görüntüleriyle karşılaştır (ana ekranlar kontrol edildi; ince piksel ayarı Ökkeş'in Faz 2 işinde)
-- [~] Rapor ve sunum için ekran görüntüleri al (otomatik senaryo görüntüleri alındı; sunum için son hali alınacak)
+- [x] Rapor ve sunum için ekran görüntüleri al
 
 ### 1.9 🟡 Vakit kalırsa
 - [x] Landing sayfası (8-tanitim)
@@ -80,15 +80,17 @@ Bağımlılıklar:
 - Fatih `contracts`'taki şemalara göre api'yi yazar.
 - Ökkeş mock üzerinde çalışır, arka ucu beklemez.
 - Mali altyapıyı, realtime'ı, worker'ı ve `core/assignments.ts`'i yazar.
-- ⚠️ Fatih'in `askQuestion`'ı Mali'nin `assignNext`'ini çağırıyor. Bu yüzden Mali `assignNext`'i **Faz 2'nin ilk işi** olarak teslim eder. Hazır olana kadar Fatih geçici bir stub kullanır.
+- ✅ Bloklayan işler teslim edildi (2026-11-17): şema + migration, `withTx`, yayın/kuyruk, `assignNext` / `closeAndReassign` / `declineAssignment` / `sweepExpired`, havuz ve engelleme sözleşmesi (mock'ta çalışıyor). Fatih'in `askQuestion`'ı `withTx` içinde soruyu ekleyip `assignNext(tx, id, null)` çağırır. Örnek: `packages/core/src/assignments.test.ts` → `ask()`.
 
 ### Mali — altyapı, realtime, worker
 - [ ] ⚠️ `apps/web/next.config.ts` → `allowedDevOrigins: ["*.trycloudflare.com"]` satırını kaldır. Sadece demoyu tünelle paylaşmak için geçici olarak eklendi; herhangi bir trycloudflare adresinin dev sunucusuna erişmesine izin veriyor.
-- [ ] `docker-compose.yml` (Postgres + Redis), `.env.example` güncellemesi
+- [x] `docker-compose.yml` (Postgres + Redis + `lokale_test`), `.env.example` güncellemesi
 - [ ] `turbo dev` ile 4 servisi birlikte çalıştırma; `apps/web` içinde `/api` ve `/events` rewrite'ları
 - [ ] GitHub Actions: her PR'da lint, typecheck ve test
-- [ ] `packages/core`: `tx.ts` (`withTx`), `infra/redis.ts`, `infra/publish.ts`, `infra/queue.ts`
-- [ ] `packages/core/assignments.ts`: `assignNext` (`SKIP LOCKED`), `closeAndReassign`, `sweepExpired` + testleri
+- [x] `packages/db`: `schema.ts` (tablolar, enum'lar, kısmi index'ler, GIN, Türkçe `search_vector`), `client.ts`, `migrate.ts`, ilk migration
+- [x] `packages/core`: `tx.ts` (`withTx`), `context.ts`, `create-core.ts`, `runtime.ts` (dev saat/T), `infra/redis.ts`, `infra/publish.ts`, `infra/queue.ts`, `realtime-token.ts`
+- [x] `packages/core/assignments.ts`: `assignNext` (`SKIP LOCKED`), `closeAndReassign`, `declineAssignment`, `sweepExpired` + gerçek Postgres testleri (yarışlar dahil)
+- [x] Sözleşme: açık havuz (ADR-027) ve engelleme (ADR-028) + mock uygulaması ve testleri
 - [ ] `apps/worker`: `assignment-deadline`, `sweep-expired`, `refresh-stats` job'ları, düzgün kapanış
 - [ ] `apps/realtime`: `GET /events`, JWT doğrulama (`jose`), kanal yetkisi, hub, Redis aboneliği, heartbeat
 - [ ] `apps/web/src/data/http/event-source.ts`: token al → bağlan → yeniden bağlan
@@ -99,23 +101,24 @@ Bağımlılıklar:
 - [ ] Rapor: SDD mimari bölümü
 
 ### Fatih — veritabanı, api, auth
-- [ ] `packages/db`: `schema.ts` (tablolar, kısmi index, `home_city` index'i, `interests` üzerinde GIN, `local_stats` materialized view), `client.ts`, migration'lar, `seed.ts`
+- [ ] `packages/db`: `seed.ts` (mock seed'in aynısı), `auth-schema.ts` (Better Auth tabloları; `user` modeli `users` tablosuna eşlenir), `local-stats.ts` (materialized view). Şema Mali'de, değişiklik için `generate` ile yeni migration.
+- [ ] `local_stats` gelince `core/assignments.ts` → `loadCandidates` medyanı oradan okusun
 - [ ] `apps/api`: Fastify kurulumu, pino, zod type provider, OpenAPI (`/api/docs`), hata plugin'i
 - [ ] Better Auth + demo kullanıcıları, `plugins/session.ts`, `GET/PATCH /api/me/session`
-- [ ] `packages/core`: `questions.ts`, `answers.ts`, `inbox.ts`, `profiles.ts`, `notifications.ts` (transaction'lar `withTx` ile)
+- [ ] `packages/core`: `questions.ts`, `answers.ts`, `inbox.ts`, `profiles.ts`, `notifications.ts`, `pool.ts` (`listOpenPool`, `answerFromPool`), `blocks.ts` (transaction'lar `withTx` ile; mesaj/bildirim için `writes.ts`; kurallar mock'taki karşılığıyla aynı)
 - [ ] `apps/api/routes/*`: `contracts.md`'deki tüm REST uç noktaları + `POST /api/realtime/token`
-- [ ] `apps/api/routes/dev.ts`: sıfırla, `T` ayarı
+- [ ] `apps/api/routes/dev.ts`: sıfırla, `T` ayarı, zamanı ileri sar (`core/runtime.ts` fonksiyonları + `sweepExpired`)
 - [ ] `apps/web/src/data/http/`: `http-repository.ts` (`ROUTES` + fetch + `RepoError` dönüşümü), `http-auth.ts`
 - [ ] `core` testleri: test veritabanı üzerinde transaction ve yarış durumları
 - [ ] Postgres full-text search ile `findSimilar` (Türkçe sözlük)
 - [ ] Rapor: SDD veri tasarımı bölümü (ER diyagramı, index'ler, OpenAPI)
 
 ### Ökkeş — ön yüzü tamamlama
-- [ ] Faz 1'de kalan 🟡 ekranlar: landing, benzer cevaplar
-- [ ] Ayarlar: rol/şehir, günlük limit (1-5), engellenenler
+- [x] Faz 1'de kalan 🟡 ekranlar: landing, benzer cevaplar (Faz 1'de yapıldı)
+- [ ] Ayarlar: rol/şehir, günlük limit (1-5), engellenenler (`listBlocked`, `unblockUser`)
 - [ ] Lokalin arşivi: listele, düzenle, arşivden kaldır
-- [ ] Şikâyet / engelle formu
-- [ ] Açık havuz arayüzü: turist bilgilendirmesi, lokallerin havuzdan soru alması
+- [ ] Şikâyet / engelle formu (`report` + `blockUser`)
+- [ ] Açık havuz arayüzü: turist bilgilendirmesi, lokallerin havuzdan soru alması (`listOpenPool`, `answerFromPool`, kanal `pool:{city}`; seed'de İstanbul havuzunda 2 soru var)
 - [ ] Tüm ekranlarda yükleniyor, hata ve boş durumları
 - [ ] Erişilebilirlik turu: klavye, `aria-label`, kontrast, dokunma alanı
 - [ ] Bütün ekranlar için 390 / 1024 / 1440 px karşılaştırması

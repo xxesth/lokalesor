@@ -216,3 +216,26 @@ export interface Session {
   /** demo için elle geçiş */
   roleOverride: Role | null;
 }
+
+/** Açık havuzdaki soru (lokal tarafı). Şehirdeki ilk cevap veren lokal alır. */
+export interface PoolItem {
+  question: Question;
+  touristName: string;
+  touristColor: PersonColor;
+  /** havuza düştüğü an */
+  pooledAt: Timestamp;
+}
+
+/** Engellenen kişi (ayarlar → engellenenler). Engel iki yönlüdür: eşleştirmede birbirlerine düşmezler. */
+export interface BlockedUser {
+  user: { id: Id; name: string; color: PersonColor; avatarUrl: string | null };
+  blockedAt: Timestamp;
+}
+
+/** Realtime token'ının içeriği (api imzalar, realtime doğrular). */
+export interface RealtimeTokenClaims {
+  /** userId */
+  sub: Id;
+  /** epoch saniye (JWT standardı) */
+  exp: number;
+}

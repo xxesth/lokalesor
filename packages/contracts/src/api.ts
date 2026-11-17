@@ -68,6 +68,24 @@ export const sessionPatch = z.object({
 });
 export type SessionPatch = z.infer<typeof sessionPatch>;
 
+export const poolAnswerInput = z.object({
+  questionId: id,
+  text: submitAnswerInput.shape.text,
+  templateId: z.string().nullable(),
+  archive: z.boolean(),
+});
+export type PoolAnswerInput = z.infer<typeof poolAnswerInput>;
+
+export const blockUserInput = z.object({ userId: id });
+export type BlockUserInput = z.infer<typeof blockUserInput>;
+
+/** Realtime token ömrü (ADR-019). */
+export const REALTIME_TOKEN_TTL_MS = 5 * 60_000;
+
+/** POST /api/realtime/token cevabı. expiresAt epoch ms. */
+export const realtimeTokenResponse = z.object({ token: z.string(), expiresAt: z.number() });
+export type RealtimeTokenResponse = z.infer<typeof realtimeTokenResponse>;
+
 // --- REST uç noktaları (Faz 2: api doğrular, HttpAdapter çağırır) ---
 
 export const ROUTES = {
@@ -88,6 +106,11 @@ export const ROUTES = {
   markNotificationsRead: { method: "POST", path: "/api/notifications/read" },
   updateSettings: { method: "PATCH", path: "/api/me/settings" },
   report: { method: "POST", path: "/api/reports" },
+  listOpenPool: { method: "GET", path: "/api/pool" },
+  answerFromPool: { method: "POST", path: "/api/pool/:questionId/answer" },
+  listBlocked: { method: "GET", path: "/api/me/blocks" },
+  blockUser: { method: "POST", path: "/api/me/blocks" },
+  unblockUser: { method: "DELETE", path: "/api/me/blocks/:userId" },
   realtimeToken: { method: "POST", path: "/api/realtime/token" },
   getSession: { method: "GET", path: "/api/me/session" },
   updateSession: { method: "PATCH", path: "/api/me/session" },

@@ -48,7 +48,7 @@ export function currentUser(): User {
   return session.user;
 }
 
-const ORDER = ["elif", "zeynep", "mert", "deniz", "can"];
+const ORDER = ["efe", "nevin", "mert"];
 
 export const mockAuth: AuthPort = {
   async listDemoUsers() {

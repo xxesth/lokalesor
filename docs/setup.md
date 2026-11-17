@@ -17,6 +17,16 @@ cp .env.example apps/web/.env.local   # isteğe bağlı; varsayılan zaten mock
 pnpm dev                              # http://localhost:3000
 ```
 
+## Arka uç (Faz 2)
+```bash
+cp .env.example .env
+docker compose up -d                  # Postgres + Redis (+ test veritabanı lokale_test)
+pnpm --filter @lokale/db migrate      # tabloları oluşturur
+```
+- Makinende 5432 ya da 6379 doluysa: `POSTGRES_PORT=55432 REDIS_PORT=56379 docker compose up -d`. Sonra `.env` içindeki `DATABASE_URL`, `TEST_DATABASE_URL` ve `REDIS_URL` portlarını da değiştir.
+- `@lokale/core` testleri `TEST_DATABASE_URL`'deki veritabanını her çalıştırmada sıfırlar. Postgres açık değilse bu testler atlanır, yani docker'sız da `pnpm test` çalışır.
+- Şemayı değiştirdiysen: `pnpm --filter @lokale/db generate` (yeni migration) → `migrate`.
+
 ## Komutlar
 | Komut | Ne yapar |
 |---|---|

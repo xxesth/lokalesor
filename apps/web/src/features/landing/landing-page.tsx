@@ -38,12 +38,12 @@ export function LandingPage() {
               <SystemSquareIcon className="mt-1 shrink-0" />
               <span>
                 <span className="block text-xs font-semibold text-gray">Otomatik mesaj</span>
-                Mert şu an müsait değil. Sorunu Zeynep&apos;e yönlendirdik, tahmini süre ~25 dk.
+                Mert Özçelik şu an müsait değil. Sorunu Nevin Arslan&apos;a yönlendirdik, tahmini süre ~25 dk.
               </span>
             </div>
             <div className="flex flex-col gap-2 rounded-[4px_14px_14px_14px] border border-line p-4">
               <span className="flex items-center gap-2 font-bold">
-                <Avatar name="Zeynep" color="safran" size={32} /> Zeynep <SealIcon />
+                <Avatar name="Nevin Arslan" color="safran" size={32} /> Nevin Arslan <SealIcon />
               </span>
               <p className="text-[15px] leading-[22px]">Çarşı&apos;nın arka sokaklarındaki esnaf lokantalarına bak. Kişi başı uygun, turist az.</p>
             </div>

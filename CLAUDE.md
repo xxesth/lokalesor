@@ -63,4 +63,4 @@ pnpm test | pnpm lint | pnpm typecheck
 docker compose up -d           # (Faz 2) Postgres + Redis
 pnpm --filter @lokale/db migrate
 ```
-Demo (mock) için iki **normal** tarayıcı penceresi açılır (gizli pencere olmaz, çünkü localStorage'ı paylaşmaz). `/giris` sayfasında birinde Elif, diğerinde Zeynep seçilir. Geliştirici paneli `/dev` adresinde.
+Demo (mock) için iki **normal** tarayıcı penceresi açılır (gizli pencere olmaz, çünkü localStorage'ı paylaşmaz). `/giris` sayfasında birinde Efe Genç, diğerinde Nevin Arslan seçilir. Geliştirici paneli `/dev` adresinde.

@@ -11,7 +11,8 @@ Yeni bir dosya ya da klasör açtığında bu dosyayı güncelle. Dosya isimleri
 ├─ turbo.json                   # dev, build, test, lint, typecheck pipeline'ları
 ├─ tsconfig.base.json           # ortak strict ayarlar
 ├─ .env.example                 # tüm servislerin ortam değişkenleri
-├─ docker-compose.yml           # (F2) Postgres + Redis
+├─ docker-compose.yml           # Postgres + Redis (portlar POSTGRES_PORT / REDIS_PORT ile değişir)
+├─ docker/postgres-init.sql     # ilk açılışta lokale_test veritabanını oluşturur
 ├─ Caddyfile                    # (F2) production proxy
 ├─ claude-design-prompts.md
 ├─ docs/setup.md                # kurulum ve komutlar
@@ -29,8 +30,8 @@ Yeni bir dosya ya da klasör açtığında bu dosyayı güncelle. Dosya isimleri
 └─ packages/
    ├─ contracts/                # @lokale/contracts — tipler, zod şemaları, kanallar, hata kodları
    ├─ domain/                   # @lokale/domain    — saf iş kuralları
-   ├─ db/                       # @lokale/db        — (F2) Drizzle şeması + client + migration'lar
-   ├─ core/                     # @lokale/core      — (F2) sunucu use-case'leri (api + worker ortak)
+   ├─ db/                       # @lokale/db        — Drizzle şeması + client + migration'lar
+   ├─ core/                     # @lokale/core      — sunucu use-case'leri (api + worker ortak)
    └─ config/                   # @lokale/config    — ortak tsconfig / eslint / vitest ayarları
 ```
 
@@ -61,27 +62,38 @@ Yeni bir dosya ya da klasör açtığında bu dosyayı güncelle. Dosya isimleri
 | `similarity.ts` | Benzer soru bulma (mock için kelime eşleşmesi) |
 | `*.test.ts` | Her dosyanın yanında birim testi |
 
-## `packages/db/src/` (F2)
+## `packages/db/src/`
 | Dosya | İçerik |
 |---|---|
-| `schema.ts` | Tablolar, kısmi index, GIN index'leri, `local_stats` materialized view |
-| `client.ts` | `pg` havuzu + Drizzle |
-| `seed.ts` | Demo verisi (mock seed ile aynı) |
-| `../drizzle/` | Migration dosyaları (elle düzenlenmez) |
+| `schema.ts` | Tablolar, enum'lar, kısmi index'ler, GIN index'leri, Türkçe `search_vector` (Mali) |
+| `auth-schema.ts` | (F2, Fatih) Better Auth'un session/account/verification tabloları |
+| `local-stats.ts` | (F2, Fatih) `local_stats` materialized view |
+| `client.ts` | `createDb(url)` → `{ db, pool }`; `Db`, `DbTx` tipleri |
+| `migrate.ts` | `runMigrations(url)`; `pnpm --filter @lokale/db migrate` |
+| `seed.ts` | (F2, Fatih) Demo verisi (mock seed ile aynı) |
+| `../drizzle/` | Migration dosyaları. Şemayı değiştirince `pnpm --filter @lokale/db generate`, elle düzenlenmez |
 
-## `packages/core/src/` (F2): sadece sunucu, web import edemez
+## `packages/core/src/`: sadece sunucu, web import edemez
 | Dosya | İçerik |
 |---|---|
 | `questions.ts` | `askQuestion`, `getThread`, `listMine`, `findSimilar` (full-text) |
-| `assignments.ts` | `assignNext(tx, questionId)`, `closeAndReassign(assignmentId, reason)`, `sweepExpired()` |
+| `assignments.ts` | `assignNext(tx, questionId, prev)`, `closeAndReassign(ctx, id, reason)`, `declineAssignment(ctx, actorId, id)`, `sweepExpired(ctx)`, `blockedWith(tx, userId)` |
 | `answers.ts` | `submitAnswer`, `rateAnswer`, `setArchived` |
 | `inbox.ts` | `getInbox` |
 | `profiles.ts` | `getLocalProfile`, `listAvailableLocals`, `refreshStats` |
 | `notifications.ts` | Bildirim oluşturma, listeleme, okundu işaretleme |
 | `infra/redis.ts` | Redis bağlantısı |
 | `infra/publish.ts` | `publish(channels[])`: sadece commit'ten sonra çağrılır |
-| `infra/queue.ts` | BullMQ kuyrukları: `scheduleDeadline(assignment)`, sweeper |
-| `tx.ts` | `withTx(fn)`: transaction + commit sonrası yayın ve kuyruk işlerini sıraya koyma |
+| `infra/queue.ts` | `QUEUES`, `createDeadlineQueue`, `scheduleDeadlines` (jobId = assignmentId) |
+| `tx.ts` | `withTx(ctx, fn)`: transaction + commit sonrası yayın ve kuyruk (ADR-029) |
+| `context.ts` | `CoreContext`, `EffectSink`, `RuntimeSource`, `Logger` arayüzleri |
+| `create-core.ts` | `createCore(env)`: servis başlangıcında bağlamı kurar, `close()` |
+| `runtime.ts` | "şimdi" + config; dev ofseti ve `T` (Redis `lokale:runtime`); `fixedRuntime` (test) |
+| `writes.ts` | `addSystemMessage`, `notify`: mesaj/bildirim yazar, kanalı yayına ekler |
+| `mappers.ts` | Satır → sözleşme tipi (Date → epoch ms, e-posta dışarı çıkmaz) |
+| `ids.ts` | `newId()` |
+| `realtime-token.ts` | `signRealtimeToken(secret, userId)` (HS256, 5 dk) |
+| `test/harness.ts` | Test DB sıfırlama, sahte yan etkiler, sabit saat, `insertUser` |
 
 ---
 
@@ -122,7 +134,7 @@ apps/web/
 | `use-now.ts` | Tek bir interval ile saniyelik saat |
 | `mock/clock.ts` | İleri sarılabilen saat |
 | `mock/store.ts` | Bellek içi durum + localStorage; sekmeler `storage` olayıyla senkron, Web Locks + `rev` ile kayıp güncelleme yok |
-| `mock/seed.ts` | `docs/handoff/data/seed.json` sözleşme tiplerine çevrilmiş hali |
+| `mock/seed.ts` | Demo verisi (kullanıcılar, arşiv, sentetik geçmiş). **İçeriği değiştirince `SEED_VERSION`'ı artır**, tarayıcılardaki eski veri kendiliğinden yenilenir. |
 | `mock/mock-auth.ts` | Hazır kullanıcıyla giriş, oturum sessionStorage'da |
 | `mock/mock-repository.ts` | `Repository` arayüzünün mock uygulaması (`@lokale/domain` fonksiyonlarını çağırır) |
 | `mock/scheduler.ts` | 2 sn'de bir süresi dolan atamaları işler; Web Locks ile sadece bir sekme (lider) çalıştırır |
@@ -206,7 +218,10 @@ Referans: `0-stil-rehberi`. SVG ikonları ekran HTML'lerinden alınıp `icons.ts
 |---|---|---|
 | `NEXT_PUBLIC_DATA_SOURCE` | web | `mock` / `http` |
 | `DATABASE_URL` | api, worker, db | `postgres://lokale:lokale@localhost:5432/lokale` |
+| `TEST_DATABASE_URL` | core testleri | `postgres://lokale:lokale@localhost:5432/lokale_test` |
 | `REDIS_URL` | api, worker, realtime | `redis://localhost:6379` |
+| `LOKALE_CONFIG` | api, worker | `demo` (T = 3 dk) / `default` (T = 30 dk) |
+| `LOKALE_TZ` | api, worker | `Europe/Istanbul` ("bugün" sınırı) |
 | `BETTER_AUTH_SECRET` | api | — |
 | `REALTIME_TOKEN_SECRET` | api, realtime | — |
 | `API_PORT` / `REALTIME_PORT` | api / realtime | `4000` / `4001` |

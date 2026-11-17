@@ -4,6 +4,7 @@ import type {
   Answer,
   ArchivedAnswer,
   AskQuestionInput,
+  BlockedUser,
   Channel,
   ChannelEvent,
   CityId,
@@ -12,6 +13,8 @@ import type {
   LocalProfile,
   LocalSummary,
   Notification,
+  PoolAnswerInput,
+  PoolItem,
   PopularQuery,
   QuestionSummary,
   QuestionThread,
@@ -47,6 +50,10 @@ export interface Repository {
   declineAssignment(assignmentId: Id): Promise<void>;
   listMyArchive(): Promise<ArchivedAnswer[]>;
   setArchived(answerId: Id, archived: boolean): Promise<void>;
+  /** Şehrimin açık havuzu (deneme sınırı aşılmış sorular), eskiden yeniye. Engellediğim/beni engelleyen kişilerin soruları gelmez. */
+  listOpenPool(): Promise<PoolItem[]>;
+  /** Havuzdaki soruyu doğrudan cevapla: ilk cevap kazanır, geç kalan QUESTION_CLOSED alır. */
+  answerFromPool(input: PoolAnswerInput): Promise<Answer>;
 
   // Ortak
   getLocalProfile(localId: Id): Promise<LocalProfile>;
@@ -54,6 +61,10 @@ export interface Repository {
   markNotificationsRead(ids?: Id[]): Promise<void>;
   updateSettings(patch: SettingsPatch): Promise<User>;
   report(input: ReportInput): Promise<void>;
+  /** Engel iki yönlüdür: eşleştirme ve havuzda birbirinize düşmezsiniz. */
+  listBlocked(): Promise<BlockedUser[]>;
+  blockUser(userId: Id): Promise<void>;
+  unblockUser(userId: Id): Promise<void>;
 
   // Realtime
   subscribe(channel: Channel, cb: (e: ChannelEvent) => void): Unsubscribe;

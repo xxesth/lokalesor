@@ -8,6 +8,8 @@ export const REPO_ERROR_CODES = [
   // cevap/decline gönderilirken atama artık "pending" değil
   "ASSIGNMENT_CLOSED",
   "ALREADY_RATED",
+  // açık havuzdaki soruyu başka bir lokal önce cevapladı
+  "QUESTION_CLOSED",
 ] as const;
 export type RepoErrorCode = (typeof REPO_ERROR_CODES)[number];
 
@@ -31,6 +33,7 @@ export const HTTP_STATUS: Record<RepoErrorCode, number> = {
   ASSIGNMENT_EXPIRED: 409,
   ASSIGNMENT_CLOSED: 409,
   ALREADY_RATED: 409,
+  QUESTION_CLOSED: 409,
 };
 
 /** Hata cevabının gövdesi. HttpAdapter bunu tekrar RepoError'a çevirir. */

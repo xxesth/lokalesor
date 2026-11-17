@@ -4,7 +4,9 @@
 import {
   RepoError,
   askQuestionInput,
+  blockUserInput,
   channel,
+  poolAnswerInput,
   rateAnswerInput,
   reportInput,
   settingsPatch,
@@ -93,6 +95,21 @@ function assignedToday(s: MockState, localId: Id, now: number): number {
   return s.assignments.filter((a) => a.localId === localId && a.assignedAt >= from && a.assignedAt <= now).length;
 }
 
+/** userId'nin engellediği ve onu engelleyen kişiler (engel iki yönlü). */
+function blockedWith(s: MockState, userId: Id): Set<Id> {
+  const out = new Set<Id>();
+  for (const b of s.blocks) {
+    if (b.blockerId === userId) out.add(b.blockedId);
+    if (b.blockedId === userId) out.add(b.blockerId);
+  }
+  return out;
+}
+
+function pooledAt(s: MockState, q: Question): number {
+  const m = s.messages.filter((x) => x.questionId === q.id && x.kind === "open_pool").at(-1);
+  return m?.createdAt ?? q.createdAt;
+}
+
 function candidates(s: MockState, now: number): Candidate[] {
   return s.users.map((user) => ({ user, stats: statsOf(s, user.id, now), assignedToday: assignedToday(s, user.id, now) }));
 }
@@ -156,7 +173,10 @@ function archivedAnswers(s: MockState, now: number, filter: (q: Question, a: Ans
 /** Sıradaki uygun lokale atar; yoksa açık havuz. assignNext + closeAndReassign'in ortak parçası. */
 function assignNext(s: MockState, q: Question, now: number, touch: Touch, prev: User | null) {
   const cfg = cfgOf(s);
-  const excluded = s.assignments.filter((a) => a.questionId === q.id).map((a) => a.localId);
+  const excluded = [
+    ...s.assignments.filter((a) => a.questionId === q.id).map((a) => a.localId),
+    ...blockedWith(s, q.touristId),
+  ];
   const next = pickNextLocal(q, candidates(s, now), excluded, cfg);
   const step = planNextStep(q, next, cfg);
 
@@ -164,6 +184,7 @@ function assignNext(s: MockState, q: Question, now: number, touch: Touch, prev: 
     q.status = "open_pool";
     q.currentAssignmentId = null;
     addMessage(s, q, "open_pool", messages.openPool(), now, touch);
+    touch(channel.pool(q.city));
     return;
   }
 
@@ -243,8 +264,9 @@ export const mockRepository: Repository = {
     const me = currentUser();
     const s = store().read();
     const now = store().now();
+    const blocked = blockedWith(s, me.id);
     return s.users
-      .filter((u) => u.homeCity === city && u.id !== me.id && assignedToday(s, u.id, now) < u.dailyLimit)
+      .filter((u) => u.homeCity === city && u.id !== me.id && !blocked.has(u.id) && assignedToday(s, u.id, now) < u.dailyLimit)
       .map((u) => summary(s, u, now))
       .filter((l) => l.medianResponseMinutes !== null)
       .sort((a, b) => (a.medianResponseMinutes ?? 999) - (b.medianResponseMinutes ?? 999))
@@ -292,7 +314,9 @@ export const mockRepository: Repository = {
     const q = s.questions.find((x) => x.id === questionId);
     if (!q) throw new RepoError("NOT_FOUND", "Soru bulunamadı.");
     const asker = userById(s, q.touristId);
-    const isAssignee = s.assignments.some((a) => a.questionId === q.id && a.localId === me.id);
+    const isAssignee =
+      s.assignments.some((a) => a.questionId === q.id && a.localId === me.id) ||
+      s.answers.some((a) => a.questionId === q.id && a.localId === me.id); // havuzdan cevaplayan
     if (q.touristId !== me.id && !isAssignee) throw new RepoError("FORBIDDEN", "Bu soruyu göremezsin.");
 
     const items: ThreadItem[] = [
@@ -450,6 +474,51 @@ export const mockRepository: Repository = {
     });
   },
 
+  async listOpenPool() {
+    const me = currentUser();
+    const s = store().read();
+    const blocked = blockedWith(s, me.id);
+    return s.questions
+      .filter((q) => q.status === "open_pool" && q.city === me.homeCity && q.touristId !== me.id && !blocked.has(q.touristId))
+      .flatMap((q) => {
+        const tourist = s.users.find((u) => u.id === q.touristId);
+        // sentetik geçmiş soruların (tourist "anon") gerçek bir soranı yok
+        return tourist ? [{ question: q, touristName: tourist.name, touristColor: tourist.color, pooledAt: pooledAt(s, q) }] : [];
+      })
+      .sort((a, b) => a.pooledAt - b.pooledAt);
+  },
+
+  async answerFromPool(input) {
+    const me = currentUser();
+    const data = parse(poolAnswerInput, input);
+    return store().transact((s, now, touch) => {
+      const q = s.questions.find((x) => x.id === data.questionId);
+      if (!q) throw new RepoError("NOT_FOUND", "Soru bulunamadı.");
+      if (q.status !== "open_pool") throw new RepoError("QUESTION_CLOSED", "Bu soruyu başka bir lokal cevapladı.");
+      if (q.touristId === me.id) throw new RepoError("FORBIDDEN", "Kendi sorunu cevaplayamazsın.");
+      if (q.city !== me.homeCity || blockedWith(s, me.id).has(q.touristId)) {
+        throw new RepoError("FORBIDDEN", "Bu soruyu cevaplayamazsın.");
+      }
+      // Gönüllü cevap: atama oluşturulmaz, bu yüzden medyan süreyi, yanıt oranını ve kapasiteyi etkilemez (ADR-027).
+      const answer: Answer = {
+        id: store().nextId(s, "ans"),
+        questionId: q.id,
+        localId: me.id,
+        text: data.text,
+        templateId: data.templateId,
+        archived: data.archive,
+        createdAt: now,
+      };
+      s.answers.push(answer);
+      q.status = "answered";
+      addMessage(s, q, "answered", messages.answered(me.name), now, touch);
+      notify(s, q.touristId, "answer_received", q, messages.notifyAnswerReceived(me.name), summary(s, me, now), now, touch);
+      touch(channel.pool(q.city));
+      touch(channel.inbox(me.id));
+      return answer;
+    });
+  },
+
   async getLocalProfile(localId) {
     const s = store().read();
     const now = store().now();
@@ -501,6 +570,38 @@ export const mockRepository: Repository = {
     const data = parse(reportInput, input);
     await store().transact((s, now) => {
       s.reports.push({ id: store().nextId(s, "rep"), reporterId: me.id, ...data, status: "open", createdAt: now });
+    });
+  },
+
+  async listBlocked() {
+    const me = currentUser();
+    const s = store().read();
+    return s.blocks
+      .filter((b) => b.blockerId === me.id)
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .map((b) => {
+        const u = userById(s, b.blockedId);
+        return { user: { id: u.id, name: u.name, color: u.color, avatarUrl: u.avatarUrl }, blockedAt: b.createdAt };
+      });
+  },
+
+  async blockUser(userId) {
+    const me = currentUser();
+    const data = parse(blockUserInput, { userId });
+    await store().transact((s, now, touch) => {
+      if (data.userId === me.id) throw new RepoError("VALIDATION", "Kendini engelleyemezsin.");
+      userById(s, data.userId);
+      if (s.blocks.some((b) => b.blockerId === me.id && b.blockedId === data.userId)) return; // idempotent
+      s.blocks.push({ blockerId: me.id, blockedId: data.userId, createdAt: now });
+      touch(channel.pool(me.homeCity));
+    });
+  },
+
+  async unblockUser(userId) {
+    const me = currentUser();
+    await store().transact((s, _now, touch) => {
+      s.blocks = s.blocks.filter((b) => !(b.blockerId === me.id && b.blockedId === userId));
+      touch(channel.pool(me.homeCity));
     });
   },
 

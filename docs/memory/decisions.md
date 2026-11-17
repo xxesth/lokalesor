@@ -132,3 +132,27 @@ Bu ölçekte darboğaz Postgres olduğu için performans farkı hissedilmez. Ger
 ## ADR-026 — Sunucu use-case'leri `packages/core`'da
 Kabul · 2026-11-14
 api (ör. `declineAssignment`) ve worker (süre dolması) aynı yeniden atama mantığını kullanır. Bu yüzden transaction, Redis yayını ve iş kuyruğu kodu servislerde değil, ortak bir pakette (`packages/core`) yazılır. Servisler sadece giriş noktasıdır: route, job handler.
+
+## ADR-027 — Açık havuz: ilk cevap veren lokal alır, atama açılmaz
+Kabul · 2026-11-17
+Deneme sınırı aşılan soru şehrin açık havuzuna düşer (`questions.pooled_at`). O şehrin her lokali havuzu görür (`listOpenPool`) ve doğrudan cevaplayabilir (`answerFromPool`).
+- İlk cevap kazanır. Geç kalan `QUESTION_CLOSED` alır. Bunu veritabanı garanti eder: `answers(question_id)` benzersiz.
+- Havuz cevabı gönüllüdür, atama kaydı oluşturulmaz. Bu yüzden medyan süre, yanıt oranı ve günlük kapasite etkilenmez. Local Score (değerlendirme) ve cevap sayısı etkilenir.
+- Havuz değişince `pool:{city}` kanalı yayınlanır.
+
+## ADR-028 — Engelleme iki yönlü uygulanır
+Kabul · 2026-11-17
+A, B'yi engellediyse ikisi de birbirine eşleşmez: B'nin sorusu A'ya atanmaz, A'nın sorusu B'ye atanmaz, havuzda birbirlerinin sorularını görmezler. `listBlocked` sadece benim engellediklerimi gösterir. Engellemek idempotenttir.
+Gerekçe: Taciz ve spam, lokallerin vazgeçme nedenlerinden biri (ara rapor, C3). Tek yönlü engel, engellenen kişinin karşı tarafa ulaşmasına izin verirdi.
+
+## ADR-029 — Core bağlamı: `CoreContext` + `withTx` + çalışma zamanı kaynağı
+Kabul · 2026-11-17
+- Her use-case ilk parametre olarak `ctx: CoreContext` alır (`db`, `effects`, `runtime`, `log`). Aktör, api'de oturumdan alınıp ikinci parametre olarak verilir.
+- Yazma işi `withTx(ctx, tx => …)` içinde yapılır. Yayın ve kuyruk sadece `tx.publish()` / `tx.scheduleDeadline()` ile istenir, commit'ten sonra gönderilir, rollback'te atılır. Commit sonrası gönderim hatası fırlatılmaz, loglanır: yedek tarama ve istemci tazelemesi telafi eder.
+- "Şimdi" ve iş kuralı parametreleri `runtime.load()` ile gelir. Geliştirmede /dev paneli Redis'teki `lokale:runtime` hash'ine yazar (`offsetMs`, `reassignAfterMinutes`), production'da bu hash okunmaz.
+- Testler aynı arayüzü sahte yan etki ve sabit saatle kurar, gerçek Postgres'te çalışır.
+Gerekçe: Rule #7 (commit sonrası yayın) kodla zorlanır. Mock'taki "zamanı ileri sar" özelliği sunucuda da çalışır. Testler Redis'e ihtiyaç duymaz.
+
+## ADR-030 — Kapasite yarışı: aday başına `FOR UPDATE SKIP LOCKED`
+Kabul · 2026-11-17
+Adaylar `domain.rankCandidates` ile sıralanır, sonra sırayla tek tek kilitlenir. Kilitli aday beklenmez, sıradakine geçilir. Kapasite kilit altında yeniden sayılır. Böylece şehrin bütün lokalleri kilitlenmez, iki eşzamanlı soru da son kapasiteyi alamaz (test: `core/assignments.test.ts`). Bir soruda aynı anda tek bekleyen atama olmasını kısmi benzersiz index garanti eder.

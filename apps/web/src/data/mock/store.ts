@@ -16,7 +16,7 @@ import type {
   User,
 } from "@lokale/contracts";
 import { DEMO_CONFIG } from "@lokale/domain";
-import { buildSeed } from "./seed";
+import { SEED_VERSION, buildSeed } from "./seed";
 
 export interface MockState {
   users: User[];
@@ -27,6 +27,8 @@ export interface MockState {
   messages: SystemMessage[];
   notifications: Notification[];
   reports: Report[];
+  /** engel kayıtları (iki yönlü uygulanır) */
+  blocks: { blockerId: string; blockedId: string; createdAt: number }[];
   /** arşiv kartındaki "faydalı" sayısına eklenen okuyucu oyları (Local Score'a girmez) */
   usefulBoost: Record<string, number>;
   /** dev panel: "zamanı ileri sar" */
@@ -37,6 +39,8 @@ export interface MockState {
   rev: number;
   /** son yazmanın etkilediği kanallar (storage olayıyla diğer sekmelere gider) */
   lastChannels: Channel[];
+  /** seed.ts SEED_VERSION; farklıysa veri yenilenir */
+  seedVersion: number;
 }
 
 const KEY = "lokale:mock:v1";
@@ -75,22 +79,29 @@ class MockStore {
   read(): MockState {
     if (this.state) return this.state;
     const raw = safeGet(KEY);
+    let prevRev = 0;
     if (raw) {
       try {
         const parsed = JSON.parse(raw) as MockState;
-        // Eski sürümden kalan veri (rev alanı yok) → yeni şemayla başla
-        if (typeof parsed.rev === "number") {
+        // Eski şemadan (rev yok) ya da eski seed'den kalan veri → yeni seed'le başla
+        if (typeof parsed.rev === "number" && parsed.seedVersion === SEED_VERSION) {
           this.state = parsed;
           this.knownRev = Math.max(this.knownRev, parsed.rev);
           return this.state;
         }
+        prevRev = typeof parsed.rev === "number" ? parsed.rev : 0;
       } catch {
         // bozuk veri → sıfırla
       }
     }
-    this.state = fresh();
-    safeSet(KEY, JSON.stringify(this.state));
-    return this.state;
+    // rev artmaya devam etsin ki açık diğer sekmeler storage olayıyla yeni veriyi alsın
+    const next = fresh();
+    next.rev = Math.max(prevRev, this.knownRev) + 1;
+    next.lastChannels = ["*" as Channel];
+    this.state = next;
+    this.knownRev = next.rev;
+    safeSet(KEY, JSON.stringify(next));
+    return next;
   }
 
   /**
@@ -175,6 +186,7 @@ function fresh(): MockState {
     seq: 0,
     rev: 0,
     lastChannels: [],
+    seedVersion: SEED_VERSION,
   };
 }
 

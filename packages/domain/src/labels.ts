@@ -45,6 +45,46 @@ export const CITIES: { id: CityId; name: string; districts: { id: DistrictId; na
       { id: "karsiyaka", name: "Karşıyaka" },
     ],
   },
+  {
+    id: "paris",
+    name: "Paris",
+    districts: [
+      { id: "marais", name: "Marais" },
+      { id: "montmartre", name: "Montmartre" },
+    ],
+  },
+  {
+    id: "berlin",
+    name: "Berlin",
+    districts: [
+      { id: "kreuzberg", name: "Kreuzberg" },
+      { id: "mitte", name: "Mitte" },
+    ],
+  },
+  {
+    id: "tokyo",
+    name: "Tokyo",
+    districts: [
+      { id: "shibuya", name: "Shibuya" },
+      { id: "shinjuku", name: "Shinjuku" },
+    ],
+  },
+  {
+    id: "newyork",
+    name: "New York",
+    districts: [
+      { id: "brooklyn", name: "Brooklyn" },
+      { id: "manhattan", name: "Manhattan" },
+    ],
+  },
+  {
+    id: "barselona",
+    name: "Barselona",
+    districts: [
+      { id: "gracia", name: "Gràcia" },
+      { id: "born", name: "El Born" },
+    ],
+  },
 ];
 
 export function cityName(id: CityId): string {

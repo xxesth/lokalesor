@@ -6,6 +6,12 @@ Sözleşme dosyaları:
 - `apps/web/src/data/repository.ts`: istemcinin portu.
 Değişiklik talepleri `progress.md` dosyasındaki "Sözleşme talepleri" bölümüne yazılır.
 
+## Faz 2 eklemeleri (2026-11-17, Mali)
+- **Açık havuz** (ADR-027): `listOpenPool(): PoolItem[]`, `answerFromPool(PoolAnswerInput): Answer`. Yeni hata kodu `QUESTION_CLOSED` (409). Yeni kanal `pool:{city}`.
+- **Engelleme** (ADR-028): `listBlocked(): BlockedUser[]`, `blockUser(userId)`, `unblockUser(userId)`. Eşleştirme, `listAvailableLocals` ve havuz engeli iki yönlü uygular.
+- **Realtime:** `RealtimeTokenClaims { sub, exp }`, `realtimeTokenResponse` zod şeması, `REALTIME_TOKEN_TTL_MS`.
+- Mock'ta hepsi çalışıyor. Seed'de İstanbul havuzunda iki soru var (Ökkeş ve Taylan soruyor).
+
 ## Kodla senkron notları (2026-11-14, Faz 1)
 Kod yazılırken taslağa şu eklemeler yapıldı. Kod esas alınır:
 - `Session` artık `@lokale/contracts` içinde (`entities.ts`).
@@ -257,7 +263,8 @@ export interface SettingsPatch {
 export type Channel =
   | `question:${Id}`
   | `inbox:${Id}`
-  | `notifications:${Id}`;
+  | `notifications:${Id}`
+  | `pool:${CityId}`;
 
 export interface ChannelEvent {
   channel: Channel;
@@ -289,6 +296,11 @@ Bütün uç noktalar `/api` altında. Aktör her zaman oturumdan alınır.
 | `markNotificationsRead` | `POST /api/notifications/read` `{ ids? }` | 204 |
 | `updateSettings` | `PATCH /api/me/settings` | `User` |
 | `report` | `POST /api/reports` | 204 |
+| `listOpenPool` | `GET /api/pool` | `PoolItem[]` |
+| `answerFromPool` | `POST /api/pool/:questionId/answer` `{ text, templateId, archive }` | `Answer` (201) |
+| `listBlocked` | `GET /api/me/blocks` | `BlockedUser[]` |
+| `blockUser` | `POST /api/me/blocks` `{ userId }` | 204 |
+| `unblockUser` | `DELETE /api/me/blocks/:userId` | 204 |
 | (realtime) | `POST /api/realtime/token` | `{ token, expiresAt }` |
 | `AuthPort` | `/api/auth/*` (Better Auth) + `GET /api/me/session`, `PATCH /api/me/session` `{ currentCity?, roleOverride? }` | `Session` |
 | `DemoControls` | `POST /api/dev/reset`, `POST /api/dev/config` (sadece geliştirmede) | 204 |
@@ -315,6 +327,8 @@ export interface Repository {
   declineAssignment(assignmentId: Id): Promise<void>; // "Bilmiyorum, sıradakine geçsin" → hemen yeniden atar
   listMyArchive(): Promise<ArchivedAnswer[]>;
   setArchived(answerId: Id, archived: boolean): Promise<void>;
+  listOpenPool(): Promise<PoolItem[]>;
+  answerFromPool(input: PoolAnswerInput): Promise<Answer>;
 
   // Ortak
   getLocalProfile(localId: Id): Promise<LocalProfile>;
@@ -322,6 +336,9 @@ export interface Repository {
   markNotificationsRead(ids?: Id[]): Promise<void>;
   updateSettings(patch: SettingsPatch): Promise<User>;
   report(input: ReportInput): Promise<void>;
+  listBlocked(): Promise<BlockedUser[]>;
+  blockUser(userId: Id): Promise<void>;
+  unblockUser(userId: Id): Promise<void>;
 
   // Realtime
   subscribe(channel: Channel, cb: (e: ChannelEvent) => void): Unsubscribe;
@@ -354,14 +371,15 @@ export interface DemoControls {     // sadece geliştirme ortamında / mock'ta
 ```ts
 export type RepoErrorCode =
   | "UNAUTHENTICATED" | "FORBIDDEN" | "NOT_FOUND"
-  | "VALIDATION" | "CAPACITY_FULL" | "ASSIGNMENT_EXPIRED" | "ASSIGNMENT_CLOSED" | "ALREADY_RATED";
+  | "VALIDATION" | "CAPACITY_FULL" | "ASSIGNMENT_EXPIRED" | "ASSIGNMENT_CLOSED" | "ALREADY_RATED"
+  | "QUESTION_CLOSED"; // açık havuzdaki soruyu başka lokal önce cevapladı
   // ASSIGNMENT_CLOSED: cevap/decline gönderilirken atama artık "pending" değil
 export class RepoError extends Error {
   constructor(public code: RepoErrorCode, message?: string) { super(message ?? code); }
 }
 export const HTTP_STATUS: Record<RepoErrorCode, number> = {
   UNAUTHENTICATED: 401, FORBIDDEN: 403, NOT_FOUND: 404, VALIDATION: 400,
-  CAPACITY_FULL: 409, ASSIGNMENT_EXPIRED: 409, ASSIGNMENT_CLOSED: 409, ALREADY_RATED: 409,
+  CAPACITY_FULL: 409, ASSIGNMENT_EXPIRED: 409, ASSIGNMENT_CLOSED: 409, ALREADY_RATED: 409, QUESTION_CLOSED: 409,
 };
 // Hata cevabının gövdesi: { code: RepoErrorCode, message: string }
 // HttpAdapter bu gövdeyi tekrar RepoError'a çevirir. Mock ile http aynı hatayı fırlatır.

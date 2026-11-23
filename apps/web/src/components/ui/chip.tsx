@@ -22,7 +22,7 @@ export function Chip({
       aria-pressed={pressed}
       onClick={onClick}
       className={cn(
-        "h-9 shrink-0 rounded-control border px-3 text-sm font-medium transition-colors",
+        "h-11 shrink-0 rounded-control border px-3 text-sm font-medium transition-colors",
         pressed ? "border-ink bg-ink text-paper" : "border-line-strong bg-paper text-ink hover:border-ink",
         className,
       )}
@@ -61,6 +61,20 @@ export function TopicChips({
       {TOPICS.map((t) => (
         <Chip key={t} pressed={value === t} onClick={() => onChange(withAll && value === t ? null : t)}>
           {TOPIC_LABELS[t]}
+        </Chip>
+      ))}
+    </div>
+  );
+}
+
+/** Bütçe filtresi: ayrı çipler, seçiliyi tekrar tıklayınca filtre kalkar (hiçbiri = tümü). */
+export function BudgetChips({ value, onChange }: { value: Budget | null; onChange: (b: Budget | null) => void }) {
+  return (
+    <div role="group" aria-label="Bütçe" className="flex items-center gap-1.5">
+      <span className="mr-1 text-sm text-gray">Bütçe</span>
+      {BUDGETS.map((b) => (
+        <Chip key={b} pressed={value === b} onClick={() => onChange(value === b ? null : b)}>
+          {BUDGET_LABELS[b]}
         </Chip>
       ))}
     </div>

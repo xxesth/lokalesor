@@ -2,6 +2,7 @@
 import type { LocalProfile } from "@lokale/contracts";
 import { TOPIC_LABELS, cityName, districtName, formatEta, formatRate } from "@lokale/domain";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { Tag } from "@/components/ui/chip";
 import { LockIcon } from "@/components/ui/icons";
@@ -69,7 +70,7 @@ export function LocalProfileCompact({ p }: { p: LocalProfile }) {
             <Tag key={t}>{TOPIC_LABELS[t]}</Tag>
           ))}
         </div>
-        <Link href={`/profil/${p.id}`} className="text-sm font-bold underline underline-offset-4">
+        <Link href={`/profil/${p.id}`} className="-my-2.5 inline-flex min-h-11 items-center self-start text-sm font-bold underline underline-offset-4">
           Profilin tamamını gör
         </Link>
       </div>
@@ -78,54 +79,61 @@ export function LocalProfileCompact({ p }: { p: LocalProfile }) {
 }
 
 /** full: profil sayfası. İletişim bilgisi YOK. */
-export function LocalProfileFull({ p }: { p: LocalProfile }) {
+export function LocalProfileFull({ p, actions }: { p: LocalProfile; actions?: ReactNode }) {
   return (
-    <div style={personStyle(p.color)}>
-      <div className="h-[140px] bg-person lg:h-[180px]" />
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-8 px-4 pb-28 lg:px-6 lg:pb-16">
-        <div className="-mt-14 flex flex-col gap-3 lg:-mt-16">
-          <Avatar name={p.name} color={p.color} size={112} ring className="lg:h-[120px] lg:w-[120px]" />
-          <h1 className="text-[44px] font-extrabold leading-[48px] tracking-[-0.04em]">{p.name}</h1>
-          <div className="flex flex-wrap items-center gap-3 text-base text-ink-2">
-            {place(p)}
-            {p.verified && (
-              <span className="rounded-full border border-ink px-3 py-1">
-                <VerifiedBadge />
-              </span>
-            )}
+    <main id="icerik" tabIndex={-1} className="focus:outline-none" style={personStyle(p.color)}>
+      <div className="h-[140px] bg-person lg:h-[160px]" />
+      {/* Masaüstü: solda kimlik + istatistik + konular, sağda son cevaplar (referans: 6-profil-masaustu). */}
+      <div className="mx-auto flex w-full max-w-[1248px] flex-wrap items-start gap-x-14 gap-y-8 px-4 pb-28 lg:px-6 lg:pb-16">
+        <div className="flex min-w-0 flex-[1_1_360px] flex-col gap-7">
+          <div className="-mt-14 flex flex-col gap-2.5 lg:-mt-[60px]">
+            <Avatar name={p.name} color={p.color} size={112} ring className="lg:h-[120px] lg:w-[120px]" />
+            <h1 className="mt-2 text-[44px] font-extrabold leading-[48px] tracking-[-0.04em] lg:text-[52px] lg:leading-[54px]">{p.name}</h1>
+            <div className="flex flex-wrap items-center gap-3 text-base text-ink-2">
+              {place(p)}
+              {p.verified && (
+                <span className="rounded-full border border-ink px-3 py-1">
+                  <VerifiedBadge />
+                </span>
+              )}
+            </div>
+            {actions}
           </div>
-        </div>
-        <div className="flex flex-wrap gap-10">
-          <div className="flex min-w-0 flex-[1_1_360px] flex-col gap-8">
-            <LocalStatsRow p={p} size="l" />
-            <section className="flex flex-col gap-3">
-              <h2 className="text-xl font-bold">Cevapladığı konular</h2>
-              <div className="flex flex-wrap gap-2">
-                {p.topics.map((t) => (
-                  <span key={t} className="rounded-control bg-mist px-3 py-2 text-[15px]">
-                    {TOPIC_LABELS[t]}
-                  </span>
-                ))}
-              </div>
-            </section>
-          </div>
-          <div className="flex min-w-0 flex-[1_1_420px] flex-col gap-2">
-            <h2 className="text-xl font-bold">Son cevapları</h2>
-            {p.recentAnswers.length === 0 && <p className="text-sm text-gray">Henüz arşivlenmiş cevabı yok.</p>}
-            <div className="divide-y divide-line border-b border-line">
-              {p.recentAnswers.map((a) => (
-                <ArchiveItem key={a.answer.id} item={a} showTopic={false} showLocal={false} />
+          <LocalStatsRow p={p} size="l" />
+          <section className="flex flex-col gap-2.5">
+            <h2 className="text-lg font-bold">Cevapladığı konular</h2>
+            <div className="flex flex-wrap gap-1.5">
+              {p.topics.map((t) => (
+                <span key={t} className="rounded-control bg-mist px-3 py-2 text-[15px]">
+                  {TOPIC_LABELS[t]}
+                </span>
               ))}
             </div>
-            <p className="mt-4 flex items-start gap-3 rounded-panel bg-mist p-4 text-[15px] leading-[22px]">
-              <LockIcon className="mt-0.5 shrink-0" />
-              <span>
-                <b>İletişim sadece site içinden.</b> Telefon ve iletişim bilgileri paylaşılmaz.
-              </span>
-            </p>
-          </div>
+          </section>
+          <ContactNote className="hidden lg:flex" />
         </div>
+        <section className="flex min-w-0 flex-[999_1_520px] flex-col lg:pt-8">
+          <h2 className="border-b border-ink pb-2.5 text-[22px] font-bold">Son cevapları</h2>
+          {p.recentAnswers.length === 0 && <p className="pt-3 text-sm text-gray">Henüz arşivlenmiş cevabı yok.</p>}
+          <div className="divide-y divide-line border-b border-line">
+            {p.recentAnswers.map((a) => (
+              <ArchiveItem key={a.answer.id} item={a} showTopic={false} showLocal={false} />
+            ))}
+          </div>
+          <ContactNote className="mt-6 lg:hidden" />
+        </section>
       </div>
-    </div>
+    </main>
+  );
+}
+
+function ContactNote({ className }: { className?: string }) {
+  return (
+    <p className={cn("flex items-start gap-3 rounded-panel bg-mist p-4 text-[15px] leading-[22px]", className)}>
+      <LockIcon className="mt-0.5 shrink-0" />
+      <span>
+        <b>İletişim sadece site içinden.</b> Telefon ve iletişim bilgileri paylaşılmaz.
+      </span>
+    </p>
   );
 }

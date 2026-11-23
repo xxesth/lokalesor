@@ -3,7 +3,7 @@ import type { Notification } from "@lokale/contracts";
 import Link from "next/link";
 import { Avatar } from "@/components/ui/avatar";
 import { SystemSquareIcon } from "@/components/ui/icons";
-import { EmptyState, Loading } from "@/components/ui/misc";
+import { EmptyState, ErrorNote, Loading } from "@/components/ui/misc";
 import { useNow } from "@/data/use-now";
 import { cn } from "@/lib/cn";
 import { timeAgo } from "@/lib/format";
@@ -56,6 +56,8 @@ export function NotificationList({ onNavigate }: { onNavigate?: () => void }) {
         </button>
       </div>
       {list.isLoading && <Loading />}
+      <ErrorNote error={list.error} onRetry={() => void list.refetch()} />
+      <ErrorNote error={markAll.error} />
       {list.data && list.data.length === 0 && <EmptyState title="Henüz bildirim yok">Yeni bir şey olunca burada göreceksin.</EmptyState>}
       <ul className="divide-y divide-line border-t border-line">
         {list.data?.map((n) => <NotificationItem key={n.id} n={n} onNavigate={onNavigate} />)}

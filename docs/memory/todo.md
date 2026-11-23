@@ -106,7 +106,7 @@ Bağımlılıklar:
 - [ ] `apps/api`: Fastify kurulumu, pino, zod type provider, OpenAPI (`/api/docs`), hata plugin'i
 - [ ] Better Auth + demo kullanıcıları, `plugins/session.ts`, `GET/PATCH /api/me/session`
 - [ ] `packages/core`: `questions.ts`, `answers.ts`, `inbox.ts`, `profiles.ts`, `notifications.ts`, `pool.ts` (`listOpenPool`, `answerFromPool`), `blocks.ts` (transaction'lar `withTx` ile; mesaj/bildirim için `writes.ts`; kurallar mock'taki karşılığıyla aynı)
-- [ ] `apps/api/routes/*`: `contracts.md`'deki tüm REST uç noktaları + `POST /api/realtime/token`
+- [ ] `apps/api/routes/*` (⚠️ önce `progress.md` → "Backend'in birebir uyması gereken davranışlar" bölümünü oku): `contracts.md`'deki tüm REST uç noktaları + `POST /api/realtime/token`
 - [ ] `apps/api/routes/dev.ts`: sıfırla, `T` ayarı, zamanı ileri sar (`core/runtime.ts` fonksiyonları + `sweepExpired`)
 - [ ] `apps/web/src/data/http/`: `http-repository.ts` (`ROUTES` + fetch + `RepoError` dönüşümü), `http-auth.ts`
 - [ ] `core` testleri: test veritabanı üzerinde transaction ve yarış durumları
@@ -115,13 +115,21 @@ Bağımlılıklar:
 
 ### Ökkeş — ön yüzü tamamlama
 - [x] Faz 1'de kalan 🟡 ekranlar: landing, benzer cevaplar (Faz 1'de yapıldı)
-- [ ] Ayarlar: rol/şehir, günlük limit (1-5), engellenenler (`listBlocked`, `unblockUser`)
-- [ ] Lokalin arşivi: listele, düzenle, arşivden kaldır
-- [ ] Şikâyet / engelle formu (`report` + `blockUser`)
-- [ ] Açık havuz arayüzü: turist bilgilendirmesi, lokallerin havuzdan soru alması (`listOpenPool`, `answerFromPool`, kanal `pool:{city}`; seed'de İstanbul havuzunda 2 soru var)
-- [ ] Tüm ekranlarda yükleniyor, hata ve boş durumları
-- [ ] Erişilebilirlik turu: klavye, `aria-label`, kontrast, dokunma alanı
-- [ ] Bütün ekranlar için 390 / 1024 / 1440 px karşılaştırması
+- [x] Ayarlar: günlük limit (1-5), semt, konular, engellenenler (`listBlocked`, `unblockUser`). Rol/şehir üst menüdeki anahtar ve seçicide.
+- [~] Lokalin arşivi: listele ve arşivden kaldır/ekle var, profilden erişilebilir. Cevap metnini düzenleme yok (henüz karar yok: `setAnswerText` sözleşme talebi Mali'de bekliyor, reddedilmedi)
+- [x] Şikâyet / engelle formu (`report` + `blockUser`)
+- [x] Rol bazlı içerik: ana sayfa, Sorularım ve rol kapısı (`RoleGate`) iki rolde farklı
+- [x] Profil: kendi profilinde Ayarlar ve Soru arşivim bağlantıları
+- [ ] Profil düzenleme: ad, kişi rengi, avatar fotoğrafı (sözleşme talepleri `progress.md`'de; Mali onaylayınca ekran + mock uygulaması)
+- [x] Açık havuz arayüzü: turist bilgilendirmesi, lokallerin havuzdan soru alması (`listOpenPool`, `answerFromPool`, kanal `pool:{city}`; seed'de İstanbul havuzunda 2 soru var)
+- [x] Tüm ekranlarda yükleniyor, hata ve boş durumları (`ErrorNote` + "Tekrar dene", `app/error.tsx`, `app/not-found.tsx`)
+- [x] Erişilebilirlik turu: klavye, `aria-label`, kontrast, dokunma alanı (kod tarafı bitti; ekran okuyucu denemesi ve token kontrast kararı açık, bkz. progress.md)
+- [~] Bütün ekranlar için 390 / 1024 / 1440 px karşılaştırması: 1440'ta ana sayfa, soru detayı, gelen kutusu, profil, giriş, tanıtım, soru sor tasarımla karşılaştırıldı ve düzeltildi; 390'da sadece ana sayfa. 1024 için referans yok, yalnızca düzen kuralları denetlendi (alt çubuk yok, masaüstü menü, yatay taşma yok). Kalan: bildirimler, 390 px diğer ekranlar, soru sor ara durumları (aranıyor, iletildi)
+- [x] Popüler sorulara bütçe filtresi (brief #24, sözleşmede `budget` zaten var)
+- [x] Favicon ve Open Graph meta (`icon.svg`, `opengraph-image.png`, `NEXT_PUBLIC_SITE_URL`)
+- [x] `docs/demo.md`: rol anahtarı, açık havuz ve engelleme adımları
+- [x] Rapor ve sunum ekran görüntüleri yenilendi: tam senaryo, 1440 ve 390 px (23'er görüntü, repoda değil, yerel `.local-e2e/sunum/`)
+- [ ] Gizlilik bilgilendirmesi (brief #11, #22 KVKK): Ayarlar'da statik "Gizlilik" bölümü (telefon ve e-posta gösterilmez, konum sadece şehir/semt, iletişim site içinden)
 - [ ] Rapor: SDD arayüz bölümü (ekran akışı, bileşen envanteri)
 
 ### Ortak

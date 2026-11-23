@@ -13,7 +13,7 @@ export function CitySelector({ value, onChange }: { value: CityId; onChange: (c:
         aria-label="Bulunduğun şehir"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="absolute inset-0 cursor-pointer opacity-0"
+        className="absolute -inset-px cursor-pointer text-base opacity-0"
       >
         {CITIES.map((c) => (
           <option key={c.id} value={c.id}>

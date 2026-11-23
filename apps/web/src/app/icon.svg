@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>Lokale Sor</title>
+  <rect width="64" height="64" rx="8" fill="#15171C"/>
+  <rect x="18" y="14" width="9" height="36" fill="#FFFFFF"/>
+  <rect x="18" y="41" width="26" height="9" fill="#FFFFFF"/>
+  <circle cx="46" cy="19" r="6" fill="#D8344B"/>
+</svg>

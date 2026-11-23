@@ -1,6 +1,6 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { EmptyState, Loading } from "@/components/ui/misc";
+import { EmptyState, ErrorNote, Loading } from "@/components/ui/misc";
 import { FlowHeader } from "@/components/layout/flow-header";
 import { Page } from "@/components/layout/two-column";
 import { getRepository } from "@/data";
@@ -23,6 +23,8 @@ export function MyArchivePage() {
       <Page className="flex max-w-[760px] flex-col gap-4">
         <h1 className="hidden text-[44px] font-extrabold tracking-[-0.04em] lg:block">Soru arşivim</h1>
         {list.isLoading && <Loading />}
+        <ErrorNote error={list.error} onRetry={() => void list.refetch()} />
+        <ErrorNote error={toggle.error} />
         {list.data?.length === 0 && <EmptyState title="Henüz cevabın yok" />}
         <div className="divide-y divide-line">
           {list.data?.map((a) => (
@@ -31,7 +33,7 @@ export function MyArchivePage() {
               <button
                 type="button"
                 onClick={() => toggle.mutate({ id: a.answer.id, archived: !a.answer.archived })}
-                className="mb-4 self-start text-sm font-bold underline underline-offset-4"
+                className="-mt-1 mb-3 inline-flex min-h-11 items-center self-start text-sm font-bold underline underline-offset-4"
               >
                 {a.answer.archived ? "Arşivden kaldır" : "Arşive ekle"}
               </button>

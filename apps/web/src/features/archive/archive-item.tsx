@@ -26,7 +26,7 @@ export function ArchiveItem({
       <p className="text-[15px] leading-[22px] text-ink-2">&ldquo;{item.answer.text}&rdquo;</p>
       <div className="mt-1 flex items-center gap-2 text-[13px]">
         {showLocal && (
-          <Link href={`/profil/${item.local.id}`} className="inline-flex items-center gap-2 font-semibold hover:text-ink">
+          <Link href={`/profil/${item.local.id}`} className="-my-2.5 inline-flex min-h-11 items-center gap-2 font-semibold hover:text-ink">
             <Avatar name={item.local.name} color={item.local.color} size={24} />
             {item.local.name}
           </Link>

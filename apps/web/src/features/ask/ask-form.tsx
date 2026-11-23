@@ -9,7 +9,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { BudgetSegment, TopicChips } from "@/components/ui/chip";
 import { CitySelector } from "@/components/layout/city-selector";
-import { BackLink, FlowHeader } from "@/components/layout/flow-header";
+import { FlowHeader } from "@/components/layout/flow-header";
 import { Page } from "@/components/layout/two-column";
 import { ErrorNote, FieldLabel, Select, Textarea } from "@/components/ui/misc";
 import { SystemSquareIcon } from "@/components/ui/icons";
@@ -178,18 +178,27 @@ export function AskForm() {
   }
 
   const where = district ? districtName(district) : null;
+  const similarPanel = !dismissed && (
+    <SimilarAnswersPanel
+      text={text}
+      onEnough={() => setEnough(true)}
+      onDismiss={() => {
+        setDismissed(true);
+        trySubmit();
+      }}
+    />
+  );
   return (
     <>
       <AppHeader hideOnMobile />
       <FlowHeader backHref="/ana-sayfa" title="Lokale sor" />
-      <Page className="max-w-[760px]">
-        <BackLink href="/ana-sayfa">Ana sayfa</BackLink>
-        <h1 className="mb-6 mt-3 hidden text-[44px] font-extrabold leading-[48px] tracking-[-0.04em] lg:block">Lokale sor</h1>
-        <form onSubmit={submit} className="flex flex-col gap-6">
-          <div className="flex items-center justify-between gap-3 rounded-panel bg-mist px-4 py-3">
-            <span className="flex flex-col">
-              <span className="text-[13px] text-gray">Şehir</span>
-            </span>
+      <Page>
+        <h1 className="mb-6 hidden text-[44px] font-extrabold leading-[48px] tracking-[-0.04em] lg:block">Lokale sor</h1>
+        {/* Masaüstü: solda form, sağda "Benzer sorular cevaplanmış" paneli (referans: 3-sor-masaustu). */}
+        <div className="flex flex-wrap items-start gap-x-14 gap-y-6">
+        <form onSubmit={submit} className="flex min-w-0 flex-[1_1_520px] flex-col gap-6 lg:max-w-[752px]">
+          <div className="flex items-center justify-between gap-3 rounded-panel bg-mist px-4 py-3 lg:justify-start lg:bg-transparent lg:p-0">
+            <span className="text-[13px] text-gray lg:text-base">Şehir</span>
             <CitySelector value={currentCity} onChange={(c) => void setCity(c)} />
           </div>
 
@@ -209,10 +218,7 @@ export function AskForm() {
             />
           </div>
 
-          {!dismissed && <SimilarAnswersPanel text={text} onEnough={() => setEnough(true)} onDismiss={() => {
-                setDismissed(true);
-                trySubmit();
-              }} />}
+          <div className="empty:hidden lg:hidden">{similarPanel}</div>
 
           <div ref={topicRef} className="flex scroll-mt-24 flex-col gap-2">
             <FieldLabel>Konu</FieldLabel>
@@ -225,7 +231,7 @@ export function AskForm() {
             />
           </div>
 
-          <div className="grid grid-cols-[auto_1fr] items-end gap-4">
+          <div className="grid grid-cols-[auto_1fr] items-end gap-4 lg:grid-cols-[auto_300px] lg:justify-start lg:gap-8">
             <div className="flex flex-col gap-2">
               <FieldLabel>Bütçe</FieldLabel>
               <BudgetSegment value={budget} onChange={setBudget} />
@@ -246,17 +252,19 @@ export function AskForm() {
           </div>
 
           <ErrorNote error={ask.error ?? (formError ? new Error(formError) : null)} />
-          <div className="flex flex-col gap-2">
-            <Button type="submit" disabled={ask.isPending} className="w-full">
+          <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-4 lg:border-t lg:border-line lg:pt-6">
+            <Button type="submit" disabled={ask.isPending} className="w-full lg:w-auto lg:px-8">
               Lokale gönder
             </Button>
-            <p className="text-center text-sm text-gray">
+            <p className="text-center text-sm text-gray lg:text-left">
               {!topic
                 ? "Göndermek için bir konu seç."
                 : `Sorun ${where ? `${where}${locativeSuffix(where)}` : "bu şehirde"} yaşayan bir lokale gider. Cevap gelmezse otomatik olarak sıradakine geçer.`}
             </p>
           </div>
         </form>
+        <aside className="hidden min-w-0 flex-[0_1_400px] empty:hidden lg:block">{similarPanel}</aside>
+        </div>
       </Page>
     </>
   );

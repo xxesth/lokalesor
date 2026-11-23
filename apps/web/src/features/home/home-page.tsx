@@ -1,20 +1,21 @@
 "use client";
-import type { Topic } from "@lokale/contracts";
+import type { Budget, Topic } from "@lokale/contracts";
 import { cityName, formatEta, locativeSuffix, median } from "@lokale/domain";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { TopicChips } from "@/components/ui/chip";
-import { EmptyState, Loading, SectionTitle } from "@/components/ui/misc";
+import { BudgetChips, TopicChips } from "@/components/ui/chip";
+import { EmptyState, ErrorNote, Loading, SectionTitle } from "@/components/ui/misc";
 import { Page, TwoColumn } from "@/components/layout/two-column";
 import { getRepository } from "@/data";
 import { qk } from "@/data/query-keys";
 import { ArchiveItem } from "@/features/archive";
 import { ActiveQuestionCard, useMyQuestions } from "@/features/question";
-import { useMe } from "@/features/session";
+import { useMe, useSession } from "@/features/session";
 import { AppHeader } from "@/features/shell";
+import { LocalHome } from "./local-home";
 
 function AskBox() {
   const { currentCity } = useMe();
@@ -33,20 +34,22 @@ function AskBox() {
       <label htmlFor="ask-box" className="text-lg font-bold">
         Lokale sor
       </label>
-      <input
-        id="ask-box"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Ne merak ediyorsun?"
-        className="h-12 rounded-control border border-line-strong px-4 text-base placeholder:text-gray focus:border-ink focus:outline-none"
-      />
-      <Button type="submit" className="w-full">
-        Lokale Sor
-      </Button>
+      <div className="flex flex-col gap-3 lg:flex-row">
+        <input
+          id="ask-box"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Ne merak ediyorsun?"
+          className="h-12 min-w-0 rounded-control border border-line-strong px-4 text-base lg:flex-1 placeholder:text-gray focus:border-ink"
+        />
+        <Button type="submit" className="w-full lg:w-auto lg:px-8">
+          Lokale Sor
+        </Button>
+      </div>
       {locals.data && locals.data.length > 0 && (
         <div className="flex items-center gap-3 pt-1">
           <span className="flex -space-x-2">
-            {locals.data.slice(0, 4).map((l) => (
+            {locals.data.slice(0, 3).map((l) => (
               <Avatar key={l.id} name={l.name} color={l.color} size={32} ring />
             ))}
           </span>
@@ -64,10 +67,13 @@ function ActiveQuestions() {
     <section className="flex flex-col gap-4">
       <SectionTitle>Aktif sorularım</SectionTitle>
       {mine.isLoading && <Loading />}
+      <ErrorNote error={mine.error} onRetry={() => void mine.refetch()} />
       {mine.data && active.length === 0 && <p className="text-[15px] text-gray">Bekleyen sorun yok. Sorduğunda burada geri sayımı göreceksin.</p>}
-      {active.map((s) => (
-        <ActiveQuestionCard key={s.question.id} s={s} />
-      ))}
+      <div className="grid gap-4 lg:grid-cols-2">
+        {active.map((s) => (
+          <ActiveQuestionCard key={s.question.id} s={s} />
+        ))}
+      </div>
     </section>
   );
 }
@@ -75,7 +81,8 @@ function ActiveQuestions() {
 function PopularQuestions() {
   const { currentCity } = useMe();
   const [topic, setTopic] = useState<Topic | null>(null);
-  const query = topic ? { city: currentCity, topic } : { city: currentCity };
+  const [budget, setBudget] = useState<Budget | null>(null);
+  const query = { city: currentCity, ...(topic && { topic }), ...(budget && { budget }) };
   const popular = useQuery({ queryKey: qk.popular(query), queryFn: () => getRepository().listPopular(query) });
   const name = cityName(currentCity);
   return (
@@ -85,8 +92,10 @@ function PopularQuestions() {
         {locativeSuffix(name)} popüler sorular
       </SectionTitle>
       <TopicChips value={topic} onChange={setTopic} withAll scroll />
+      <BudgetChips value={budget} onChange={setBudget} />
       {popular.isLoading && <Loading />}
-      {popular.data?.items.length === 0 && <EmptyState title="Bu konuda henüz arşiv yok">İlk soran sen ol.</EmptyState>}
+      <ErrorNote error={popular.error} onRetry={() => void popular.refetch()} />
+      {popular.data?.items.length === 0 && <EmptyState title="Bu filtreyle henüz arşiv yok">Filtreyi gevşetmeyi dene ya da ilk soran sen ol.</EmptyState>}
       <div className="divide-y divide-line">
         {popular.data?.items.map((a) => (
           <ArchiveItem key={a.answer.id} item={a} />
@@ -96,16 +105,16 @@ function PopularQuestions() {
   );
 }
 
-export function HomePage() {
+function TouristHome() {
   const { user, currentCity } = useMe();
   const name = cityName(currentCity);
   return (
     <>
       <AppHeader />
       <Page>
-        <h1 className="mb-6 text-[34px] font-extrabold leading-[38px] tracking-[-0.04em] lg:mb-10 lg:text-[56px] lg:leading-[58px]">
+        <h1 className="mb-6 text-[28px] font-extrabold leading-8 tracking-[-0.03em] lg:mb-10 lg:text-[44px] lg:leading-[48px] lg:tracking-[-0.04em]">
           Selam {user.name.split(" ")[0]},
-          <br />
+          <br className="lg:hidden" />{" "}
           <span className="text-gray lg:text-gray-soft">
             {name}
             {locativeSuffix(name)}
@@ -124,4 +133,10 @@ export function HomePage() {
       </Page>
     </>
   );
+}
+
+/** Rol, hangi ana sayfanın görüneceğini belirler. */
+export function HomePage() {
+  const { role } = useSession();
+  return role === "local" ? <LocalHome /> : <TouristHome />;
 }

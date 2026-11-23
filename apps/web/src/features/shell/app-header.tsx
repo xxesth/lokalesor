@@ -13,9 +13,11 @@ import { NAV } from "./nav";
 
 export function Logo() {
   return (
-    <Link href="/" className="inline-flex items-baseline gap-0.5 hover:text-ink" aria-label="Lokale Sor ana sayfa">
-      <span className="text-[26px] font-extrabold tracking-[-0.03em]">Lokale Sor</span>
-      <span aria-hidden className="h-2 w-2 rounded-full bg-nar" />
+    <Link href="/" className="inline-flex min-h-11 items-center hover:text-ink" aria-label="Lokale Sor ana sayfa">
+      <span className="inline-flex items-baseline gap-0.5">
+        <span className="text-[26px] font-extrabold tracking-[-0.03em]">Lokale Sor</span>
+        <span aria-hidden className="h-2 w-2 rounded-full bg-nar" />
+      </span>
     </Link>
   );
 }
@@ -56,7 +58,7 @@ export function AppHeader({ hideOnMobile }: { hideOnMobile?: boolean }) {
         </div>
       </div>
       {/* Masaüstü */}
-      <div className="mx-auto hidden max-w-[1200px] flex-col px-6 lg:flex">
+      <div className="mx-auto hidden max-w-[1248px] flex-col px-6 lg:flex">
         <div className="grid grid-cols-[1fr_auto_1fr] items-center py-3.5">
           <Logo />
           <CitySelector value={currentCity} onChange={(c) => void setCity(c)} />
@@ -75,7 +77,7 @@ export function AppHeader({ hideOnMobile }: { hideOnMobile?: boolean }) {
                 href={n.href(user.id)}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "border-b-2 pb-2.5 pt-1 text-[15px] hover:text-ink",
+                  "inline-flex min-h-11 items-center border-b-2 text-[15px] hover:text-ink",
                   active ? cn("font-bold", role === "local" ? "border-person" : "border-ink") : "border-transparent text-ink-2",
                 )}
               >

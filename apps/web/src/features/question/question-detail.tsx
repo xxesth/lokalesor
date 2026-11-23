@@ -1,5 +1,6 @@
 "use client";
 import type { Id } from "@lokale/contracts";
+import { cityName, messages } from "@lokale/domain";
 import { useState } from "react";
 import { Countdown, ProgressLine } from "@/components/ui/countdown";
 import { BackLink, FlowHeader } from "@/components/layout/flow-header";
@@ -39,8 +40,9 @@ export function QuestionDetail({ id }: { id: Id }) {
       <AppHeader hideOnMobile />
       <FlowHeader backHref="/sorularim" title="Sorun" right={t && <StatusLabel kind={kind} />} />
       <Page>
+        <h1 className="sr-only">Sorun</h1>
         {thread.isLoading && <Loading />}
-        <ErrorNote error={thread.error} />
+        <ErrorNote error={thread.error} onRetry={() => void thread.refetch()} />
         {t && (
           <TwoColumn
             main={
@@ -56,6 +58,13 @@ export function QuestionDetail({ id }: { id: Id }) {
                 <div className="lg:hidden">
                   <QuestionJourneyBar q={t.question} assignments={t.assignments} />
                 </div>
+
+                {t.question.status === "open_pool" && (
+                  <section className="flex flex-col gap-2 rounded-panel border border-dashed border-line-strong p-4">
+                    <StatusLabel kind="open_pool" />
+                    <p className="text-[15px] text-ink-2">{messages.poolNoticeTourist(cityName(t.question.city))}</p>
+                  </section>
+                )}
 
                 {t.currentAssignment && (
                   <section className="flex flex-col gap-2 rounded-panel border border-line p-4" style={{}}>
@@ -85,7 +94,7 @@ export function QuestionDetail({ id }: { id: Id }) {
                           return a?.resolvedAt ? minutesBetween(a.assignedAt, a.resolvedAt) : undefined;
                         })()}
                         action={
-                          <button type="button" onClick={() => setSheet(true)} className="inline-flex min-h-11 items-center text-[13px] font-bold underline underline-offset-4 lg:hidden">
+                          <button type="button" onClick={() => setSheet(true)} className="inline-flex min-h-11 min-w-11 items-center justify-center text-[13px] font-bold underline underline-offset-4 lg:hidden">
                             Profil
                           </button>
                         }
@@ -117,7 +126,7 @@ export function QuestionDetail({ id }: { id: Id }) {
         {profile.data && <LocalProfileCompact p={profile.data} />}
       </Sheet>
       <Sheet open={!!report} onClose={() => setReport(null)} title="Şikâyet et">
-        {report && <ReportForm answerId={report} onDone={() => setReport(null)} />}
+        {report && <ReportForm answerId={report} author={answerItem?.type === "answer" ? { id: answerItem.local.id, name: answerItem.local.name } : undefined} onDone={() => setReport(null)} />}
       </Sheet>
     </>
   );

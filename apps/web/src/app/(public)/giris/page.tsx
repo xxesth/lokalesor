@@ -8,8 +8,9 @@ export default function GirisPage() {
   return (
     <>
       <header className="border-b border-line">
-        <div className="mx-auto flex max-w-[1200px] items-center px-4 py-3.5 lg:px-6">
+        <div className="mx-auto flex max-w-[1248px] items-center justify-between px-4 py-3.5 lg:px-6">
           <Logo />
+          <span className="text-[15px] text-gray">Demo</span>
         </div>
       </header>
       <DemoUserPicker />

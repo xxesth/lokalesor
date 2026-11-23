@@ -122,6 +122,8 @@ apps/web/
 | `(app)/profil/[id]/page.tsx` | `/profil/:id` | `features/profile` |
 | `(app)/ayarlar/page.tsx` | `/ayarlar` | `features/settings` |
 | `(app)/bildirimler/page.tsx` | `/bildirimler` | `features/notifications` (telefon görünümü) |
+| `error.tsx`, `not-found.tsx` | beklenmeyen hata ve 404 sayfaları (tüm rotalar) | `components/ui` |
+| `icon.svg`, `opengraph-image.png` | favicon ve paylaşım önizleme görseli (Next dosya kuralı, elle bağlanmaz) | : |
 | `dev/page.tsx` | `/dev` | `features/dev-panel` (sadece geliştirme ortamında) |
 
 ### `src/data/`: istemcinin veri katmanı
@@ -152,15 +154,17 @@ Her feature'ın içinde `components/`, `hooks/` ve `index.ts` bulunur. Bir featu
 | `landing/` | `LandingPage` (8-tanitim) |
 | `home/` | `AskBox`, `ActiveQuestions`, `PopularQuestions` (2-ana) |
 | `ask/` | `AskForm`, `SimilarAnswersPanel`, `AskProgress` (3-sor-*) |
-| `question/` | `QuestionCard`, `ActiveQuestionCard`, `QuestionJourney`, `AutoMessage`, `HumanAnswerCard`, `ThreadView`, `MyQuestions` (4-detay-*) |
+| `question/` | `QuestionCard`, `ActiveQuestionCard`, `QuestionJourney`, `AutoMessage`, `HumanAnswerCard`, `ThreadView`, `MyQuestions` (lokalde `MyAnswers`) (4-detay-*) |
 | `rating/` | `RatingBox` (teşekkür durumu dahil), `ReportForm` (şikâyet) (4-detay-tesekkur) |
 | `inbox/` | `InboxList`, `InboxItem`, `CapacityMeter`, `AnsweredToday`, `InboxEmpty` (5-gelen-*) |
-| `answer/` | `AnswerForm`, `AnswerTemplates`, "Bilmiyorum, sıradakine geçsin" (5-cevapla) |
+| `home/` | (yukarıdakine ek) `LocalHome`: lokal rolünün ana sayfası (kapasite, bekleyenler, havuz özeti) |
+| `answer/` | `AnswerForm` (`assignmentId` varsa atamayı cevaplar + "Bilmiyorum, sıradakine geçsin"; yoksa açık havuzdan cevaplar), `AnswerTemplates` (5-cevapla) |
+| `pool/` | `PoolSection` (gelen kutusunun altında açık havuz, yerinde cevap formu), `useOpenPool` (`pool:{şehir}` kanalı). Tasarımı yok, stil rehberine göre |
 | `profile/` | `LocalProfileCard` (`full | compact | sheet`), `LocalStatsRow` (6-profil-*) |
 | `archive/` | `ArchiveItem`, `MyArchivePage` (lokalin arşivi) |
 | `notifications/` | `NotificationBell` (masaüstünde açılır kutu, telefonda `/bildirimler`), `NotificationList`, `NotificationItem`, `useNotifications` (7-bildirim-*) |
-| `settings/` | `SettingsPage`: günlük limit, semt, ilgi alanları, çıkış (tasarımı yok, stil rehberine göre) |
-| `shell/` | `AppHeader`, `TabBar`, `Logo`, `nav.ts`: oturuma bağlı kabuk (bu yüzden `components/layout`'ta değil) |
+| `settings/` | `SettingsPage`: günlük limit, semt, ilgi alanları, `BlockedList` (engellenenler), çıkış (tasarımı yok, stil rehberine göre) |
+| `shell/` | `AppHeader`, `TabBar`, `Logo`, `RoleGate` (ekran tek role aitse geçiş butonu), `nav.ts`: oturuma bağlı kabuk (bu yüzden `components/layout`'ta değil) |
 | `dev-panel/` | `T` ayarı, zamanı ileri sar, sıfırla, atama tablosu |
 
 ### `src/components/`: ortak, iş mantığından bağımsız
@@ -217,6 +221,7 @@ Referans: `0-stil-rehberi`. SVG ikonları ekran HTML'lerinden alınıp `icons.ts
 | Ad | Kullanan | Örnek |
 |---|---|---|
 | `NEXT_PUBLIC_DATA_SOURCE` | web | `mock` / `http` |
+| `NEXT_PUBLIC_SITE_URL` | web | isteğe bağlı; Open Graph görsel adresi için sitenin dış adresi (varsayılan `http://localhost:3000`) |
 | `DATABASE_URL` | api, worker, db | `postgres://lokale:lokale@localhost:5432/lokale` |
 | `TEST_DATABASE_URL` | core testleri | `postgres://lokale:lokale@localhost:5432/lokale_test` |
 | `REDIS_URL` | api, worker, realtime | `redis://localhost:6379` |

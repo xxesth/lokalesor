@@ -1,5 +1,5 @@
 "use client";
-import type { InboxItem } from "@lokale/contracts";
+import type { Id, PersonColor, Question } from "@lokale/contracts";
 import { ANSWER_TEMPLATES } from "@lokale/domain";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -11,8 +11,20 @@ import { qk } from "@/data/query-keys";
 import { cn } from "@/lib/cn";
 import { QuestionTags } from "@/features/question";
 
-/** Lokalin eforu minimum: şablona dokun → boşlukları doldur → gönder (hedef 30 sn). */
-export function AnswerForm({ item, onDone }: { item: InboxItem; onDone: () => void }) {
+/**
+ * Lokalin eforu minimum: şablona dokun → boşlukları doldur → gönder (hedef 30 sn).
+ * `assignmentId` varsa gelen kutusu atamasını cevaplar ("Bilmiyorum" ile sıradakine geçirilebilir);
+ * yoksa açık havuzdan gönüllü cevap verir (atama yok, geçme seçeneği de yok).
+ */
+export function AnswerForm({
+  item,
+  assignmentId,
+  onDone,
+}: {
+  item: { question: Question; touristName: string; touristColor: PersonColor };
+  assignmentId?: Id;
+  onDone: () => void;
+}) {
   const qc = useQueryClient();
   const [text, setText] = useState("");
   const [templateId, setTemplateId] = useState<string | null>(null);
@@ -20,13 +32,19 @@ export function AnswerForm({ item, onDone }: { item: InboxItem; onDone: () => vo
 
   const done = () => {
     void qc.invalidateQueries({ queryKey: qk.inbox() });
+    void qc.invalidateQueries({ queryKey: qk.openPool() });
     onDone();
   };
   const submit = useMutation({
-    mutationFn: () => getRepository().submitAnswer({ assignmentId: item.assignment.id, text, templateId, archive }),
+    mutationFn: () =>
+      assignmentId
+        ? getRepository().submitAnswer({ assignmentId, text, templateId, archive })
+        : getRepository().answerFromPool({ questionId: item.question.id, text, templateId, archive }),
     onSuccess: done,
+    // Havuzda başka lokal önce cevapladıysa liste tazelensin.
+    onError: () => void qc.invalidateQueries({ queryKey: qk.openPool() }),
   });
-  const decline = useMutation({ mutationFn: () => getRepository().declineAssignment(item.assignment.id), onSuccess: done });
+  const decline = useMutation({ mutationFn: () => getRepository().declineAssignment(assignmentId!), onSuccess: done });
 
   function applyTemplate(id: string, t: string) {
     setTemplateId(id);
@@ -49,7 +67,7 @@ export function AnswerForm({ item, onDone }: { item: InboxItem; onDone: () => vo
           <h2 className="text-base font-bold">Hazır şablonlar</h2>
           <p className="text-sm text-gray">Dokun, metin alanına eklensin. Boşlukları doldur.</p>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 lg:flex-row lg:flex-wrap">
           {ANSWER_TEMPLATES.map((t) => (
             <button
               key={t.id}
@@ -72,25 +90,28 @@ export function AnswerForm({ item, onDone }: { item: InboxItem; onDone: () => vo
         <Textarea id="answer-text" rows={4} value={text} onChange={(e) => setText(e.target.value)} className="border-ink" placeholder="Bir şablona dokun ya da kendin yaz." />
       </div>
 
-      <label className="flex min-h-11 items-center gap-3 text-base">
-        <input type="checkbox" checked={archive} onChange={(e) => setArchive(e.target.checked)} className="h-6 w-6 accent-[var(--ink)]" />
-        Arşive eklensin <span className="text-sm text-gray">· başkaları da görsün</span>
-      </label>
-
       <ErrorNote error={submit.error ?? decline.error} />
-      <div className="flex flex-col items-center gap-2">
-        <Button className="w-full" disabled={text.trim().length < 5 || text.includes("…") || submit.isPending} onClick={() => submit.mutate()}>
-          Gönder
-        </Button>
-        {text.includes("…") && <span className="text-[13px] text-gray">Şablondaki “…” boşluklarını doldur.</span>}
-        <button
-          type="button"
-          onClick={() => decline.mutate()}
-          disabled={decline.isPending}
-          className="min-h-11 text-[15px] font-semibold text-gray hover:text-ink"
-        >
-          Bilmiyorum, sıradakine geçsin
-        </button>
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <label className="flex min-h-11 items-center gap-3 text-base">
+          <input type="checkbox" checked={archive} onChange={(e) => setArchive(e.target.checked)} className="h-6 w-6 accent-[var(--ink)]" />
+          Arşive eklensin <span className="text-sm text-gray">· başkaları da görsün</span>
+        </label>
+        <div className="flex flex-col items-center gap-2 lg:flex-row-reverse lg:gap-6">
+          <Button className="w-full lg:w-auto lg:px-8" disabled={text.trim().length < 5 || text.includes("…") || submit.isPending} onClick={() => submit.mutate()}>
+            Gönder
+          </Button>
+          {text.includes("…") && <span className="text-[13px] text-gray">Şablondaki “…” boşluklarını doldur.</span>}
+          {assignmentId && (
+            <button
+              type="button"
+              onClick={() => decline.mutate()}
+              disabled={decline.isPending}
+              className="min-h-11 text-[15px] font-semibold text-gray hover:text-ink"
+            >
+              Bilmiyorum, sıradakine geçsin
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

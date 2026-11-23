@@ -7,6 +7,7 @@ import { Page } from "@/components/layout/two-column";
 import { useState } from "react";
 import { TOPIC_LABELS, districtName } from "@lokale/domain";
 import { AnswerForm } from "@/features/answer";
+import { PoolSection } from "@/features/pool";
 import { useMe } from "@/features/session";
 import { AppHeader } from "@/features/shell";
 import { CapacityMeter } from "./capacity-meter";
@@ -44,12 +45,13 @@ export function InboxPage() {
   // Telefonda Cevapla ekranı
   if (mobileOpen && selected) {
     return (
-      <div className="lg:hidden">
+      <main id="icerik" tabIndex={-1} className="focus:outline-none lg:hidden">
+        <h1 className="sr-only">Cevapla</h1>
         <FlowHeader backHref="/lokal/gelen-kutusu" title="Cevapla" right={<Countdown deadline={selected.assignment.deadline} assignedAt={selected.assignment.assignedAt} size="s" />} />
         <div className="px-4 pb-28 pt-5">
-          <AnswerForm key={selected.assignment.id} item={selected} onDone={() => setMobileOpen(false)} />
+          <AnswerForm key={selected.assignment.id} item={selected} assignmentId={selected.assignment.id} onDone={() => setMobileOpen(false)} />
         </div>
-      </div>
+      </main>
     );
   }
 
@@ -57,21 +59,28 @@ export function InboxPage() {
     <>
       <AppHeader />
       <Page className="flex flex-col gap-6">
-        {data && <CapacityMeter capacity={data.capacity} color={user.color} />}
-        <div className="flex items-baseline justify-between">
-          <h1 className="text-[34px] font-extrabold leading-[38px] tracking-[-0.04em] lg:text-[44px] lg:leading-[48px]">Gelen kutusu</h1>
-          {data && <span className="text-[15px] text-gray">{data.pending.length} soru bekliyor</span>}
+        {/* Telefonda kapasite üstte; masaüstünde başlıkla aynı satırda, sağda. */}
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          {data && (
+            <div className="lg:order-2">
+              <CapacityMeter capacity={data.capacity} color={user.color} />
+            </div>
+          )}
+          <div className="flex items-baseline justify-between gap-4 lg:order-1">
+            <h1 className="text-[34px] font-extrabold leading-[38px] tracking-[-0.04em] lg:text-[44px] lg:leading-[48px]">Gelen kutusu</h1>
+            {data && <span className="text-[15px] text-gray lg:hidden">{data.pending.length} soru bekliyor</span>}
+          </div>
         </div>
         {inbox.isLoading && <Loading />}
-        <ErrorNote error={inbox.error} />
+        <ErrorNote error={inbox.error} onRetry={() => void inbox.refetch()} />
         {data && data.pending.length === 0 && (
           <EmptyState icon={<InboxIcon size={56} className="text-line-strong" />} title="Şu an sana atanmış soru yok">
             {left > 0 ? `Bugün ${left} soru daha alabilirsin. Yeni soru gelince zil çalacak.` : "Bugünlük kapasiten doldu. Yarın görüşürüz!"}
           </EmptyState>
         )}
         {data && data.pending.length > 0 && (
-          <div className="flex flex-wrap gap-8 lg:flex-nowrap">
-            <div className="flex w-full flex-col gap-3 lg:w-[400px] lg:shrink-0">
+          <div className="flex flex-col gap-3 lg:flex-row lg:gap-0 lg:overflow-hidden lg:rounded-panel-l lg:border lg:border-line">
+            <div className="flex w-full flex-col gap-3 lg:w-[320px] lg:shrink-0 lg:gap-0 lg:border-r lg:border-line">
               {data.pending.map((p) => (
                 <InboxItem
                   key={p.assignment.id}
@@ -83,19 +92,18 @@ export function InboxPage() {
                   }}
                 />
               ))}
+              {/* E-posta istemcisi düzeni: bugünkü cevapların listenin altında (masaüstü). */}
+              {answered && <div className="hidden px-4 pb-4 pt-5 lg:block">{answered}</div>}
             </div>
             {selected && (
-              <div className="hidden min-w-0 flex-1 flex-col gap-4 rounded-panel-l border border-line p-6 lg:flex">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold">Cevapla</h2>
-                  <Countdown deadline={selected.assignment.deadline} assignedAt={selected.assignment.assignedAt} size="m" />
-                </div>
-                <AnswerForm key={selected.assignment.id} item={selected} onDone={() => setSelectedId(null)} />
+              <div className="hidden min-w-0 flex-1 flex-col gap-4 p-6 lg:flex">
+                <AnswerForm key={selected.assignment.id} item={selected} assignmentId={selected.assignment.id} onDone={() => setSelectedId(null)} />
               </div>
             )}
           </div>
         )}
-        {answered}
+        <PoolSection />
+        {answered && <div className={data && data.pending.length > 0 ? "lg:hidden" : undefined}>{answered}</div>}
       </Page>
     </>
   );

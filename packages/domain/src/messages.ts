@@ -28,6 +28,20 @@ export function openPool(): string {
   return "Şu an müsait lokal bulamadık. Sorun açık havuzda; ilk cevap veren lokal sana dönecek.";
 }
 
+/** Turistin soru detayında, soru açık havuzdayken. */
+export function poolNoticeTourist(cityName: string): string {
+  return `Sorun şu an ${cityName} lokallerinin hepsine açık. İlk cevaplayan sana dönecek, cevap gelince bildirim alacaksın.`;
+}
+
+/** Lokalin açık havuz bölümü açıklaması. */
+export function poolIntroLocal(): string {
+  return "Sıra bittiği için kimseye atanmamış sorular. İstediğini cevapla; atama sayılmaz, günlük kapasiten dolmaz. İlk cevap veren kazanır.";
+}
+
+export function poolEmptyLocal(): string {
+  return "Açık havuzda bekleyen soru yok.";
+}
+
 export function answered(localName: string): string {
   return `${localName} soruna cevap verdi. Cevabı değerlendirmeyi unutma.`;
 }

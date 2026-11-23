@@ -7,8 +7,8 @@ import { personStyle } from "@/lib/person-color";
 export function CapacityMeter({ capacity, color }: { capacity: Capacity; color: PersonColor }) {
   const full = capacity.used >= capacity.limit;
   return (
-    <section className="flex items-center justify-between gap-4 rounded-panel bg-mist px-5 py-4" style={personStyle(color)}>
-      <div className="flex flex-col gap-2">
+    <section className="flex items-center justify-between gap-4 rounded-panel bg-mist px-5 py-4 lg:gap-6 lg:py-2" style={personStyle(color)}>
+      <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-4">
         <span className="text-lg font-bold" aria-label={`Bugün ${capacity.limit} sorudan ${capacity.used} tanesi alındı`}>
           Bugün {capacity.used}/{capacity.limit} soru
         </span>

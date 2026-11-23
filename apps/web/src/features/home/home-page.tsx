@@ -34,20 +34,22 @@ function AskBox() {
       <label htmlFor="ask-box" className="text-lg font-bold">
         Lokale sor
       </label>
-      <input
-        id="ask-box"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Ne merak ediyorsun?"
-        className="h-12 rounded-control border border-line-strong px-4 text-base placeholder:text-gray focus:border-ink"
-      />
-      <Button type="submit" className="w-full">
-        Lokale Sor
-      </Button>
+      <div className="flex flex-col gap-3 lg:flex-row">
+        <input
+          id="ask-box"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Ne merak ediyorsun?"
+          className="h-12 min-w-0 rounded-control border border-line-strong px-4 text-base lg:flex-1 placeholder:text-gray focus:border-ink"
+        />
+        <Button type="submit" className="w-full lg:w-auto lg:px-8">
+          Lokale Sor
+        </Button>
+      </div>
       {locals.data && locals.data.length > 0 && (
         <div className="flex items-center gap-3 pt-1">
           <span className="flex -space-x-2">
-            {locals.data.slice(0, 4).map((l) => (
+            {locals.data.slice(0, 3).map((l) => (
               <Avatar key={l.id} name={l.name} color={l.color} size={32} ring />
             ))}
           </span>
@@ -67,9 +69,11 @@ function ActiveQuestions() {
       {mine.isLoading && <Loading />}
       <ErrorNote error={mine.error} onRetry={() => void mine.refetch()} />
       {mine.data && active.length === 0 && <p className="text-[15px] text-gray">Bekleyen sorun yok. Sorduğunda burada geri sayımı göreceksin.</p>}
-      {active.map((s) => (
-        <ActiveQuestionCard key={s.question.id} s={s} />
-      ))}
+      <div className="grid gap-4 lg:grid-cols-2">
+        {active.map((s) => (
+          <ActiveQuestionCard key={s.question.id} s={s} />
+        ))}
+      </div>
     </section>
   );
 }
@@ -106,9 +110,9 @@ function TouristHome() {
     <>
       <AppHeader />
       <Page>
-        <h1 className="mb-6 text-[34px] font-extrabold leading-[38px] tracking-[-0.04em] lg:mb-10 lg:text-[56px] lg:leading-[58px]">
+        <h1 className="mb-6 text-[28px] font-extrabold leading-8 tracking-[-0.03em] lg:mb-10 lg:text-[44px] lg:leading-[48px] lg:tracking-[-0.04em]">
           Selam {user.name.split(" ")[0]},
-          <br />
+          <br className="lg:hidden" />{" "}
           <span className="text-gray lg:text-gray-soft">
             {name}
             {locativeSuffix(name)}

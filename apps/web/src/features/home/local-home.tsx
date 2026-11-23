@@ -21,9 +21,9 @@ export function LocalHome() {
     <>
       <AppHeader />
       <Page className="flex max-w-[760px] flex-col gap-6">
-        <h1 className="text-[34px] font-extrabold leading-[38px] tracking-[-0.04em] lg:text-[56px] lg:leading-[58px]">
+        <h1 className="text-[28px] font-extrabold leading-8 tracking-[-0.03em] lg:text-[44px] lg:leading-[48px] lg:tracking-[-0.04em]">
           Selam {user.name.split(" ")[0]},
-          <br />
+          <br className="lg:hidden" />{" "}
           <span className="text-gray lg:text-gray-soft">
             {name}
             {locativeSuffix(name)} lokalsin.

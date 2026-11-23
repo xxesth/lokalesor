@@ -58,7 +58,7 @@ export function AppHeader({ hideOnMobile }: { hideOnMobile?: boolean }) {
         </div>
       </div>
       {/* Masaüstü */}
-      <div className="mx-auto hidden max-w-[1200px] flex-col px-6 lg:flex">
+      <div className="mx-auto hidden max-w-[1248px] flex-col px-6 lg:flex">
         <div className="grid grid-cols-[1fr_auto_1fr] items-center py-3.5">
           <Logo />
           <CitySelector value={currentCity} onChange={(c) => void setCity(c)} />

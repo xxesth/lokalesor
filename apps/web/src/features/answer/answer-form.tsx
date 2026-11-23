@@ -67,7 +67,7 @@ export function AnswerForm({
           <h2 className="text-base font-bold">Hazır şablonlar</h2>
           <p className="text-sm text-gray">Dokun, metin alanına eklensin. Boşlukları doldur.</p>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 lg:flex-row lg:flex-wrap">
           {ANSWER_TEMPLATES.map((t) => (
             <button
               key={t.id}
@@ -90,27 +90,28 @@ export function AnswerForm({
         <Textarea id="answer-text" rows={4} value={text} onChange={(e) => setText(e.target.value)} className="border-ink" placeholder="Bir şablona dokun ya da kendin yaz." />
       </div>
 
-      <label className="flex min-h-11 items-center gap-3 text-base">
-        <input type="checkbox" checked={archive} onChange={(e) => setArchive(e.target.checked)} className="h-6 w-6 accent-[var(--ink)]" />
-        Arşive eklensin <span className="text-sm text-gray">· başkaları da görsün</span>
-      </label>
-
       <ErrorNote error={submit.error ?? decline.error} />
-      <div className="flex flex-col items-center gap-2">
-        <Button className="w-full" disabled={text.trim().length < 5 || text.includes("…") || submit.isPending} onClick={() => submit.mutate()}>
-          Gönder
-        </Button>
-        {text.includes("…") && <span className="text-[13px] text-gray">Şablondaki “…” boşluklarını doldur.</span>}
-        {assignmentId && (
-          <button
-            type="button"
-            onClick={() => decline.mutate()}
-            disabled={decline.isPending}
-            className="min-h-11 text-[15px] font-semibold text-gray hover:text-ink"
-          >
-            Bilmiyorum, sıradakine geçsin
-          </button>
-        )}
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <label className="flex min-h-11 items-center gap-3 text-base">
+          <input type="checkbox" checked={archive} onChange={(e) => setArchive(e.target.checked)} className="h-6 w-6 accent-[var(--ink)]" />
+          Arşive eklensin <span className="text-sm text-gray">· başkaları da görsün</span>
+        </label>
+        <div className="flex flex-col items-center gap-2 lg:flex-row-reverse lg:gap-6">
+          <Button className="w-full lg:w-auto lg:px-8" disabled={text.trim().length < 5 || text.includes("…") || submit.isPending} onClick={() => submit.mutate()}>
+            Gönder
+          </Button>
+          {text.includes("…") && <span className="text-[13px] text-gray">Şablondaki “…” boşluklarını doldur.</span>}
+          {assignmentId && (
+            <button
+              type="button"
+              onClick={() => decline.mutate()}
+              disabled={decline.isPending}
+              className="min-h-11 text-[15px] font-semibold text-gray hover:text-ink"
+            >
+              Bilmiyorum, sıradakine geçsin
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

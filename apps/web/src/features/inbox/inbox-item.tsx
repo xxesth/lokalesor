@@ -17,8 +17,8 @@ export function InboxItem({ item, selected, onOpen }: { item: Item; selected?: b
       onClick={onOpen}
       aria-current={selected ? "true" : undefined}
       className={cn(
-        "flex w-full flex-col gap-2.5 rounded-card border p-4 text-left transition-colors",
-        urgent ? "border-nar" : "border-line hover:border-ink",
+        "flex w-full flex-col gap-2.5 rounded-card border p-4 text-left transition-colors lg:rounded-none lg:border-x-0 lg:border-t-0",
+        urgent ? "border-nar lg:border-line lg:shadow-[inset_0_0_0_2px_var(--nar)]" : "border-line hover:border-ink lg:hover:border-line",
         selected && "bg-mist",
       )}
     >
@@ -32,7 +32,7 @@ export function InboxItem({ item, selected, onOpen }: { item: Item; selected?: b
       <span className="text-[17px] font-semibold leading-6">{item.question.text}</span>
       <span className="flex w-full items-center justify-between text-[15px]">
         <span className="text-gray">{item.touristName} soruyor</span>
-        <span className="inline-flex items-center gap-1.5 font-bold">
+        <span className="inline-flex items-center gap-1.5 font-bold lg:hidden">
           Cevapla <ArrowRightIcon />
         </span>
       </span>

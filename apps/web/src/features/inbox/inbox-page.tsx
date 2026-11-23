@@ -59,10 +59,17 @@ export function InboxPage() {
     <>
       <AppHeader />
       <Page className="flex flex-col gap-6">
-        {data && <CapacityMeter capacity={data.capacity} color={user.color} />}
-        <div className="flex items-baseline justify-between">
-          <h1 className="text-[34px] font-extrabold leading-[38px] tracking-[-0.04em] lg:text-[44px] lg:leading-[48px]">Gelen kutusu</h1>
-          {data && <span className="text-[15px] text-gray">{data.pending.length} soru bekliyor</span>}
+        {/* Telefonda kapasite üstte; masaüstünde başlıkla aynı satırda, sağda. */}
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          {data && (
+            <div className="lg:order-2">
+              <CapacityMeter capacity={data.capacity} color={user.color} />
+            </div>
+          )}
+          <div className="flex items-baseline justify-between gap-4 lg:order-1">
+            <h1 className="text-[34px] font-extrabold leading-[38px] tracking-[-0.04em] lg:text-[44px] lg:leading-[48px]">Gelen kutusu</h1>
+            {data && <span className="text-[15px] text-gray lg:hidden">{data.pending.length} soru bekliyor</span>}
+          </div>
         </div>
         {inbox.isLoading && <Loading />}
         <ErrorNote error={inbox.error} onRetry={() => void inbox.refetch()} />
@@ -72,8 +79,8 @@ export function InboxPage() {
           </EmptyState>
         )}
         {data && data.pending.length > 0 && (
-          <div className="flex flex-wrap gap-8 lg:flex-nowrap">
-            <div className="flex w-full flex-col gap-3 lg:w-[400px] lg:shrink-0">
+          <div className="flex flex-col gap-3 lg:flex-row lg:gap-0 lg:overflow-hidden lg:rounded-panel-l lg:border lg:border-line">
+            <div className="flex w-full flex-col gap-3 lg:w-[320px] lg:shrink-0 lg:gap-0 lg:border-r lg:border-line">
               {data.pending.map((p) => (
                 <InboxItem
                   key={p.assignment.id}
@@ -85,20 +92,18 @@ export function InboxPage() {
                   }}
                 />
               ))}
+              {/* E-posta istemcisi düzeni: bugünkü cevapların listenin altında (masaüstü). */}
+              {answered && <div className="hidden px-4 pb-4 pt-5 lg:block">{answered}</div>}
             </div>
             {selected && (
-              <div className="hidden min-w-0 flex-1 flex-col gap-4 rounded-panel-l border border-line p-6 lg:flex">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold">Cevapla</h2>
-                  <Countdown deadline={selected.assignment.deadline} assignedAt={selected.assignment.assignedAt} size="m" />
-                </div>
+              <div className="hidden min-w-0 flex-1 flex-col gap-4 p-6 lg:flex">
                 <AnswerForm key={selected.assignment.id} item={selected} assignmentId={selected.assignment.id} onDone={() => setSelectedId(null)} />
               </div>
             )}
           </div>
         )}
         <PoolSection />
-        {answered}
+        {answered && <div className={data && data.pending.length > 0 ? "lg:hidden" : undefined}>{answered}</div>}
       </Page>
     </>
   );

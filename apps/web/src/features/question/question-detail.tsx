@@ -1,5 +1,6 @@
 "use client";
 import type { Id } from "@lokale/contracts";
+import { cityName, messages } from "@lokale/domain";
 import { useState } from "react";
 import { Countdown, ProgressLine } from "@/components/ui/countdown";
 import { BackLink, FlowHeader } from "@/components/layout/flow-header";
@@ -56,6 +57,13 @@ export function QuestionDetail({ id }: { id: Id }) {
                 <div className="lg:hidden">
                   <QuestionJourneyBar q={t.question} assignments={t.assignments} />
                 </div>
+
+                {t.question.status === "open_pool" && (
+                  <section className="flex flex-col gap-2 rounded-panel border border-dashed border-line-strong p-4">
+                    <StatusLabel kind="open_pool" />
+                    <p className="text-[15px] text-ink-2">{messages.poolNoticeTourist(cityName(t.question.city))}</p>
+                  </section>
+                )}
 
                 {t.currentAssignment && (
                   <section className="flex flex-col gap-2 rounded-panel border border-line p-4" style={{}}>

@@ -9,6 +9,7 @@ Format: `YYYY-MM-DD · kişi · ne yapıldı · ne kaldı`. En yeni kayıt en ü
 - **Sıradaki (Mali):** worker, realtime, event-source, turbo dev + rewrite'lar, CI.
 
 ## Günlük
+- 2026-11-23 · Ökkeş (Claude ile) · Branch `feat/open-pool-ui`: açık havuz arayüzü. Lokal gelen kutusunda `PoolSection` (canlı, yerinde cevap formu), lokal ana sayfada havuz özeti, turistin soru detayında havuz bilgilendirmesi. `AnswerForm` hem atamayı hem havuzu cevaplıyor. Metinler `@lokale/domain/messages.ts`'te. Sözleşme değişmedi. · Kalan: tarayıcıda deneme, havuz için testler (testler çalıştırılamıyor: Node 22.11, rolldown 22.12+ istiyor).
 - 2026-11-23 · Ökkeş (Claude ile) · Branch `fix/role-aware-screens`:
   - Rol bazlı içerik: ana sayfa (lokalde kapasite ve bekleyenler), Sorularım (lokalde Cevaplarım), `RoleGate` (`/sor` sadece turistte, gelen kutusu sadece lokalde, geçiş butonuyla). Alt sekme etiketi tek satıra sabitlendi.
   - Engelleme: Ayarlar'da Engellenenler listesi, şikâyet formunda "lokali engelle" seçeneği. Profilde Ayarlar ve Soru arşivim bağlantıları (arşiv sayfasına hiçbir yerden link yoktu).

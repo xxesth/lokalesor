@@ -7,6 +7,7 @@ import { Page } from "@/components/layout/two-column";
 import { useState } from "react";
 import { TOPIC_LABELS, districtName } from "@lokale/domain";
 import { AnswerForm } from "@/features/answer";
+import { PoolSection } from "@/features/pool";
 import { useMe } from "@/features/session";
 import { AppHeader } from "@/features/shell";
 import { CapacityMeter } from "./capacity-meter";
@@ -47,7 +48,7 @@ export function InboxPage() {
       <div className="lg:hidden">
         <FlowHeader backHref="/lokal/gelen-kutusu" title="Cevapla" right={<Countdown deadline={selected.assignment.deadline} assignedAt={selected.assignment.assignedAt} size="s" />} />
         <div className="px-4 pb-28 pt-5">
-          <AnswerForm key={selected.assignment.id} item={selected} onDone={() => setMobileOpen(false)} />
+          <AnswerForm key={selected.assignment.id} item={selected} assignmentId={selected.assignment.id} onDone={() => setMobileOpen(false)} />
         </div>
       </div>
     );
@@ -90,11 +91,12 @@ export function InboxPage() {
                   <h2 className="text-xl font-bold">Cevapla</h2>
                   <Countdown deadline={selected.assignment.deadline} assignedAt={selected.assignment.assignedAt} size="m" />
                 </div>
-                <AnswerForm key={selected.assignment.id} item={selected} onDone={() => setSelectedId(null)} />
+                <AnswerForm key={selected.assignment.id} item={selected} assignmentId={selected.assignment.id} onDone={() => setSelectedId(null)} />
               </div>
             )}
           </div>
         )}
+        <PoolSection />
         {answered}
       </Page>
     </>

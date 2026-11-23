@@ -121,7 +121,7 @@ Bağımlılıklar:
 - [x] Rol bazlı içerik: ana sayfa, Sorularım ve rol kapısı (`RoleGate`) iki rolde farklı
 - [x] Profil: kendi profilinde Ayarlar ve Soru arşivim bağlantıları
 - [ ] Profil düzenleme: ad, kişi rengi, avatar fotoğrafı (sözleşme talepleri `progress.md`'de; Mali onaylayınca ekran + mock uygulaması)
-- [ ] Açık havuz arayüzü: turist bilgilendirmesi, lokallerin havuzdan soru alması (`listOpenPool`, `answerFromPool`, kanal `pool:{city}`; seed'de İstanbul havuzunda 2 soru var)
+- [x] Açık havuz arayüzü: turist bilgilendirmesi, lokallerin havuzdan soru alması (`listOpenPool`, `answerFromPool`, kanal `pool:{city}`; seed'de İstanbul havuzunda 2 soru var)
 - [ ] Tüm ekranlarda yükleniyor, hata ve boş durumları
 - [ ] Erişilebilirlik turu: klavye, `aria-label`, kontrast, dokunma alanı
 - [ ] Bütün ekranlar için 390 / 1024 / 1440 px karşılaştırması

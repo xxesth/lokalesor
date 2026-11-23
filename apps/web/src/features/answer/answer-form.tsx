@@ -1,5 +1,5 @@
 "use client";
-import type { InboxItem } from "@lokale/contracts";
+import type { Id, PersonColor, Question } from "@lokale/contracts";
 import { ANSWER_TEMPLATES } from "@lokale/domain";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -11,8 +11,20 @@ import { qk } from "@/data/query-keys";
 import { cn } from "@/lib/cn";
 import { QuestionTags } from "@/features/question";
 
-/** Lokalin eforu minimum: şablona dokun → boşlukları doldur → gönder (hedef 30 sn). */
-export function AnswerForm({ item, onDone }: { item: InboxItem; onDone: () => void }) {
+/**
+ * Lokalin eforu minimum: şablona dokun → boşlukları doldur → gönder (hedef 30 sn).
+ * `assignmentId` varsa gelen kutusu atamasını cevaplar ("Bilmiyorum" ile sıradakine geçirilebilir);
+ * yoksa açık havuzdan gönüllü cevap verir (atama yok, geçme seçeneği de yok).
+ */
+export function AnswerForm({
+  item,
+  assignmentId,
+  onDone,
+}: {
+  item: { question: Question; touristName: string; touristColor: PersonColor };
+  assignmentId?: Id;
+  onDone: () => void;
+}) {
   const qc = useQueryClient();
   const [text, setText] = useState("");
   const [templateId, setTemplateId] = useState<string | null>(null);
@@ -20,13 +32,19 @@ export function AnswerForm({ item, onDone }: { item: InboxItem; onDone: () => vo
 
   const done = () => {
     void qc.invalidateQueries({ queryKey: qk.inbox() });
+    void qc.invalidateQueries({ queryKey: qk.openPool() });
     onDone();
   };
   const submit = useMutation({
-    mutationFn: () => getRepository().submitAnswer({ assignmentId: item.assignment.id, text, templateId, archive }),
+    mutationFn: () =>
+      assignmentId
+        ? getRepository().submitAnswer({ assignmentId, text, templateId, archive })
+        : getRepository().answerFromPool({ questionId: item.question.id, text, templateId, archive }),
     onSuccess: done,
+    // Havuzda başka lokal önce cevapladıysa liste tazelensin.
+    onError: () => void qc.invalidateQueries({ queryKey: qk.openPool() }),
   });
-  const decline = useMutation({ mutationFn: () => getRepository().declineAssignment(item.assignment.id), onSuccess: done });
+  const decline = useMutation({ mutationFn: () => getRepository().declineAssignment(assignmentId!), onSuccess: done });
 
   function applyTemplate(id: string, t: string) {
     setTemplateId(id);
@@ -83,14 +101,16 @@ export function AnswerForm({ item, onDone }: { item: InboxItem; onDone: () => vo
           Gönder
         </Button>
         {text.includes("…") && <span className="text-[13px] text-gray">Şablondaki “…” boşluklarını doldur.</span>}
-        <button
-          type="button"
-          onClick={() => decline.mutate()}
-          disabled={decline.isPending}
-          className="min-h-11 text-[15px] font-semibold text-gray hover:text-ink"
-        >
-          Bilmiyorum, sıradakine geçsin
-        </button>
+        {assignmentId && (
+          <button
+            type="button"
+            onClick={() => decline.mutate()}
+            disabled={decline.isPending}
+            className="min-h-11 text-[15px] font-semibold text-gray hover:text-ink"
+          >
+            Bilmiyorum, sıradakine geçsin
+          </button>
+        )}
       </div>
     </div>
   );

@@ -1,9 +1,11 @@
 "use client";
+import Link from "next/link";
 import { cityName, locativeSuffix } from "@lokale/domain";
 import { ButtonLink } from "@/components/ui/button";
 import { EmptyState, ErrorNote, Loading, SectionTitle } from "@/components/ui/misc";
 import { Page } from "@/components/layout/two-column";
 import { CapacityMeter, useInbox } from "@/features/inbox";
+import { useOpenPool } from "@/features/pool";
 import { useMe } from "@/features/session";
 import { AppHeader } from "@/features/shell";
 import { Countdown } from "@/components/ui/countdown";
@@ -13,6 +15,7 @@ export function LocalHome() {
   const { user, currentCity } = useMe();
   const inbox = useInbox();
   const data = inbox.data;
+  const poolCount = useOpenPool().data?.length ?? 0;
   const name = cityName(currentCity);
   return (
     <>
@@ -48,6 +51,14 @@ export function LocalHome() {
               </>
             )}
           </section>
+        )}
+        {poolCount > 0 && (
+          <p className="text-[15px] text-ink-2">
+            Açık havuzda {poolCount} soru bekliyor.{" "}
+            <Link href="/lokal/gelen-kutusu" className="font-bold underline underline-offset-4">
+              Göz at
+            </Link>
+          </p>
         )}
         {data && data.answeredToday.length > 0 && (
           <p className="text-[15px] text-ink-2">Bugün {data.answeredToday.length} soruyu cevapladın.</p>

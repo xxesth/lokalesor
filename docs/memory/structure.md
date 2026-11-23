@@ -152,15 +152,17 @@ Her feature'ın içinde `components/`, `hooks/` ve `index.ts` bulunur. Bir featu
 | `landing/` | `LandingPage` (8-tanitim) |
 | `home/` | `AskBox`, `ActiveQuestions`, `PopularQuestions` (2-ana) |
 | `ask/` | `AskForm`, `SimilarAnswersPanel`, `AskProgress` (3-sor-*) |
-| `question/` | `QuestionCard`, `ActiveQuestionCard`, `QuestionJourney`, `AutoMessage`, `HumanAnswerCard`, `ThreadView`, `MyQuestions` (4-detay-*) |
+| `question/` | `QuestionCard`, `ActiveQuestionCard`, `QuestionJourney`, `AutoMessage`, `HumanAnswerCard`, `ThreadView`, `MyQuestions` (lokalde `MyAnswers`) (4-detay-*) |
 | `rating/` | `RatingBox` (teşekkür durumu dahil), `ReportForm` (şikâyet) (4-detay-tesekkur) |
 | `inbox/` | `InboxList`, `InboxItem`, `CapacityMeter`, `AnsweredToday`, `InboxEmpty` (5-gelen-*) |
-| `answer/` | `AnswerForm`, `AnswerTemplates`, "Bilmiyorum, sıradakine geçsin" (5-cevapla) |
+| `home/` | (yukarıdakine ek) `LocalHome`: lokal rolünün ana sayfası (kapasite, bekleyenler, havuz özeti) |
+| `answer/` | `AnswerForm` (`assignmentId` varsa atamayı cevaplar + "Bilmiyorum, sıradakine geçsin"; yoksa açık havuzdan cevaplar), `AnswerTemplates` (5-cevapla) |
+| `pool/` | `PoolSection` (gelen kutusunun altında açık havuz, yerinde cevap formu), `useOpenPool` (`pool:{şehir}` kanalı). Tasarımı yok, stil rehberine göre |
 | `profile/` | `LocalProfileCard` (`full | compact | sheet`), `LocalStatsRow` (6-profil-*) |
 | `archive/` | `ArchiveItem`, `MyArchivePage` (lokalin arşivi) |
 | `notifications/` | `NotificationBell` (masaüstünde açılır kutu, telefonda `/bildirimler`), `NotificationList`, `NotificationItem`, `useNotifications` (7-bildirim-*) |
-| `settings/` | `SettingsPage`: günlük limit, semt, ilgi alanları, çıkış (tasarımı yok, stil rehberine göre) |
-| `shell/` | `AppHeader`, `TabBar`, `Logo`, `nav.ts`: oturuma bağlı kabuk (bu yüzden `components/layout`'ta değil) |
+| `settings/` | `SettingsPage`: günlük limit, semt, ilgi alanları, `BlockedList` (engellenenler), çıkış (tasarımı yok, stil rehberine göre) |
+| `shell/` | `AppHeader`, `TabBar`, `Logo`, `RoleGate` (ekran tek role aitse geçiş butonu), `nav.ts`: oturuma bağlı kabuk (bu yüzden `components/layout`'ta değil) |
 | `dev-panel/` | `T` ayarı, zamanı ileri sar, sıfırla, atama tablosu |
 
 ### `src/components/`: ortak, iş mantığından bağımsız

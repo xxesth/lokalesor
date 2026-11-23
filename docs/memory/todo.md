@@ -106,7 +106,7 @@ Bağımlılıklar:
 - [ ] `apps/api`: Fastify kurulumu, pino, zod type provider, OpenAPI (`/api/docs`), hata plugin'i
 - [ ] Better Auth + demo kullanıcıları, `plugins/session.ts`, `GET/PATCH /api/me/session`
 - [ ] `packages/core`: `questions.ts`, `answers.ts`, `inbox.ts`, `profiles.ts`, `notifications.ts`, `pool.ts` (`listOpenPool`, `answerFromPool`), `blocks.ts` (transaction'lar `withTx` ile; mesaj/bildirim için `writes.ts`; kurallar mock'taki karşılığıyla aynı)
-- [ ] `apps/api/routes/*`: `contracts.md`'deki tüm REST uç noktaları + `POST /api/realtime/token`
+- [ ] `apps/api/routes/*` (⚠️ önce `progress.md` → "Backend'in birebir uyması gereken davranışlar" bölümünü oku): `contracts.md`'deki tüm REST uç noktaları + `POST /api/realtime/token`
 - [ ] `apps/api/routes/dev.ts`: sıfırla, `T` ayarı, zamanı ileri sar (`core/runtime.ts` fonksiyonları + `sweepExpired`)
 - [ ] `apps/web/src/data/http/`: `http-repository.ts` (`ROUTES` + fetch + `RepoError` dönüşümü), `http-auth.ts`
 - [ ] `core` testleri: test veritabanı üzerinde transaction ve yarış durumları

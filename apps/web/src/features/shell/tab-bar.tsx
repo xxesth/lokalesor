@@ -24,7 +24,7 @@ export function TabBar() {
   return (
     <nav
       aria-label="Ana menü"
-      className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-line bg-paper px-1.5 pb-[max(env(safe-area-inset-bottom),12px)] lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-line bg-paper px-0.5 pb-[max(env(safe-area-inset-bottom),12px)] lg:hidden"
       style={personStyle(session.user.color)}
     >
       {NAV.map((n) => {
@@ -36,7 +36,7 @@ export function TabBar() {
             href={n.href(session.user.id)}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "relative flex min-h-14 flex-col items-center justify-center gap-1 text-[11px] hover:text-ink",
+              "relative flex min-h-14 min-w-0 flex-col items-center justify-center gap-1 whitespace-nowrap text-[11px] leading-none hover:text-ink",
               active ? "font-bold text-ink" : "font-medium text-gray",
             )}
           >

@@ -117,7 +117,7 @@ export function QuestionDetail({ id }: { id: Id }) {
         {profile.data && <LocalProfileCompact p={profile.data} />}
       </Sheet>
       <Sheet open={!!report} onClose={() => setReport(null)} title="Şikâyet et">
-        {report && <ReportForm answerId={report} onDone={() => setReport(null)} />}
+        {report && <ReportForm answerId={report} author={answerItem?.type === "answer" ? { id: answerItem.local.id, name: answerItem.local.name } : undefined} onDone={() => setReport(null)} />}
       </Sheet>
     </>
   );

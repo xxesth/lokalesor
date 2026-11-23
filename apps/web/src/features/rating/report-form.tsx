@@ -1,6 +1,6 @@
 "use client";
 import { REPORT_REASONS, type Id, type ReportReason } from "@lokale/contracts";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Chip } from "@/components/ui/chip";
@@ -16,17 +16,35 @@ const LABELS: Record<ReportReason, string> = {
 };
 
 /** Basit şikâyet formu (brief 🟡). Moderasyon kuyruğu Faz 3. */
-export function ReportForm({ answerId, onDone }: { answerId: Id; onDone: () => void }) {
+export function ReportForm({
+  answerId,
+  author,
+  onDone,
+}: {
+  answerId: Id;
+  /** Cevabı yazan lokal; verilirse "engelle" seçeneği çıkar. */
+  author?: { id: Id; name: string };
+  onDone: () => void;
+}) {
+  const qc = useQueryClient();
   const [reason, setReason] = useState<ReportReason>("wrong_info");
   const [text, setText] = useState("");
+  const [block, setBlock] = useState(false);
   const send = useMutation({
-    mutationFn: () => getRepository().report({ targetType: "answer", targetId: answerId, reason, description: text }),
+    mutationFn: async () => {
+      await getRepository().report({ targetType: "answer", targetId: answerId, reason, description: text });
+      if (block && author) await getRepository().blockUser(author.id);
+    },
+    onSuccess: () => qc.invalidateQueries(),
   });
   if (send.isSuccess) {
     return (
       <div className="flex flex-col gap-3">
         <p className="text-lg font-bold">Şikâyetin alındı</p>
-        <p className="text-[15px] text-ink-2">Ekibimiz 24 saat içinde inceleyecek.</p>
+        <p className="text-[15px] text-ink-2">
+          Ekibimiz 24 saat içinde inceleyecek.
+          {block && author ? ` ${author.name} artık seninle eşleşmeyecek. Engeli Ayarlar'dan kaldırabilirsin.` : ""}
+        </p>
         <Button onClick={onDone}>Tamam</Button>
       </div>
     );
@@ -42,6 +60,15 @@ export function ReportForm({ answerId, onDone }: { answerId: Id; onDone: () => v
         ))}
       </div>
       <Textarea rows={3} placeholder="İstersen açıkla (isteğe bağlı)" value={text} onChange={(e) => setText(e.target.value)} />
+      {author && (
+        <label className="flex min-h-11 items-center gap-3 text-[15px]">
+          <input type="checkbox" checked={block} onChange={(e) => setBlock(e.target.checked)} className="h-5 w-5 accent-ink" />
+          <span>
+            {author.name} adlı lokali engelle
+            <span className="block text-[13px] text-gray">Birbirinize soru atanmaz. İstediğin zaman kaldırabilirsin.</span>
+          </span>
+        </label>
+      )}
       <ErrorNote error={send.error} />
       <Button onClick={() => send.mutate()} disabled={send.isPending}>
         Gönder

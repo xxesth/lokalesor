@@ -115,9 +115,12 @@ Bağımlılıklar:
 
 ### Ökkeş — ön yüzü tamamlama
 - [x] Faz 1'de kalan 🟡 ekranlar: landing, benzer cevaplar (Faz 1'de yapıldı)
-- [ ] Ayarlar: rol/şehir, günlük limit (1-5), engellenenler (`listBlocked`, `unblockUser`)
-- [ ] Lokalin arşivi: listele, düzenle, arşivden kaldır
-- [ ] Şikâyet / engelle formu (`report` + `blockUser`)
+- [x] Ayarlar: günlük limit (1-5), semt, konular, engellenenler (`listBlocked`, `unblockUser`). Rol/şehir üst menüdeki anahtar ve seçicide.
+- [~] Lokalin arşivi: listele ve arşivden kaldır/ekle var, profilden erişilebilir. Cevap metnini düzenleme yok (henüz karar yok: `setAnswerText` sözleşme talebi Mali'de bekliyor, reddedilmedi)
+- [x] Şikâyet / engelle formu (`report` + `blockUser`)
+- [x] Rol bazlı içerik: ana sayfa, Sorularım ve rol kapısı (`RoleGate`) iki rolde farklı
+- [x] Profil: kendi profilinde Ayarlar ve Soru arşivim bağlantıları
+- [ ] Profil düzenleme: ad, kişi rengi, avatar fotoğrafı (sözleşme talepleri `progress.md`'de; Mali onaylayınca ekran + mock uygulaması)
 - [ ] Açık havuz arayüzü: turist bilgilendirmesi, lokallerin havuzdan soru alması (`listOpenPool`, `answerFromPool`, kanal `pool:{city}`; seed'de İstanbul havuzunda 2 soru var)
 - [ ] Tüm ekranlarda yükleniyor, hata ve boş durumları
 - [ ] Erişilebilirlik turu: klavye, `aria-label`, kontrast, dokunma alanı

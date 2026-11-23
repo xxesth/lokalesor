@@ -9,6 +9,9 @@ Format: `YYYY-MM-DD · kişi · ne yapıldı · ne kaldı`. En yeni kayıt en ü
 - **Sıradaki (Mali):** worker, realtime, event-source, turbo dev + rewrite'lar, CI.
 
 ## Günlük
+- 2026-11-23 · Ökkeş (Claude ile) · Branch `fix/role-aware-screens`:
+  - Rol bazlı içerik: ana sayfa (lokalde kapasite ve bekleyenler), Sorularım (lokalde Cevaplarım), `RoleGate` (`/sor` sadece turistte, gelen kutusu sadece lokalde, geçiş butonuyla). Alt sekme etiketi tek satıra sabitlendi.
+  - Engelleme: Ayarlar'da Engellenenler listesi, şikâyet formunda "lokali engelle" seçeneği. Profilde Ayarlar ve Soru arşivim bağlantıları (arşiv sayfasına hiçbir yerden link yoktu).
 - 2026-11-17 · Mali (Claude ile) · Faz 2'nin bloklayan işleri bitti:
   - `docker-compose.yml` (Postgres 17 + Redis 7 + `lokale_test`), `.env.example`.
   - `@lokale/db`: şema + ilk migration. Şemayı Fatih yerine Mali yazdı, çünkü `assignNext` buna bağlıydı.
@@ -36,7 +39,9 @@ _Yok._
 ## Sözleşme talepleri
 Format: `tarih · kim · hangi tip/fonksiyon · neden`. Sözleşme sahibi karara bağlayınca işaretlenir.
 
-_Yok._
+- [ ] 2026-11-23 · Ökkeş · `SettingsPatch` + `updateSettings`: `name` ve `color` alanları. Profil düzenlemede ad ve kişi rengi değiştirilemiyor. Rengin kayıtta seçilmesi Faz 3'te (Açık konular), ama demo kullanıcıları için de gerekebilir.
+- [ ] 2026-11-23 · Ökkeş · `SettingsPatch.avatarUrl` + fotoğraf yükleme (yeni, örn. `uploadAvatar(file): Promise<{ avatarUrl }>`): profil fotoğrafı. `User.avatarUrl` alanı var ama değiştirmenin yolu yok. Gerçek arka uçta dosya depolaması (disk/S3) ve boyut/tür sınırı gerekir; mock'ta data URL yeter. Kişisel bilgi kuralı (madde 12) için yüz fotoğrafı zorunlu değil, isteğe bağlı olmalı.
+- [ ] 2026-11-23 · Ökkeş · `setAnswerText(answerId, text)` (yeni): lokalin arşivdeki cevabını düzenlemesi için.
 
 ## Tasarımla ilgili açık konular
 - Demo isimleri tasarımdan farklı: tasarımdaki Elif / Mert / Zeynep yerine Efe Genç / Mert Özçelik / Nevin Arslan. Ekran görüntüleriyle karşılaştırırken isim farkı normal.

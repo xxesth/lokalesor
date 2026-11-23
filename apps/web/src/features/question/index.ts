@@ -5,3 +5,4 @@ export { MyQuestions } from "./my-questions";
 export { QuestionCard, QuestionTags } from "./question-card";
 export { QuestionDetail } from "./question-detail";
 export { useMyQuestions, useQuestionThread } from "./hooks";
+export { MyAnswers } from "./my-answers";

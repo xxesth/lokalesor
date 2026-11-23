@@ -14,6 +14,7 @@ import { getRepository } from "@/data";
 import { cn } from "@/lib/cn";
 import { useMe, useSession } from "@/features/session";
 import { AppHeader } from "@/features/shell";
+import { BlockedList } from "./blocked-list";
 
 /** Ayarlar (tasarımı yok; stil rehberine göre). Günlük limit brief #4. */
 export function SettingsPage() {
@@ -77,6 +78,7 @@ export function SettingsPage() {
             ))}
           </div>
         </section>
+        <BlockedList />
         <ErrorNote error={save.error} />
         {save.isSuccess && <p role="status" className="text-sm text-ink-2">Kaydedildi.</p>}
         <div className="flex items-center justify-between">

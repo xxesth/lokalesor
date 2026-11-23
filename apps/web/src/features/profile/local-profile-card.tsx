@@ -2,6 +2,7 @@
 import type { LocalProfile } from "@lokale/contracts";
 import { TOPIC_LABELS, cityName, districtName, formatEta, formatRate } from "@lokale/domain";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { Tag } from "@/components/ui/chip";
 import { LockIcon } from "@/components/ui/icons";
@@ -78,7 +79,7 @@ export function LocalProfileCompact({ p }: { p: LocalProfile }) {
 }
 
 /** full: profil sayfası. İletişim bilgisi YOK. */
-export function LocalProfileFull({ p }: { p: LocalProfile }) {
+export function LocalProfileFull({ p, actions }: { p: LocalProfile; actions?: ReactNode }) {
   return (
     <div style={personStyle(p.color)}>
       <div className="h-[140px] bg-person lg:h-[180px]" />
@@ -94,6 +95,7 @@ export function LocalProfileFull({ p }: { p: LocalProfile }) {
               </span>
             )}
           </div>
+          {actions}
         </div>
         <div className="flex flex-wrap gap-10">
           <div className="flex min-w-0 flex-[1_1_360px] flex-col gap-8">

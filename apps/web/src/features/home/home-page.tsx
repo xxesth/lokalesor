@@ -13,8 +13,9 @@ import { getRepository } from "@/data";
 import { qk } from "@/data/query-keys";
 import { ArchiveItem } from "@/features/archive";
 import { ActiveQuestionCard, useMyQuestions } from "@/features/question";
-import { useMe } from "@/features/session";
+import { useMe, useSession } from "@/features/session";
 import { AppHeader } from "@/features/shell";
+import { LocalHome } from "./local-home";
 
 function AskBox() {
   const { currentCity } = useMe();
@@ -96,7 +97,7 @@ function PopularQuestions() {
   );
 }
 
-export function HomePage() {
+function TouristHome() {
   const { user, currentCity } = useMe();
   const name = cityName(currentCity);
   return (
@@ -124,4 +125,10 @@ export function HomePage() {
       </Page>
     </>
   );
+}
+
+/** Rol, hangi ana sayfanın görüneceğini belirler. */
+export function HomePage() {
+  const { role } = useSession();
+  return role === "local" ? <LocalHome /> : <TouristHome />;
 }

@@ -29,6 +29,7 @@ export function RoleGate({ role, children }: { role: Role; children: ReactNode }
     <>
       <AppHeader />
       <Page>
+        <h1 className="sr-only">{c.title}</h1>
         <EmptyState title={c.title}>
           <p className="mb-4">{c.body}</p>
           <Button onClick={() => void setRole(role)}>{c.action}</Button>

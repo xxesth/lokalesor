@@ -34,7 +34,7 @@ export function DemoUserPicker() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-8 px-4 py-10 lg:px-6 lg:py-16">
+    <main id="icerik" tabIndex={-1} className="mx-auto flex w-full max-w-[1200px] flex-col gap-8 px-4 py-10 focus:outline-none lg:px-6 lg:py-16">
       <div className="flex flex-col gap-3">
         <h1 className="text-[28px] font-extrabold leading-8 tracking-[-0.03em] lg:text-[44px] lg:leading-[48px]">
           Kim olarak devam etmek istersin?
@@ -65,6 +65,6 @@ export function DemoUserPicker() {
           </li>
         ))}
       </ul>
-    </div>
+    </main>
   );
 }

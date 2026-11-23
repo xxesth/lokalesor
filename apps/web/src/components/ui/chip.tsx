@@ -22,7 +22,7 @@ export function Chip({
       aria-pressed={pressed}
       onClick={onClick}
       className={cn(
-        "h-9 shrink-0 rounded-control border px-3 text-sm font-medium transition-colors",
+        "h-11 shrink-0 rounded-control border px-3 text-sm font-medium transition-colors",
         pressed ? "border-ink bg-ink text-paper" : "border-line-strong bg-paper text-ink hover:border-ink",
         className,
       )}

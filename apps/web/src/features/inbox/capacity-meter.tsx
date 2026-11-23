@@ -19,7 +19,7 @@ export function CapacityMeter({ capacity, color }: { capacity: Capacity; color: 
         </span>
         {full && <span className="text-[13px] text-gray">Bugünlük kapasiten doldu, yeni soru atanmayacak.</span>}
       </div>
-      <Link href="/ayarlar" className="text-[15px] font-bold underline underline-offset-4">
+      <Link href="/ayarlar" className="inline-flex min-h-11 items-center text-[15px] font-bold underline underline-offset-4">
         Ayarlar
       </Link>
     </section>

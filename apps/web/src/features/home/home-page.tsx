@@ -39,7 +39,7 @@ function AskBox() {
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Ne merak ediyorsun?"
-        className="h-12 rounded-control border border-line-strong px-4 text-base placeholder:text-gray focus:border-ink focus:outline-none"
+        className="h-12 rounded-control border border-line-strong px-4 text-base placeholder:text-gray focus:border-ink"
       />
       <Button type="submit" className="w-full">
         Lokale Sor

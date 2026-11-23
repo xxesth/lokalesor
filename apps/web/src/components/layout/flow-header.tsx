@@ -22,7 +22,7 @@ export function FlowHeader({ backHref, title, subtitle, right }: { backHref: str
 /** Masaüstünde geri bağlantısı. */
 export function BackLink({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <Link href={href} className="hidden items-center gap-1 text-[15px] font-semibold text-ink-2 lg:inline-flex">
+    <Link href={href} className="hidden min-h-11 items-center gap-1 text-[15px] font-semibold text-ink-2 lg:inline-flex">
       <BackIcon size={16} />
       {children}
     </Link>

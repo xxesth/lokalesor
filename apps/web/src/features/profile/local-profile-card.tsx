@@ -70,7 +70,7 @@ export function LocalProfileCompact({ p }: { p: LocalProfile }) {
             <Tag key={t}>{TOPIC_LABELS[t]}</Tag>
           ))}
         </div>
-        <Link href={`/profil/${p.id}`} className="text-sm font-bold underline underline-offset-4">
+        <Link href={`/profil/${p.id}`} className="-my-2.5 inline-flex min-h-11 items-center self-start text-sm font-bold underline underline-offset-4">
           Profilin tamamını gör
         </Link>
       </div>
@@ -81,7 +81,7 @@ export function LocalProfileCompact({ p }: { p: LocalProfile }) {
 /** full: profil sayfası. İletişim bilgisi YOK. */
 export function LocalProfileFull({ p, actions }: { p: LocalProfile; actions?: ReactNode }) {
   return (
-    <div style={personStyle(p.color)}>
+    <main id="icerik" tabIndex={-1} className="focus:outline-none" style={personStyle(p.color)}>
       <div className="h-[140px] bg-person lg:h-[180px]" />
       <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-8 px-4 pb-28 lg:px-6 lg:pb-16">
         <div className="-mt-14 flex flex-col gap-3 lg:-mt-16">
@@ -128,6 +128,6 @@ export function LocalProfileFull({ p, actions }: { p: LocalProfile; actions?: Re
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

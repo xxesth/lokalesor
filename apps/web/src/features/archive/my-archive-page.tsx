@@ -33,7 +33,7 @@ export function MyArchivePage() {
               <button
                 type="button"
                 onClick={() => toggle.mutate({ id: a.answer.id, archived: !a.answer.archived })}
-                className="mb-4 self-start text-sm font-bold underline underline-offset-4"
+                className="-mt-1 mb-3 inline-flex min-h-11 items-center self-start text-sm font-bold underline underline-offset-4"
               >
                 {a.answer.archived ? "Arşivden kaldır" : "Arşive ekle"}
               </button>

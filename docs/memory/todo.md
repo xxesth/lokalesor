@@ -123,7 +123,7 @@ Bağımlılıklar:
 - [ ] Profil düzenleme: ad, kişi rengi, avatar fotoğrafı (sözleşme talepleri `progress.md`'de; Mali onaylayınca ekran + mock uygulaması)
 - [x] Açık havuz arayüzü: turist bilgilendirmesi, lokallerin havuzdan soru alması (`listOpenPool`, `answerFromPool`, kanal `pool:{city}`; seed'de İstanbul havuzunda 2 soru var)
 - [x] Tüm ekranlarda yükleniyor, hata ve boş durumları (`ErrorNote` + "Tekrar dene", `app/error.tsx`, `app/not-found.tsx`)
-- [ ] Erişilebilirlik turu: klavye, `aria-label`, kontrast, dokunma alanı
+- [x] Erişilebilirlik turu: klavye, `aria-label`, kontrast, dokunma alanı (kod tarafı bitti; ekran okuyucu denemesi ve token kontrast kararı açık, bkz. progress.md)
 - [ ] Bütün ekranlar için 390 / 1024 / 1440 px karşılaştırması
 - [ ] Rapor: SDD arayüz bölümü (ekran akışı, bileşen envanteri)
 

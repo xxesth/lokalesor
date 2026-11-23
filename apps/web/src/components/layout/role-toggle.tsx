@@ -11,7 +11,7 @@ export function RoleToggle({ role, color, onChange }: { role: Role; color: Perso
       aria-pressed={role === r}
       onClick={() => role !== r && onChange(r)}
       className={cn(
-        "inline-flex h-[38px] items-center gap-2 rounded-[7px] px-3.5 text-sm",
+        "inline-flex h-11 items-center gap-2 rounded-[7px] px-3.5 text-sm",
         role === r ? "bg-paper font-bold text-ink shadow-[0_0_0_1px_var(--line-strong)]" : "font-semibold text-gray",
       )}
     >
@@ -20,7 +20,7 @@ export function RoleToggle({ role, color, onChange }: { role: Role; color: Perso
     </button>
   );
   return (
-    <div role="group" aria-label="Rol" className="inline-flex rounded-[10px] bg-mist p-[3px]" style={personStyle(color)}>
+    <div role="group" aria-label="Rol" className="inline-flex rounded-[10px] bg-mist p-0.5" style={personStyle(color)}>
       {item("tourist", "Turist")}
       {item("local", "Lokal")}
     </div>

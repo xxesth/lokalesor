@@ -45,12 +45,13 @@ export function InboxPage() {
   // Telefonda Cevapla ekranı
   if (mobileOpen && selected) {
     return (
-      <div className="lg:hidden">
+      <main id="icerik" tabIndex={-1} className="focus:outline-none lg:hidden">
+        <h1 className="sr-only">Cevapla</h1>
         <FlowHeader backHref="/lokal/gelen-kutusu" title="Cevapla" right={<Countdown deadline={selected.assignment.deadline} assignedAt={selected.assignment.assignedAt} size="s" />} />
         <div className="px-4 pb-28 pt-5">
           <AnswerForm key={selected.assignment.id} item={selected} assignmentId={selected.assignment.id} onDone={() => setMobileOpen(false)} />
         </div>
-      </div>
+      </main>
     );
   }
 

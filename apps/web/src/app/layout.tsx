@@ -28,6 +28,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="tr" className={schibsted.variable}>
       <body className="min-h-dvh antialiased">
+        <a
+          href="#icerik"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-[60] focus:rounded-control focus:bg-ink focus:px-4 focus:py-3 focus:text-paper"
+        >
+          İçeriğe geç
+        </a>
         <Providers>{children}</Providers>
       </body>
     </html>

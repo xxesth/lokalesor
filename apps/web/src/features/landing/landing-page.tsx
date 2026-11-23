@@ -19,7 +19,7 @@ export function LandingPage() {
           Giriş
         </ButtonLink>
       </header>
-      <main className="mx-auto flex w-full max-w-[1200px] flex-col gap-16 px-4 pb-16 pt-8 lg:px-6 lg:pt-16">
+      <main id="icerik" tabIndex={-1} className="mx-auto flex w-full max-w-[1200px] flex-col gap-16 px-4 pb-16 pt-8 focus:outline-none lg:px-6 lg:pt-16">
         <section className="flex flex-wrap items-center gap-12">
           <div className="flex flex-[1_1_480px] flex-col gap-6">
             <h1 className="text-[46px] font-extrabold leading-[46px] tracking-[-0.04em] lg:text-[88px] lg:leading-[84px]">

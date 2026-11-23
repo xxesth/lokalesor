@@ -40,6 +40,7 @@ export function QuestionDetail({ id }: { id: Id }) {
       <AppHeader hideOnMobile />
       <FlowHeader backHref="/sorularim" title="Sorun" right={t && <StatusLabel kind={kind} />} />
       <Page>
+        <h1 className="sr-only">Sorun</h1>
         {thread.isLoading && <Loading />}
         <ErrorNote error={thread.error} onRetry={() => void thread.refetch()} />
         {t && (
@@ -93,7 +94,7 @@ export function QuestionDetail({ id }: { id: Id }) {
                           return a?.resolvedAt ? minutesBetween(a.assignedAt, a.resolvedAt) : undefined;
                         })()}
                         action={
-                          <button type="button" onClick={() => setSheet(true)} className="inline-flex min-h-11 items-center text-[13px] font-bold underline underline-offset-4 lg:hidden">
+                          <button type="button" onClick={() => setSheet(true)} className="inline-flex min-h-11 min-w-11 items-center justify-center text-[13px] font-bold underline underline-offset-4 lg:hidden">
                             Profil
                           </button>
                         }

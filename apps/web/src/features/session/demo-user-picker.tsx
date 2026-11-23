@@ -42,6 +42,7 @@ export function DemoUserPicker() {
         <p className="text-base text-ink-2">Demo modu: iki pencerede farklı kullanıcı seçebilirsin. Biri sorsun, diğeri cevaplasın.</p>
       </div>
       <ErrorNote error={error} />
+      <ErrorNote error={users.error} onRetry={() => void users.refetch()} />
       {users.isLoading && <Loading />}
       <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {users.data?.map((u) => (

@@ -7,7 +7,7 @@ import { useState, type FormEvent } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { TopicChips } from "@/components/ui/chip";
-import { EmptyState, Loading, SectionTitle } from "@/components/ui/misc";
+import { EmptyState, ErrorNote, Loading, SectionTitle } from "@/components/ui/misc";
 import { Page, TwoColumn } from "@/components/layout/two-column";
 import { getRepository } from "@/data";
 import { qk } from "@/data/query-keys";
@@ -65,6 +65,7 @@ function ActiveQuestions() {
     <section className="flex flex-col gap-4">
       <SectionTitle>Aktif sorularım</SectionTitle>
       {mine.isLoading && <Loading />}
+      <ErrorNote error={mine.error} onRetry={() => void mine.refetch()} />
       {mine.data && active.length === 0 && <p className="text-[15px] text-gray">Bekleyen sorun yok. Sorduğunda burada geri sayımı göreceksin.</p>}
       {active.map((s) => (
         <ActiveQuestionCard key={s.question.id} s={s} />
@@ -87,6 +88,7 @@ function PopularQuestions() {
       </SectionTitle>
       <TopicChips value={topic} onChange={setTopic} withAll scroll />
       {popular.isLoading && <Loading />}
+      <ErrorNote error={popular.error} onRetry={() => void popular.refetch()} />
       {popular.data?.items.length === 0 && <EmptyState title="Bu konuda henüz arşiv yok">İlk soran sen ol.</EmptyState>}
       <div className="divide-y divide-line">
         {popular.data?.items.map((a) => (

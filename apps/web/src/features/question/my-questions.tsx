@@ -18,7 +18,7 @@ function TouristQuestions() {
       <Page className="flex max-w-[760px] flex-col gap-6">
         <h1 className="text-[28px] font-extrabold leading-8 tracking-[-0.03em] lg:text-[44px] lg:leading-[48px]">Sorularım</h1>
         {mine.isLoading && <Loading />}
-        <ErrorNote error={mine.error} />
+        <ErrorNote error={mine.error} onRetry={() => void mine.refetch()} />
         {mine.data?.length === 0 && (
           <EmptyState title="Henüz soru sormadın">
             <p className="mb-4">Gittiğin şehrin yerlisine sor, dakikalar içinde cevap gelsin.</p>

@@ -30,7 +30,7 @@ export function LocalHome() {
           </span>
         </h1>
         {inbox.isLoading && <Loading />}
-        <ErrorNote error={inbox.error} />
+        <ErrorNote error={inbox.error} onRetry={() => void inbox.refetch()} />
         {data && <CapacityMeter capacity={data.capacity} color={user.color} />}
         {data && (
           <section className="flex flex-col gap-4">

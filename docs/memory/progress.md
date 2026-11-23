@@ -9,6 +9,7 @@ Format: `YYYY-MM-DD · kişi · ne yapıldı · ne kaldı`. En yeni kayıt en ü
 - **Sıradaki (Mali):** worker, realtime, event-source, turbo dev + rewrite'lar, CI.
 
 ## Günlük
+- 2026-11-23 · Ökkeş (Claude ile) · Branch `feat/loading-error-empty-states`: hata ve yükleme durumları. `ErrorNote` artık nar değil siyah kenarlık kullanıyor (kural 9: nar sadece aciliyet) ve "Tekrar dene" düğmesi var (NOT_FOUND/FORBIDDEN'da gizli). Eksik olan ana sayfa, arşiv, bildirimler ve giriş ekranlarına hata kutusu eklendi, `Loading` `role="status"` oldu. `app/error.tsx` ve `app/not-found.tsx` eklendi. Node 22.23.5'e geçildi, `pnpm test` yeşil (domain 20, web 5; core'un 9 testi Postgres yok diye atlandı). · Kalan: gerçek bir ağ hatasında "Tekrar dene" akışı denenmedi (mock hata fırlatmıyor); erişilebilirlik turu, 390/1024/1440 karşılaştırması.
 - 2026-11-23 · Ökkeş (Claude ile) · Branch `feat/open-pool-ui`: açık havuz arayüzü. Lokal gelen kutusunda `PoolSection` (canlı, yerinde cevap formu), lokal ana sayfada havuz özeti, turistin soru detayında havuz bilgilendirmesi. `AnswerForm` hem atamayı hem havuzu cevaplıyor. Metinler `@lokale/domain/messages.ts`'te. Sözleşme değişmedi. · Kalan: tarayıcıda deneme, havuz için testler (testler çalıştırılamıyor: Node 22.11, rolldown 22.12+ istiyor).
 - 2026-11-23 · Ökkeş (Claude ile) · Branch `fix/role-aware-screens`:
   - Rol bazlı içerik: ana sayfa (lokalde kapasite ve bekleyenler), Sorularım (lokalde Cevaplarım), `RoleGate` (`/sor` sadece turistte, gelen kutusu sadece lokalde, geçiş butonuyla). Alt sekme etiketi tek satıra sabitlendi.
@@ -49,6 +50,7 @@ Format: `tarih · kim · hangi tip/fonksiyon · neden`. Sözleşme sahibi karara
 - Örnek cevaptaki "Moda'da Çiya'nın arka sokağı" yanlış, çünkü Çiya Kadıköy Çarşı'da. Seed'e aktarırken düzeltilecek.
 - Kişi rengi demoda sabit. Gerçek kullanımda lokal rengini kayıt sırasında kendisi seçecek (2. faz).
 - AskBox'taki "müsait lokaller" avatarları çevrimiçi durumunu değil, **bugün kapasitesi olan** lokalleri gösteriyor. Gerçek bir presence özelliği yok.
+- **Puan verdikten sonra şikâyet/engelleme yok** (2026-11-23, Ökkeş): `RatingBox` değerlendirme gönderilince "Teşekkürler" durumuna geçiyor ve "Şikâyet et" bağlantısı kayboluyor (handoff `4-detay-tesekkur`'da da yok). Lokali engellemenin tek yolu şikâyet formundaki onay kutusu olduğu için puan verdikten sonra engellenemiyor; Ayarlar'da sadece engeli kaldırma var. Brief #12 şikâyet/engellemeyi ayrı bir akış olarak tarif ediyor ama giriş noktasını belirtmiyor. Karar bekliyor: teşekkür durumuna "Şikâyet et / engelle" bağlantısı eklensin mi, yoksa lokal profilinde "Engelle" mi olsun?
 - Ayarlar ve lokalin arşivi sayfaları için tasarım yok. Stil rehberine göre yapılacak (🟡).
 
 ## Açık sorular (EM ekibine)

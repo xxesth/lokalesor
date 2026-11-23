@@ -29,7 +29,7 @@ export function PoolSection() {
         <p className="text-sm text-gray">{messages.poolIntroLocal()}</p>
       </div>
       {pool.isLoading && <Loading />}
-      <ErrorNote error={pool.error} />
+      <ErrorNote error={pool.error} onRetry={() => void pool.refetch()} />
       {pool.data && items.length === 0 && <p className="text-[15px] text-gray">{messages.poolEmptyLocal()}</p>}
       {items.map((p) => {
         const open = openId === p.question.id;

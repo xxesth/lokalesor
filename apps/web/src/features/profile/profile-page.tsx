@@ -27,7 +27,7 @@ export function ProfilePage({ id }: { id: Id }) {
           <BackIcon />
         </button>
         {profile.isLoading && <Loading />}
-        <ErrorNote error={profile.error} />
+        <ErrorNote error={profile.error} onRetry={() => void profile.refetch()} />
         {profile.data && (
           <LocalProfileFull
             p={profile.data}

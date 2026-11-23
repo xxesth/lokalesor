@@ -18,7 +18,7 @@ export function BlockedList() {
     <section className="flex flex-col gap-3">
       <FieldLabel hint="Engellediğin kişiyle birbirinize soru atanmaz ve havuzda birbirinizin sorularını görmezsiniz.">Engellenenler</FieldLabel>
       {list.isLoading && <Loading />}
-      <ErrorNote error={list.error} />
+      <ErrorNote error={list.error} onRetry={() => void list.refetch()} />
       <ErrorNote error={unblock.error} />
       {list.data?.length === 0 && <p className="text-[15px] text-gray">Kimseyi engellemedin.</p>}
       <ul className="divide-y divide-line">

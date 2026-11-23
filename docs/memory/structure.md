@@ -122,6 +122,7 @@ apps/web/
 | `(app)/profil/[id]/page.tsx` | `/profil/:id` | `features/profile` |
 | `(app)/ayarlar/page.tsx` | `/ayarlar` | `features/settings` |
 | `(app)/bildirimler/page.tsx` | `/bildirimler` | `features/notifications` (telefon görünümü) |
+| `error.tsx`, `not-found.tsx` | beklenmeyen hata ve 404 sayfaları (tüm rotalar) | `components/ui` |
 | `dev/page.tsx` | `/dev` | `features/dev-panel` (sadece geliştirme ortamında) |
 
 ### `src/data/`: istemcinin veri katmanı

@@ -41,7 +41,7 @@ export function QuestionDetail({ id }: { id: Id }) {
       <FlowHeader backHref="/sorularim" title="Sorun" right={t && <StatusLabel kind={kind} />} />
       <Page>
         {thread.isLoading && <Loading />}
-        <ErrorNote error={thread.error} />
+        <ErrorNote error={thread.error} onRetry={() => void thread.refetch()} />
         {t && (
           <TwoColumn
             main={

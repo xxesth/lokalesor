@@ -64,7 +64,7 @@ export function InboxPage() {
           {data && <span className="text-[15px] text-gray">{data.pending.length} soru bekliyor</span>}
         </div>
         {inbox.isLoading && <Loading />}
-        <ErrorNote error={inbox.error} />
+        <ErrorNote error={inbox.error} onRetry={() => void inbox.refetch()} />
         {data && data.pending.length === 0 && (
           <EmptyState icon={<InboxIcon size={56} className="text-line-strong" />} title="Şu an sana atanmış soru yok">
             {left > 0 ? `Bugün ${left} soru daha alabilirsin. Yeni soru gelince zil çalacak.` : "Bugünlük kapasiten doldu. Yarın görüşürüz!"}

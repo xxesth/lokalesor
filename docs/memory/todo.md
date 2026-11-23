@@ -122,7 +122,7 @@ Bağımlılıklar:
 - [x] Profil: kendi profilinde Ayarlar ve Soru arşivim bağlantıları
 - [ ] Profil düzenleme: ad, kişi rengi, avatar fotoğrafı (sözleşme talepleri `progress.md`'de; Mali onaylayınca ekran + mock uygulaması)
 - [x] Açık havuz arayüzü: turist bilgilendirmesi, lokallerin havuzdan soru alması (`listOpenPool`, `answerFromPool`, kanal `pool:{city}`; seed'de İstanbul havuzunda 2 soru var)
-- [ ] Tüm ekranlarda yükleniyor, hata ve boş durumları
+- [x] Tüm ekranlarda yükleniyor, hata ve boş durumları (`ErrorNote` + "Tekrar dene", `app/error.tsx`, `app/not-found.tsx`)
 - [ ] Erişilebilirlik turu: klavye, `aria-label`, kontrast, dokunma alanı
 - [ ] Bütün ekranlar için 390 / 1024 / 1440 px karşılaştırması
 - [ ] Rapor: SDD arayüz bölümü (ekran akışı, bileşen envanteri)

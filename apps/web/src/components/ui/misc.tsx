@@ -1,4 +1,5 @@
 "use client";
+import { isRepoError } from "@lokale/contracts";
 import { useEffect, type ComponentProps, type ReactNode, type SelectHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 import { CloseIcon } from "./icons";
@@ -79,16 +80,28 @@ export function Sheet({ open, onClose, title, children }: { open: boolean; onClo
   );
 }
 
-export function ErrorNote({ error }: { error: unknown }) {
+/** Hata kutusu. Nar kırmızısı sadece aciliyet içindir (kural 9), hata için siyah kenarlık. */
+export function ErrorNote({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
   if (!error) return null;
-  const msg = error instanceof Error ? error.message : "Bir şeyler ters gitti.";
+  const msg = error instanceof Error && error.message ? error.message : "Bir şeyler ters gitti.";
+  // Soru/profil yoksa ya da yetki yoksa tekrar denemek işe yaramaz.
+  const retryable = !(isRepoError(error) && (error.code === "NOT_FOUND" || error.code === "FORBIDDEN"));
   return (
-    <p role="alert" className="rounded-control border border-nar px-3 py-2 text-sm text-nar">
-      {msg}
-    </p>
+    <div role="alert" className="flex flex-wrap items-center justify-between gap-3 rounded-control border border-ink px-3 py-2.5 text-sm">
+      <span>{msg}</span>
+      {onRetry && retryable && (
+        <button type="button" onClick={onRetry} className="inline-flex min-h-11 items-center font-bold underline underline-offset-4">
+          Tekrar dene
+        </button>
+      )}
+    </div>
   );
 }
 
 export function Loading({ label = "Yükleniyor…" }: { label?: string }) {
-  return <p className="py-8 text-center text-sm text-gray">{label}</p>;
+  return (
+    <p role="status" className="py-8 text-center text-sm text-gray">
+      {label}
+    </p>
+  );
 }

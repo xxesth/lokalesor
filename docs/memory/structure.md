@@ -123,6 +123,7 @@ apps/web/
 | `(app)/ayarlar/page.tsx` | `/ayarlar` | `features/settings` |
 | `(app)/bildirimler/page.tsx` | `/bildirimler` | `features/notifications` (telefon görünümü) |
 | `error.tsx`, `not-found.tsx` | beklenmeyen hata ve 404 sayfaları (tüm rotalar) | `components/ui` |
+| `icon.svg`, `opengraph-image.png` | favicon ve paylaşım önizleme görseli (Next dosya kuralı, elle bağlanmaz) | : |
 | `dev/page.tsx` | `/dev` | `features/dev-panel` (sadece geliştirme ortamında) |
 
 ### `src/data/`: istemcinin veri katmanı
@@ -220,6 +221,7 @@ Referans: `0-stil-rehberi`. SVG ikonları ekran HTML'lerinden alınıp `icons.ts
 | Ad | Kullanan | Örnek |
 |---|---|---|
 | `NEXT_PUBLIC_DATA_SOURCE` | web | `mock` / `http` |
+| `NEXT_PUBLIC_SITE_URL` | web | isteğe bağlı; Open Graph görsel adresi için sitenin dış adresi (varsayılan `http://localhost:3000`) |
 | `DATABASE_URL` | api, worker, db | `postgres://lokale:lokale@localhost:5432/lokale` |
 | `TEST_DATABASE_URL` | core testleri | `postgres://lokale:lokale@localhost:5432/lokale_test` |
 | `REDIS_URL` | api, worker, realtime | `redis://localhost:6379` |

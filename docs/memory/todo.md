@@ -125,6 +125,11 @@ Bağımlılıklar:
 - [x] Tüm ekranlarda yükleniyor, hata ve boş durumları (`ErrorNote` + "Tekrar dene", `app/error.tsx`, `app/not-found.tsx`)
 - [x] Erişilebilirlik turu: klavye, `aria-label`, kontrast, dokunma alanı (kod tarafı bitti; ekran okuyucu denemesi ve token kontrast kararı açık, bkz. progress.md)
 - [~] Bütün ekranlar için 390 / 1024 / 1440 px karşılaştırması: 1440'ta ana sayfa, soru detayı, gelen kutusu, profil, giriş, tanıtım, soru sor tasarımla karşılaştırıldı ve düzeltildi; 390'da sadece ana sayfa. 1024 için referans yok, yalnızca düzen kuralları denetlendi (alt çubuk yok, masaüstü menü, yatay taşma yok). Kalan: bildirimler, 390 px diğer ekranlar, soru sor ara durumları (aranıyor, iletildi)
+- [x] Popüler sorulara bütçe filtresi (brief #24, sözleşmede `budget` zaten var)
+- [x] Favicon ve Open Graph meta (`icon.svg`, `opengraph-image.png`, `NEXT_PUBLIC_SITE_URL`)
+- [x] `docs/demo.md`: rol anahtarı, açık havuz ve engelleme adımları
+- [x] Rapor ve sunum ekran görüntüleri yenilendi: tam senaryo, 1440 ve 390 px (23'er görüntü, repoda değil, yerel `.local-e2e/sunum/`)
+- [ ] Gizlilik bilgilendirmesi (brief #11, #22 KVKK): Ayarlar'da statik "Gizlilik" bölümü (telefon ve e-posta gösterilmez, konum sadece şehir/semt, iletişim site içinden)
 - [ ] Rapor: SDD arayüz bölümü (ekran akışı, bileşen envanteri)
 
 ### Ortak

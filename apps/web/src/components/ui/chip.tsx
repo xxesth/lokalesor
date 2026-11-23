@@ -67,6 +67,20 @@ export function TopicChips({
   );
 }
 
+/** Bütçe filtresi: ayrı çipler, seçiliyi tekrar tıklayınca filtre kalkar (hiçbiri = tümü). */
+export function BudgetChips({ value, onChange }: { value: Budget | null; onChange: (b: Budget | null) => void }) {
+  return (
+    <div role="group" aria-label="Bütçe" className="flex items-center gap-1.5">
+      <span className="mr-1 text-sm text-gray">Bütçe</span>
+      {BUDGETS.map((b) => (
+        <Chip key={b} pressed={value === b} onClick={() => onChange(value === b ? null : b)}>
+          {BUDGET_LABELS[b]}
+        </Chip>
+      ))}
+    </div>
+  );
+}
+
 export function BudgetSegment({ value, onChange }: { value: Budget; onChange: (b: Budget) => void }) {
   return (
     <div role="group" aria-label="Bütçe" className="inline-flex overflow-hidden rounded-control border border-ink">

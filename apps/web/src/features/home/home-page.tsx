@@ -1,12 +1,12 @@
 "use client";
-import type { Topic } from "@lokale/contracts";
+import type { Budget, Topic } from "@lokale/contracts";
 import { cityName, formatEta, locativeSuffix, median } from "@lokale/domain";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { TopicChips } from "@/components/ui/chip";
+import { BudgetChips, TopicChips } from "@/components/ui/chip";
 import { EmptyState, ErrorNote, Loading, SectionTitle } from "@/components/ui/misc";
 import { Page, TwoColumn } from "@/components/layout/two-column";
 import { getRepository } from "@/data";
@@ -81,7 +81,8 @@ function ActiveQuestions() {
 function PopularQuestions() {
   const { currentCity } = useMe();
   const [topic, setTopic] = useState<Topic | null>(null);
-  const query = topic ? { city: currentCity, topic } : { city: currentCity };
+  const [budget, setBudget] = useState<Budget | null>(null);
+  const query = { city: currentCity, ...(topic && { topic }), ...(budget && { budget }) };
   const popular = useQuery({ queryKey: qk.popular(query), queryFn: () => getRepository().listPopular(query) });
   const name = cityName(currentCity);
   return (
@@ -91,9 +92,10 @@ function PopularQuestions() {
         {locativeSuffix(name)} popüler sorular
       </SectionTitle>
       <TopicChips value={topic} onChange={setTopic} withAll scroll />
+      <BudgetChips value={budget} onChange={setBudget} />
       {popular.isLoading && <Loading />}
       <ErrorNote error={popular.error} onRetry={() => void popular.refetch()} />
-      {popular.data?.items.length === 0 && <EmptyState title="Bu konuda henüz arşiv yok">İlk soran sen ol.</EmptyState>}
+      {popular.data?.items.length === 0 && <EmptyState title="Bu filtreyle henüz arşiv yok">Filtreyi gevşetmeyi dene ya da ilk soran sen ol.</EmptyState>}
       <div className="divide-y divide-line">
         {popular.data?.items.map((a) => (
           <ArchiveItem key={a.answer.id} item={a} />

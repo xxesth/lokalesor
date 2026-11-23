@@ -13,9 +13,15 @@ const schibsted = localFont({
   display: "swap",
 });
 
+const DESCRIPTION = "Gittiğin şehrin yerlisine sor. Gerçek insanlardan, dakikalar içinde cevap.";
+
 export const metadata: Metadata = {
+  // Paylaşım önizlemesindeki görsel adresi mutlak olmalı; yayında NEXT_PUBLIC_SITE_URL verilir.
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: { default: "Lokale Sor", template: "%s · Lokale Sor" },
-  description: "Gittiğin şehrin yerlisine sor. Gerçek insanlardan, dakikalar içinde cevap.",
+  description: DESCRIPTION,
+  openGraph: { type: "website", locale: "tr_TR", siteName: "Lokale Sor", title: "Lokale Sor", description: DESCRIPTION },
+  twitter: { card: "summary_large_image", title: "Lokale Sor", description: DESCRIPTION },
 };
 
 export const viewport: Viewport = {

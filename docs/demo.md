@@ -13,6 +13,10 @@ Kurulum için: [setup.md](setup.md)
 3. Nevin: zil ve gelen kutusu güncellenir (Bugün 1/2) → şablona dokun → boşlukları doldur → *Gönder*.
 4. Efe'nin ekranı yenilenmeden cevabı gösterir → Faydalı / Güncel / Güvenilir → *Gönder*. Nevin'in profilindeki istatistikler güncellenir.
 5. (İsteğe bağlı) Efe yine benzer bir soru yazmaya başlayınca Nevin'in arşive eklenen cevabı "Benzer sorular cevaplanmış" panelinde çıkar.
+6. (İsteğe bağlı) **Açık havuz:** Nevin'in gelen kutusunun altında "Açık havuz" bölümü var (seed'de iki soru bekliyor). *Cevapla* → gönder; havuzdan cevap kapasiteyi doldurmaz. Soruyu iki lokal birden açarsa ilk gönderen kazanır, ötekine "başka lokal cevapladı" çıkar. Deneme sınırı (3) dolan bir soru da buraya düşer.
+7. (İsteğe bağlı) **Engelleme:** Efe cevabı puanlamadan önce *Şikâyet et* → "lokali engelle" kutusunu işaretle → *Gönder*. Engeli Efe'nin *Ayarlar → Engellenenler* bölümünden kaldır.
+
+Not: Üstteki **Turist / Lokal** anahtarı ekranların içeriğini değiştirir (ana sayfa, Sorularım, gelen kutusu). Efe'de *Gelen kutusu*, Nevin'de *Soru sor* "bu ekran öbür modda" uyarısı gösterir.
 
 ## Sorun olursa
 | Sorun | Çözüm |
